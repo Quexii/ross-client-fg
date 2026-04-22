@@ -1,0 +1,16 @@
+[versions]
+mixins = "0.7.11-SNAPSHOT"
+mixins_annotations = "0.8.5-SNAPSHOT"
+skija = "0.143.13"
+skija_types = "0.2.0"
+
+[libraries]
+mixins = { group = "org.spongepowered", name = "mixin", version.ref = "mixins" }
+mixins-annotations = { group = "org.spongepowered", name = "mixin", version.ref = "mixins_annotations" }
+skija_shared = { group = "io.github.humbleui", name = "skija-shared", version.ref = "skija" }
+skija_types = { group = "io.github.humbleui", name = "types", version.ref = "skija_types" }
+skija_windows = { group = "io.github.humbleui", name = "skija-windows-x64", version.ref = "skija" }
+skija_linux_x64 = { group = "io.github.humbleui", name = "skija-linux-x64", version.ref = "skija" }
+skija_linux_arm64 = { group = "io.github.humbleui", name = "skija-linux-arm64", version.ref = "skija" }
+skija_macos_x64 = { group = "io.github.humbleui", name = "skija-macos-x64", version.ref = "skija" }
+skija_macos_arm64 = { group = "io.github.humbleui", name = "skija-macos-arm64", version.ref = "skija" }

@@ -1,0 +1,5 @@
+[versions]
+devauth = "1.2.2"
+
+[libraries]
+devauth = { module = "me.djtheredstoner:DevAuth-forge-legacy", version.ref = "devauth" }
