@@ -19,25 +19,25 @@ import static eu.shoroa.ross.Client.mc;
 
 public class ModuleBridgeAssist extends Module {
     private final NumberSetting edgeOffset = register(
-            new NumberSetting("Edge Offset", 0.15f, 0.01f, 0.7f, 0.01f));
+            new NumberSetting("Edge Offset", "bridgeassist.edge_offset", 0.15f, 0.01f, 0.7f, 0.01f));
 
     private final NumberSetting unsneakDelay = register(
-            new NumberSetting("Unsneak Delay", 3f, 0f, 20f, 1f));
+            new NumberSetting("Unsneak Delay", "bridgeassist.unsneak_delay", 3f, 0f, 20f, 1f));
 
     private final BooleanSetting randomize = register(
-            new BooleanSetting("Randomize", false));
+            new BooleanSetting("Randomize", "bridgeassist.randomize", false));
 
     private final BooleanSetting requireSneak = register(
-            new BooleanSetting("Sneak Key Pressed", false));
+            new BooleanSetting("Sneak Key Pressed", "bridgeassist.require_sneak", false));
 
     private final BooleanSetting requireHoldingBlocks = register(
-            new BooleanSetting("Holding Blocks", true));
+            new BooleanSetting("Holding Blocks", "bridgeassist.require_holding_block", true));
 
     private final BooleanSetting requireLookDown = register(
-            new BooleanSetting("Looking Down", true));
+            new BooleanSetting("Looking Down", "bridgeassist.require_looking_down", true));
 
     private final BooleanSetting requireNotMovingForward = register(
-            new BooleanSetting("Not Moving Forward", true));
+            new BooleanSetting("Not Moving Forward", "bridgeassist.require_moving_forward", true));
 
     private final Random rng = new Random();
     private float currentEdgeOffset;

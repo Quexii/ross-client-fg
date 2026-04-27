@@ -10,7 +10,7 @@ public class Module {
     public final String name;
     public final String description;
     public final Category category;
-    public final Bind bind;
+    public Bind bind;
 
     private boolean enabled = false;
 

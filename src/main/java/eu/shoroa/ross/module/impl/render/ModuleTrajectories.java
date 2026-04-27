@@ -28,12 +28,12 @@ import java.util.List;
 import static eu.shoroa.ross.Client.mc;
 
 public class ModuleTrajectories extends Module {
-    private final ColorSetting lineColor = register(new ColorSetting("Line Color", new Color(200, 50, 50, 255)));
-    private final ColorSetting hitColor = register(new ColorSetting("Hit Color", new Color(200, 50, 50, 255)));
-    private final NumberSetting lineWidth = register(new NumberSetting("Line Width", 2.0f, 0.5f, 5.0f, 0.5f));
-    private final BooleanSetting showHit = register(new BooleanSetting("Landing Indicator", true));
-    private final BooleanSetting entityHit = register(new BooleanSetting("Entity Indicator", true));
-    private final NumberSetting hitRadius = register(new NumberSetting("Indicator Radius", 0.25f, 0.05f, 1.0f, 0.05f));
+    private final ColorSetting lineColor = register(new ColorSetting("Line Color", "trajectories.line_color", new Color(200, 50, 50, 255)));
+    private final ColorSetting hitColor = register(new ColorSetting("Hit Color", "trajectories.hit_color", new Color(200, 50, 50, 255)));
+    private final NumberSetting lineWidth = register(new NumberSetting("Line Width", "trajectories.line_width", 2.0f, 0.5f, 5.0f, 0.5f));
+    private final BooleanSetting showHit = register(new BooleanSetting("Landing Indicator", "trajectories.landing_indicator", true));
+    private final BooleanSetting entityHit = register(new BooleanSetting("Entity Indicator", "trajectories.entity_indicator", true));
+    private final NumberSetting hitRadius = register(new NumberSetting("Indicator Radius", "trajectories.indicator_radius", 0.25f, 0.05f, 1.0f, 0.05f));
 
     public ModuleTrajectories() {
         super("Trajectories", "Draws the path based on projectile type and velocity", Category.RENDER, null);

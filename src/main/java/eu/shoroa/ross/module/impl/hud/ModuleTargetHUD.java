@@ -40,7 +40,7 @@ import static eu.shoroa.ross.Client.mc;
 public class ModuleTargetHUD extends Module {
     private static final ResourceLocation STEVE_SKIN = new ResourceLocation("textures/entity/steve.png");
 
-    private final ModeSetting<Style> style = register(new ModeSetting<>("Style", Style.ROSS));
+    private final ModeSetting<Style> style = register(new ModeSetting<>("Style", "targethud.style", Style.ROSS));
 
     private final Animate animate = new Animate(180, Easing.EXPO_IN_OUT);
     private EntityPlayer currentTarget;

@@ -7,8 +7,8 @@ public class ModeSetting<T extends Enum<T> & ModeEnum> extends Setting<T> {
     private final T[] modes;
     private int currentIndex;
 
-    public ModeSetting(String name, T defaultValue) {
-        super(name, defaultValue, Type.MODE);
+    public ModeSetting(String name, String id, T defaultValue) {
+        super(name, id, defaultValue, Type.MODE);
         this.modes = defaultValue.getDeclaringClass().getEnumConstants();
         this.currentIndex = Arrays.asList(modes).indexOf(defaultValue);
     }

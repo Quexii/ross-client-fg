@@ -13,8 +13,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import static eu.shoroa.ross.Client.mc;
 
 public class ModuleFastPlace extends Module {
-    private final NumberSetting cps = register(new NumberSetting("CPS", 10, 1, 20, 1));
-    private final NumberSetting activationDelay = register(new NumberSetting("Activation Delay", 300, 0, 2000, 50));
+    private final NumberSetting cps = register(new NumberSetting("CPS", "fastplace.cps", 10, 1, 20, 1));
+    private final NumberSetting activationDelay = register(new NumberSetting("Activation Delay", "fastplace.activation_delay", 300, 0, 2000, 50));
 
     private final Timer timer = new Timer();
     private final Timer holdTimer = new Timer();

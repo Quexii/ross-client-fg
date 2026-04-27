@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @SuppressWarnings("ALL")
 public class ModuleWatermark extends Module {
 
-    private final ModeSetting<Mode> mode = register(new ModeSetting<>("Mode", Mode.ROSS));
+    private final ModeSetting<Mode> mode = register(new ModeSetting<>("Mode", "watermark.style", Mode.ROSS));
 
     public ModuleWatermark() {
         super("Watermark", "Displays a watermark on the screen", Category.HUD, null);

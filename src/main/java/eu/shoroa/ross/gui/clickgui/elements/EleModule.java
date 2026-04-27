@@ -111,7 +111,7 @@ public class EleModule extends GuiElement {
                 setting.setY(getY() + my);
                 setting.setWidth(getWidth() - 8f);
                 setting.render(mouseX, mouseY, partialTicks);
-                my += setting.getHeight();
+                my += setting.getExtendHeight();
             }
         }
         Client.INSTANCE.skia.getCanvas().restore();

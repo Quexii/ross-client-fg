@@ -65,4 +65,21 @@ public class ScreenClickGUI extends RossScreen {
     public boolean doesGuiPauseGame() {
         return false;
     }
+
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+
+        Thread saveThread = new Thread(() -> {
+            try {
+                Client.INSTANCE.config.save();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        saveThread.setDaemon(true);
+        saveThread.setName("Config Saver");
+        saveThread.start();
+    }
 }

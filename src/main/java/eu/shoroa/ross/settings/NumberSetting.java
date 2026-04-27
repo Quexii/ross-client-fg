@@ -6,9 +6,9 @@ public class NumberSetting extends Setting<Float> {
     private final float max;
     private final float increment;
 
-    public NumberSetting(String name, float defaultValue,
+    public NumberSetting(String name, String id, float defaultValue,
                          float min, float max, float increment) {
-        super(name, defaultValue, Type.NUMBER);
+        super(name, id, defaultValue, Type.NUMBER);
         this.min = min;
         this.max = max;
         this.increment = increment;

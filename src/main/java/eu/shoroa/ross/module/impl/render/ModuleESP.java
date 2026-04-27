@@ -36,16 +36,16 @@ import java.io.IOException;
 import static eu.shoroa.ross.Client.mc;
 
 public class ModuleESP extends Module {
-    private final ModeSetting<Mode> mode = register(new ModeSetting("Mode", Mode.MODE_2D));
-    private final BooleanSetting self = register(new BooleanSetting("Self", true));
+    private final ModeSetting<Mode> mode = register(new ModeSetting("Mode", "esp.mode", Mode.MODE_2D));
+    private final BooleanSetting self = register(new BooleanSetting("Self", "esp.do_self", true));
 
     // box settings
-    private final NumberSetting boxOutlineThickness = register(new NumberSetting("Box Outline", 1f, 0f, 5f, 0.1f));
+    private final NumberSetting boxOutlineThickness = register(new NumberSetting("Box Outline", "esp.box_outline_thickness", 1f, 0f, 5f, 0.1f));
 
     // shader settings
-    private final NumberSetting shaderOutlineThickness = register(new NumberSetting("Shader Outline", 1f, 0f, 15f, 0.1f));
-    private final NumberSetting shaderFillAlpha = register(new NumberSetting("Fill Alpha", 0.2f, 0f, 1f, 0.1f));
-    private final NumberSetting shaderOutlineAlpha = register(new NumberSetting("Outline Alpha", 1f, 0f, 1f, 0.1f));
+    private final NumberSetting shaderOutlineThickness = register(new NumberSetting("Shader Outline", "esp.shader_outline_thickness", 1f, 0f, 15f, 0.1f));
+    private final NumberSetting shaderFillAlpha = register(new NumberSetting("Fill Alpha", "esp.shader_fill_alpha", 0.2f, 0f, 1f, 0.1f));
+    private final NumberSetting shaderOutlineAlpha = register(new NumberSetting("Outline Alpha", "esp.shader_outline_alpha", 1f, 0f, 1f, 0.1f));
 
     private Framebuffer colorBuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
     private boolean renderingColorPass;

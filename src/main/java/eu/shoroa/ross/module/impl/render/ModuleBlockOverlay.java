@@ -13,12 +13,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
 
 public class ModuleBlockOverlay extends Module {
-    private final ColorSetting outlineColor = register(new ColorSetting("Outline Color", new Color(-1)));
-    private final ColorSetting fillColor = register(new ColorSetting("Fill Color", new Color(255,255,255,50)));
-    private final BooleanSetting renderOutline = register(new BooleanSetting("Render Outline", true));
-    private final BooleanSetting renderFill = register(new BooleanSetting("Render Fill", true));
-    private final BooleanSetting depth = register(new BooleanSetting("Depth", true));
-    private final NumberSetting lineWidth = register(new NumberSetting("Line Width", 2, 0.1f, 5, 0.1f));
+    private final ColorSetting outlineColor = register(new ColorSetting("Outline Color", "blockoverlay.outline_color", new Color(-1)));
+    private final ColorSetting fillColor = register(new ColorSetting("Fill Color", "blockoverlay.fill_color", new Color(255,255,255,50)));
+    private final BooleanSetting renderOutline = register(new BooleanSetting("Render Outline", "blockoverlay.draw_outline", true));
+    private final BooleanSetting renderFill = register(new BooleanSetting("Render Fill", "blockoverlay.draw_fill", true));
+    private final BooleanSetting depth = register(new BooleanSetting("Depth", "blockoverlay.depth", true));
+    private final NumberSetting lineWidth = register(new NumberSetting("Line Width", "blockoverlay.line_width", 2, 0.1f, 5, 0.1f));
 
     public ModuleBlockOverlay() {
         super("Block Overlay", "Custom block selection", Category.RENDER, null);

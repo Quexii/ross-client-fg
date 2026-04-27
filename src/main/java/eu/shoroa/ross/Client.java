@@ -1,5 +1,6 @@
 package eu.shoroa.ross;
 
+import eu.shoroa.ross.config.ConfigManager;
 import eu.shoroa.ross.module.ModuleManager;
 import eu.shoroa.ross.render.filters.Filter;
 import eu.shoroa.ross.render.skia.SkiaSource;
@@ -7,13 +8,13 @@ import eu.shoroa.ross.render.skia.font.Fonts;
 import eu.shoroa.ross.render.skia.image.Images;
 import eu.shoroa.ross.util.proj.EntityProjection;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import eu.shoroa.ross.event.EventInput;
+
+import java.io.IOException;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
@@ -23,6 +24,7 @@ public class Client {
     public static final Minecraft mc = Minecraft.getMinecraft();
 
     public SkiaSource skia;
+    public ConfigManager config;
 
     private Client() {
         EVENT_BUS.register(this);
@@ -38,6 +40,14 @@ public class Client {
         EntityProjection.getInstance();
 
         ModuleManager.init();
+
+        config = new ConfigManager();
+        try {
+            config.init();
+            config.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @SubscribeEvent

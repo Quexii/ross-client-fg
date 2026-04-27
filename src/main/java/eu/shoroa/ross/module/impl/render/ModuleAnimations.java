@@ -6,8 +6,8 @@ import eu.shoroa.ross.settings.ModeEnum;
 import eu.shoroa.ross.settings.ModeSetting;
 
 public class ModuleAnimations extends Module {
-    public ModeSetting<AnimationMode> animation = register(new ModeSetting<>("Animation", AnimationMode.OLD));
-    public ModeSetting<SmoothMode> smoothing = register(new ModeSetting<>("Smoothing", SmoothMode.NORMAL));
+    public ModeSetting<AnimationMode> animation = register(new ModeSetting<>("Animation", "blockhit.animation", AnimationMode.OLD));
+    public ModeSetting<SmoothMode> smoothing = register(new ModeSetting<>("Smoothing", "blockhit.hitting", SmoothMode.NORMAL));
 
     public ModuleAnimations() {
         super("Animations", "Changes the way your animations look", Category.RENDER, null);

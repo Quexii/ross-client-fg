@@ -9,14 +9,16 @@ import java.util.function.Supplier;
 public abstract class Setting<T> {
 
     private final String name;
+    private final String id;
     private T value;
 
     private final List<Consumer<T>> listeners = new ArrayList<>();
     private Supplier<Boolean> visibility = () -> true;
     private final Type type;
 
-    protected Setting(String name, T defaultValue, Type type) {
+    protected Setting(String name, String id, T defaultValue, Type type) {
         this.name = name;
+        this.id = id;
         this.value = defaultValue;
         this.type = type;
     }
@@ -51,6 +53,10 @@ public abstract class Setting<T> {
 
     public Type getType() {
         return type;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public enum Type {
