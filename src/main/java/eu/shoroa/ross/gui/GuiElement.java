@@ -16,7 +16,7 @@ public abstract class GuiElement {
     }
 
     public abstract void render(float mouseX, float mouseY, float partialTicks);
-    public abstract void input(float mouseX, float mouseY, EventInput event);
+    public abstract boolean input(float mouseX, float mouseY, EventInput event);
 
     public float getX() {
         return x;

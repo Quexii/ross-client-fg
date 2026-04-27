@@ -4,6 +4,7 @@ import eu.shoroa.ross.Client;
 import eu.shoroa.ross.render.filters.Filter;
 import eu.shoroa.ross.render.skia.SkiaSource;
 import eu.shoroa.ross.render.skia.font.Font;
+import eu.shoroa.ross.render.skia.image.ImageSource;
 import eu.shoroa.ross.types.Size;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.types.Point;
@@ -15,7 +16,6 @@ import org.lwjgl.opengl.GL11;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class Renderer {
     private static Canvas currentCanvas;
@@ -26,23 +26,18 @@ public class Renderer {
         currentCanvas = source.getCanvas();
     }
 
-    public static void drawRect(float x, float y, float width, float height, Consumer<Paint> paint) {
-        try (Paint p = new Paint()) {
-            paint.accept(p);
-            currentCanvas.drawRect(Rect.makeXYWH(x, y, width, height), p);
-        }
+    public static void drawRect(float x, float y, float width, float height, Paint paint) {
+        currentCanvas.drawRect(Rect.makeXYWH(x, y, width, height), paint);
     }
 
-    public static void drawRRect(float x, float y, float width, float height, float radius, Consumer<Paint> paint) {
-        try (Paint p = new Paint()) {
-            paint.accept(p);
-            currentCanvas.drawRRect(RRect.makeXYWH(x, y, width, height, radius), p);
-        }
+    public static void drawRRect(float x, float y, float width, float height, float radius, Paint paint) {
+        currentCanvas.drawRRect(RRect.makeXYWH(x, y, width, height, radius), paint);
     }
 
 
     public static void drawFilter(Filter filter, int filterTexture, float x, float y, float width, float height) {
         Image image = filter.imageFor(filterTexture);
+        if (image == null) return;
 
         currentCanvas.save();
         currentCanvas.clipRect(Rect.makeXYWH(x, y, width, height));
@@ -52,6 +47,7 @@ public class Renderer {
 
     public static void drawFilter(Filter filter, int filterTexture, float x, float y, float width, float height, float radius) {
         Image image = filter.imageFor(filterTexture);
+        if (image == null) return;
 
         currentCanvas.save();
         currentCanvas.clipRRect(RRect.makeXYWH(x, y, width, height, radius));
@@ -59,13 +55,38 @@ public class Renderer {
         currentCanvas.restore();
     }
 
-    public static void drawText(String text, float x, float y, Font font, float size, Font.Align align, Consumer<Paint> paint) {
-        io.github.humbleui.skija.Font skFont = fontCache.computeIfAbsent(new FontCache(font.getTypeface(), size), fc -> new io.github.humbleui.skija.Font(fc.typeface, fc.size));
-        TextLine line = TextLine.make(text, skFont);
+    public static void drawImage(ImageSource source, float x, float y) {
+        Image image = source.getImage();
+        if (image == null) return;
 
-        try (Paint p = new Paint()) {
-            p.setAntiAlias(true);
-            paint.accept(p);
+        currentCanvas.drawImageRect(image, Rect.makeXYWH(x, y, source.getWidth(), source.getHeight()));
+    }
+
+    public static void drawImage(ImageSource source, float x, float y, float width, float height) {
+        Image image = source.getImage();
+        if (image == null) return;
+
+        currentCanvas.drawImageRect(image, Rect.makeXYWH(x, y, width, height));
+    }
+
+    public static void drawImageRegion(ImageSource source,
+                                       float srcX, float srcY, float srcWidth, float srcHeight,
+                                       float dstX, float dstY, float dstWidth, float dstHeight) {
+        Image image = source.getImage();
+        if (image == null) return;
+
+        currentCanvas.drawImageRect(
+                image,
+                Rect.makeXYWH(srcX, srcY, srcWidth, srcHeight),
+                Rect.makeXYWH(dstX, dstY, dstWidth, dstHeight)
+        );
+    }
+
+    public static void drawText(String text, float x, float y, Font font, float size, Font.Align align, Paint paint) {
+        io.github.humbleui.skija.Font skFont = fontCache.computeIfAbsent(new FontCache(font.getTypeface(), size), fc -> new io.github.humbleui.skija.Font(fc.typeface, fc.size));
+
+        try (TextLine line = TextLine.make(text, skFont)) {
+            paint.setAntiAlias(true);
 
             skFont.setMetricsLinear(true);
             skFont.setSubpixel(true);
@@ -135,26 +156,23 @@ public class Renderer {
                     break;
             }
 
-            currentCanvas.drawTextLine(line, drawX, drawY, p);
+            currentCanvas.drawTextLine(line, drawX, drawY, paint);
         }
     }
 
     public static Size getTextBounds(String text, Font font, float size) {
         io.github.humbleui.skija.Font skFont = fontCache.computeIfAbsent(new FontCache(font.getTypeface(), size), fc -> new io.github.humbleui.skija.Font(fc.typeface, fc.size));
-        TextLine line = TextLine.make(text, skFont);
-        FontMetrics metrics = skFont.getMetrics();
-
-        return new Size(line.getWidth(), metrics.getDescent() - metrics.getAscent());
+        try (TextLine line = TextLine.make(text, skFont)) {
+            FontMetrics metrics = skFont.getMetrics();
+            return new Size(line.getWidth(), metrics.getDescent() - metrics.getAscent());
+        }
     }
 
     public static Image fromGL(int texture) {
-        return glImageCache.computeIfAbsent(texture, Renderer::adoptGLTexture);
+        return glImageCache.computeIfAbsent(texture, t -> adoptGLTexture(t, Display.getWidth(), Display.getHeight()));
     }
 
-    public static Image adoptGLTexture(int texture) {
-        int width = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-        int height = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
-
+    public static Image adoptGLTexture(int texture, int width, int height) {
         return Image.adoptGLTextureFrom(
                 Client.INSTANCE.skia.getContext(),
                 texture,
@@ -162,14 +180,17 @@ public class Renderer {
                 width,
                 height,
                 GL11.GL_RGBA8,
-                SurfaceOrigin.BOTTOM_LEFT,
+                SurfaceOrigin.TOP_LEFT,
                 ColorType.RGBA_8888
         );
     }
 
     public static void recomputeGLTexture(int texture) {
         if (glImageCache.containsKey(texture)) {
-            glImageCache.remove(texture);
+            Image old = glImageCache.remove(texture);
+            if (old != null) {
+                old.close();
+            }
             fromGL(texture);
         }
     }
@@ -181,6 +202,19 @@ public class Renderer {
         private FontCache(Typeface typeface, float size) {
             this.typeface = typeface;
             this.size = size;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            FontCache fontCache = (FontCache) o;
+            return Float.compare(fontCache.size, size) == 0 && java.util.Objects.equals(typeface, fontCache.typeface);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(typeface, size);
         }
     }
 }

@@ -10,14 +10,29 @@ public class Fonts {
     private static Map<String, SimpleFont> simpleFonts = new HashMap<>();
     private static Map<String, VariableFont> variableFonts = new HashMap<>();
 
-    public static final SimpleFont MapleMono = Fonts.createSimpleFont("/assets/rossclient/fonts/MapleMono.ttf");
-    public static final VariableFont MirandaSans = Fonts.createVariableFont("/assets/rossclient/fonts/MirandaSans_wght.ttf");
-    public static final VariableFont MirandaSansItalic = Fonts.createVariableFont("/assets/rossclient/fonts/MirandaSans-Italic_wght.ttf");
-    public static final SimpleFont RajdhaniBold = Fonts.createSimpleFont("/assets/rossclient/fonts/rajdhani/bold.ttf");
-    public static final SimpleFont RajdhaniLight = Fonts.createSimpleFont("/assets/rossclient/fonts/rajdhani/light.ttf");
-    public static final SimpleFont RajdhaniMedium = Fonts.createSimpleFont("/assets/rossclient/fonts/rajdhani/medium.ttf");
-    public static final SimpleFont RajdhaniRegular = Fonts.createSimpleFont("/assets/rossclient/fonts/rajdhani/regular.ttf");
-    public static final SimpleFont RajdhaniSemiBold = Fonts.createSimpleFont("/assets/rossclient/fonts/rajdhani/semibold.ttf");
+    /**
+     * <strong>Material Rounded</strong>
+     * <ul>
+     *  <li>FILL: 0 to 1 (default: 0)</li>
+     *  <li>GRAD: -50 to 200 (default: 0)</li>
+     *  <li>opsz: 20 to 48 (default: 24)</li>
+     *  <li>wght: 100 to 700 (default: 400)</li>
+     * </ul>
+     */
+    public static final VariableFont MaterialRounded = Fonts.createVariableFont("/assets/rossclient/fonts/material/rounded-FILL_GRAD_opsz_wght.ttf");
+
+    /**
+     * <strong>Google Sans Flex</strong>
+     * <ul>
+     *  <li>GRAD: 0 to 100 (default: 0)</li>
+     *  <li>ROND: 0 to 100 (default: 0)</li>
+     *  <li>opsz: 6 to 144 (default: 18)</li>
+     *  <li>slnt: -10 to 0 (default: 0)</li>
+     *  <li>wdth: 25 to 151 (default: 100)</li>
+     *  <li>wght: 1 to 1000 (default: 400)</li>
+     * </ul>
+     */
+    public static final VariableFont GoogleFlex = Fonts.createVariableFont("/assets/rossclient/fonts/GoogleSansFlex-GRAD_ROND_opsz_slnt_wdth_wght.ttf");
 
     public static SimpleFont createSimpleFont(String path) {
         simpleFonts.put(path, new SimpleFont());

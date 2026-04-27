@@ -13,6 +13,7 @@ plugins {
 }
 
 version = "1.0.0"
+base.archivesName.set("ross-forge")
 
 val skijaVersion = "0.116.8"
 
@@ -57,10 +58,10 @@ tasks.named<JavaExec>("runClient") {
     javaLauncher.set(javaToolchains.launcherFor {
         languageVersion.set(JavaLanguageVersion.of(8))
     })
-    jvmArgs = listOf("-noverify")
+
+    jvmArgs("-noverify")
 
     doFirst {
-        //this is for `runClient` task, for the configuration change `rootDir` to `projectDir`
         val modsDir = File(rootDir, "run/mods")
         if (!modsDir.exists()) {
             modsDir.mkdirs()
@@ -74,7 +75,30 @@ tasks.named<JavaExec>("runClient") {
 }
 
 tasks {
+    register<Copy>("updateLauncher") {
+        description = "Copies the built jar to the launcher directory for testing, requires you to set the path."
+        group = "ross"
+
+        val launcherPath = System.getenv("ROSS_LAUNCHER_PATH")
+
+        from(named("remapJar"))
+        into(launcherPath ?: temporaryDir.path)
+
+        onlyIf {
+            val isSet = System.getenv("ROSS_LAUNCHER_PATH") != null
+            if (!isSet) {
+                println("ROSS_LAUNCHER_PATH environment variable not set, skipping updateLauncher task.")
+            }
+            isSet
+        }
+    }
+
+    named("build") {
+        finalizedBy("updateLauncher")
+    }
+
     jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         from(embed.files.map { zipTree(it) })
 
         manifest {
@@ -120,11 +144,6 @@ tasks {
     }
 }
 
-
-//tasks.build {
-//    dependsOn(tasks.shadowJar)
-//}
-
 loom {
     noServerRunConfigs()
 
@@ -144,6 +163,7 @@ loom {
         property("fml.coreMods.load", "eu.shoroa.ross.mixins.plugin.RossCoreMod")
         property("devauth.enabled", "true")
         property("devauth.account", "main")
+        property("mixin.hotSwap", "true")
     }
 
     forge {

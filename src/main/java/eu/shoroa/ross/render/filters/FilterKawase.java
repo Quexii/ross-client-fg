@@ -107,6 +107,6 @@ public class FilterKawase extends Filter {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(1f, 1f, 1f, 1f);
 
-        putImage(texture, fbos[0].framebufferTexture);
+        putImage(texture, fbos[0].framebufferTexture, fbos[0].framebufferTextureWidth, fbos[0].framebufferTextureHeight);
     }
 }

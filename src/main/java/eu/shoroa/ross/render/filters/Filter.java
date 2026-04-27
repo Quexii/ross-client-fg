@@ -19,6 +19,7 @@ import java.util.Map;
 public abstract class Filter {
     protected final Shader shader;
     private final Map<Integer, Image> textures = new HashMap<>();
+    private final Map<Integer, Integer> textureIds = new HashMap<>();
 
     private static FilterKawase kawase;
 
@@ -42,12 +43,21 @@ public abstract class Filter {
     public abstract void capture(int texture, Object... args);
 
     public void resize() {
-        createFbos();
+        for (Image img : textures.values()) {
+            img.close();
+        }
         textures.clear();
+        textureIds.clear();
+        createFbos();
     }
 
-    public void putImage(int target, int texture) {
-        textures.computeIfAbsent(target, t -> Renderer.adoptGLTexture(texture));
+    public void putImage(int target, int texture, int width, int height) {
+        Integer oldTex = textureIds.get(target);
+        if (oldTex == null || oldTex != texture) {
+            Image oldImg = textures.put(target, Renderer.adoptGLTexture(texture, width, height));
+            if (oldImg != null) oldImg.close();
+            textureIds.put(target, texture);
+        }
     }
 
     public Image imageFor(int texture) {

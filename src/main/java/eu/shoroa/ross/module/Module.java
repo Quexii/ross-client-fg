@@ -1,6 +1,10 @@
 package eu.shoroa.ross.module;
 
+import eu.shoroa.ross.settings.Setting;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Module {
     public final String name;
@@ -9,6 +13,12 @@ public class Module {
     public final Bind bind;
 
     private boolean enabled = false;
+
+    public List<Setting<?>> getSettings() {
+        return settings;
+    }
+
+    private final List<Setting<?>> settings = new ArrayList<>();
 
     public Module(String name, String description, Category category, Bind bind) {
         this.name = name;
@@ -37,5 +47,10 @@ public class Module {
         this.enabled = enabled;
         if (enabled) onEnable();
         else onDisable();
+    }
+
+    public <T extends Setting<?>> T register(T setting) {
+        settings.add(setting);
+        return setting;
     }
 }

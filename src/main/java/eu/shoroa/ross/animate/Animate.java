@@ -1,14 +1,16 @@
 package eu.shoroa.ross.animate;
 
+import org.lwjgl.Sys;
+
 import java.util.function.Supplier;
 
 public class Animate {
     private long durationMs;
     private Easing ease;
     private Supplier<Boolean> condition;
-    private float value;
+    private double value;
     
-    private long lastUpdateTime;
+    private double lastUpdateTime;
     private boolean lastCondition;
 
     public Animate(long durationMs, Easing ease) {
@@ -25,33 +27,33 @@ public class Animate {
         return this;
     }
 
-    public float getValue() {
+    public double getValue() {
         update();
         return ease.ease(value);
     }
 
-    public float getLinearValue() {
+    public double getLinearValue() {
         update();
         return value;
     }
 
     private void update() {
-        long now = System.currentTimeMillis();
+        double now = Sys.getTime() * 1000.0 / Sys.getTimerResolution();
         if (lastUpdateTime == -1) lastUpdateTime = now;
         
-        long deltaMs = now - lastUpdateTime;
+        double deltaMs = now - lastUpdateTime;
         lastUpdateTime = now;
         
         boolean cond = condition.get();
-        float progress = deltaMs / (float) durationMs;
-        
+        double progress = deltaMs / durationMs;
+
         if (cond) value += progress;
         else value -= progress;
 
         value = Math.max(0f, Math.min(1f, value));
         lastCondition = cond;
 
-        if (Float.isNaN(value) || Float.isInfinite(value)) forceFinish();
+        if (Double.isNaN(value) || Double.isInfinite(value)) forceFinish();
     }
 
     public void forceFinish() {

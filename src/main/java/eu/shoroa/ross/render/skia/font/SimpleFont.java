@@ -24,6 +24,13 @@ public class SimpleFont implements Font {
                 typeface.getFamilyName(),
                 typeface.getFamilyNames()
         );
+
+        System.out.println("Loaded simple font: " + fontData.familyName);
+        System.out.println("data:");
+            System.out.println(" - " + fontData.axes);
+            System.out.println(" - " + fontData.variations);
+            System.out.println(" - " + fontData.familyName);
+        System.out.println();
     }
 
     @Override

@@ -1,12 +1,9 @@
 package eu.shoroa.ross.mixins.plugin;
 
 import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
-import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.Set;
 
 public class RossCoreMod implements IFMLLoadingPlugin {
 

@@ -25,7 +25,7 @@ public class SkiaSource {
         renderTarget = BackendRenderTarget.makeGL(
             framebuffer.framebufferTextureWidth,
             framebuffer.framebufferTextureHeight,
-            4,
+            0,
             8,
             framebuffer.framebufferObject,
             GL11.GL_RGBA8
@@ -56,6 +56,7 @@ public class SkiaSource {
             framebuffer.framebufferClear();
         }
 
+        GlStateManager.pushAttrib();
         SkStateSaver.backup();
         context.resetGLAll();
         GlStateManager.disableAlpha();
@@ -65,6 +66,7 @@ public class SkiaSource {
         context.flushAndSubmit(surface);
         GlStateManager.enableAlpha();
         SkStateSaver.restore();
+        GlStateManager.popAttrib();
 
         if (previousFramebuffer != -1) {
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, previousFramebuffer);

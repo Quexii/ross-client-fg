@@ -5,11 +5,20 @@
   "package": "eu.shoroa.ross.mixins.injection",
   "refmap": "ross.mixins.refmap.json",
   "mixins": [
+    "client.renderer.entity.MixinRendererLivingEntity",
+    "entity.MixinEntityLivingBase"
   ],
   "client": [
     "MixinGuiMainMenu",
+    "client.MinecraftAccessor",
     "client.MixinMinecraft",
-    ,
+    "client.entity.MixinEntityPlayerSP",
+    "client.renderer.MixinActiveRenderInfo",
+    "client.renderer.MixinItemRenderer",
+    "client.renderer.MixinRenderGlobal",
+    "client.renderer.entity.MixinEntityRenderer",
+    "client.renderer.entity.MixinRenderManager",
+    "client.renderer.entity.RenderManagerAccessor",
     "client.settings.KeyBindingAccessor"
   ],
   "injectors": {
