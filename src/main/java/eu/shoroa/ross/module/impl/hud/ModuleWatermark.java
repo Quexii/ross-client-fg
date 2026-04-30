@@ -68,7 +68,7 @@ public class ModuleWatermark extends Module {
                 p.setColor(0xFFe044a8);
                 p.setImageFilter(ImageFilter.makeDropShadow(0f, 0f, 5f, 5f, 0x88e044a8));
                 VariableFont.DerivedFont font = Fonts.GoogleFlex.weight(600).opticSize(24).roundness(100);
-                Renderer.drawText("Ross", 4f, 4f, font, 22f, Font.Align.TOP_LEFT, p);
+                Renderer.drawText("Ross", 4f, 0f, font, 22f, Font.Align.TOP_LEFT, p);
             }
         }
     }

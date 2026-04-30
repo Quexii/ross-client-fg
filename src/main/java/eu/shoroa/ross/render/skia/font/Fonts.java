@@ -19,7 +19,7 @@ public class Fonts {
      *  <li>wght: 100 to 700 (default: 400)</li>
      * </ul>
      */
-    public static final VariableFont MaterialRounded = Fonts.createVariableFont("/assets/rossclient/fonts/material/rounded-FILL_GRAD_opsz_wght.ttf");
+    public static final VariableFont MaterialIcons = Fonts.createVariableFont("/assets/rossclient/fonts/MaterialRounded.ttf");
 
     /**
      * <strong>Google Sans Flex</strong>
@@ -32,7 +32,7 @@ public class Fonts {
      *  <li>wght: 1 to 1000 (default: 400)</li>
      * </ul>
      */
-    public static final VariableFont GoogleFlex = Fonts.createVariableFont("/assets/rossclient/fonts/GoogleSansFlex-GRAD_ROND_opsz_slnt_wdth_wght.ttf");
+    public static final VariableFont GoogleFlex = Fonts.createVariableFont("/assets/rossclient/fonts/GoogleSansFlex.ttf");
 
     public static SimpleFont createSimpleFont(String path) {
         simpleFonts.put(path, new SimpleFont());

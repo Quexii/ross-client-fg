@@ -17,6 +17,8 @@ import org.lwjgl.opengl.Display;
 public class ScreenClickGUI extends RossScreen {
     private final EleCategory[] categories = new EleCategory[Category.values().length];
 
+    // TODO: center categories, clamp max height, add scrolling
+
     @Override
     protected void init() {
         for (int i = 0; i < categories.length; i++) {
@@ -42,14 +44,6 @@ public class ScreenClickGUI extends RossScreen {
 
         for (EleCategory category : categories) {
             category.render(mouseX, mouseY, partialTicks);
-        }
-
-        try (Paint p = new Paint()) {
-            p.setColor(0xFFd4d4d4);
-            VariableFont.DerivedFont font = Fonts.GoogleFlex
-                    .weight(500)
-                    .opticSize(14);
-            Renderer.drawText("FPS: " + Minecraft.getDebugFPS(), Display.getWidth() - 10f, Display.getHeight() - 10f, font, 14f, Font.Align.BOTTOM_RIGHT, p);
         }
         Client.INSTANCE.skia.endFrame();
     }

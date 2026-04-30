@@ -53,7 +53,7 @@ public class EleSettingMode<T extends Enum<T> & ModeEnum> extends EleSetting<T> 
             VariableFont.DerivedFont font = Fonts.GoogleFlex
                     .weight(400)
                     .opticSize(14);
-            VariableFont.DerivedFont iconFont = Fonts.MaterialRounded.weight(200);
+            VariableFont.DerivedFont iconFont = Fonts.MaterialIcons.weight(200);
 
             p.setColor(0xffbfbfbf);
             Renderer.drawText(getSetting().getName(), getX() + 10f, getY() + 9f, titleFont, 12f, Font.Align.CENTER_LEFT, p);
@@ -85,7 +85,7 @@ public class EleSettingMode<T extends Enum<T> & ModeEnum> extends EleSetting<T> 
                 VariableFont.DerivedFont font = Fonts.GoogleFlex
                         .weight(400)
                         .opticSize(14);
-                VariableFont.DerivedFont iconFont = Fonts.MaterialRounded.weight(200);
+                VariableFont.DerivedFont iconFont = Fonts.MaterialIcons.weight(200);
 
                 int currentIndex = setting.getCurrentIndex();
                 for (int i = 0; i < setting.getModes().size(); i++) {

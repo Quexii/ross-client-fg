@@ -1,7 +1,9 @@
 package eu.shoroa.ross;
 
 import eu.shoroa.ross.config.ConfigManager;
+import eu.shoroa.ross.integration.hypixel.BedwarsSystem;
 import eu.shoroa.ross.module.ModuleManager;
+import eu.shoroa.ross.notification.Notifications;
 import eu.shoroa.ross.render.filters.Filter;
 import eu.shoroa.ross.render.skia.SkiaSource;
 import eu.shoroa.ross.render.skia.font.Fonts;
@@ -28,6 +30,8 @@ public class Client {
 
     private Client() {
         EVENT_BUS.register(this);
+        EVENT_BUS.register(BedwarsSystem.getInstance());
+        EVENT_BUS.register(Notifications.getInstance());
     }
 
     public void init() {

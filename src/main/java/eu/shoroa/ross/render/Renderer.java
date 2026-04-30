@@ -50,7 +50,7 @@ public class Renderer {
         if (image == null) return;
 
         currentCanvas.save();
-        currentCanvas.clipRRect(RRect.makeXYWH(x, y, width, height, radius));
+        currentCanvas.clipRRect(RRect.makeXYWH(x, y, width, height, radius), true);
         currentCanvas.drawImageRect(image, Rect.makeWH(Display.getWidth(), Display.getHeight()));
         currentCanvas.restore();
     }
@@ -62,11 +62,25 @@ public class Renderer {
         currentCanvas.drawImageRect(image, Rect.makeXYWH(x, y, source.getWidth(), source.getHeight()));
     }
 
+    public static void drawImage(ImageSource source, float x, float y, Paint paint) {
+        Image image = source.getImage();
+        if (image == null) return;
+
+        currentCanvas.drawImageRect(image, Rect.makeWH(image.getWidth(), image.getHeight()), Rect.makeXYWH(x, y, source.getWidth(), source.getHeight()), SamplingMode.LINEAR, paint, true);
+    }
+
     public static void drawImage(ImageSource source, float x, float y, float width, float height) {
         Image image = source.getImage();
         if (image == null) return;
 
         currentCanvas.drawImageRect(image, Rect.makeXYWH(x, y, width, height));
+    }
+
+    public static void drawImage(ImageSource source, float x, float y, float width, float height, Paint paint) {
+        Image image = source.getImage();
+        if (image == null) return;
+
+        currentCanvas.drawImageRect(image, Rect.makeXYWH(x, y, width, height), paint);
     }
 
     public static void drawImageRegion(ImageSource source,
@@ -180,7 +194,7 @@ public class Renderer {
                 width,
                 height,
                 GL11.GL_RGBA8,
-                SurfaceOrigin.TOP_LEFT,
+                SurfaceOrigin.BOTTOM_LEFT,
                 ColorType.RGBA_8888
         );
     }

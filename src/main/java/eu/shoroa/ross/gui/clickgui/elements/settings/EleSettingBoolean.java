@@ -11,7 +11,6 @@ import eu.shoroa.ross.render.skia.font.VariableFont;
 import eu.shoroa.ross.settings.BooleanSetting;
 import eu.shoroa.ross.util.render.MaterialIcons;
 import io.github.humbleui.skija.Canvas;
-import io.github.humbleui.skija.Color;
 import io.github.humbleui.skija.Paint;
 
 public class EleSettingBoolean extends EleSetting<Boolean> {
@@ -44,7 +43,7 @@ public class EleSettingBoolean extends EleSetting<Boolean> {
             p.setStrokeWidth(1.5f);
             Renderer.drawRRect(getX() + getWidth() - 30, getY() + getHeight() / 2f - 8, 16, 16, 6, p);
 
-            VariableFont.DerivedFont iconFont = Fonts.MaterialRounded.weight(200);
+            VariableFont.DerivedFont iconFont = Fonts.MaterialIcons.weight(200);
 
             p.setColor(0xFF4caf50);
             canvas.save();

@@ -27,6 +27,10 @@ public class Module {
         this.bind = bind;
     }
 
+    public Module(String name, String description, Category category) {
+        this(name, description, category, null);
+    }
+
     public void toggle() {
         setEnabled(!isEnabled());
     }

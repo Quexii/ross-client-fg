@@ -2,8 +2,10 @@ package eu.shoroa.ross.module;
 
 import eu.shoroa.ross.event.EventInput;
 import eu.shoroa.ross.module.impl.combat.ModuleAutoClicked;
+import eu.shoroa.ross.module.impl.hud.ModuleItemNotifs;
 import eu.shoroa.ross.module.impl.hud.ModuleTargetHUD;
 import eu.shoroa.ross.module.impl.hud.ModuleWatermark;
+import eu.shoroa.ross.module.impl.misc.ModuleBedwars;
 import eu.shoroa.ross.module.impl.misc.ModuleFireballWarning;
 import eu.shoroa.ross.module.impl.misc.ModuleFreeLook;
 import eu.shoroa.ross.module.impl.player.*;
@@ -41,9 +43,11 @@ public class ModuleManager {
                 // hud
                 new ModuleWatermark(),
                 new ModuleTargetHUD(),
+                new ModuleItemNotifs(),
                 // misc
                 freeLook = new ModuleFreeLook(),
-                new ModuleFireballWarning()
+                new ModuleFireballWarning(),
+                new ModuleBedwars()
         };
 
         for (Category category : Category.values()) {

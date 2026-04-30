@@ -124,7 +124,7 @@ public class ConfigManager {
             try (Reader reader = new FileReader(file)) {
                 JsonObject json = gson.fromJson(reader, JsonObject.class);
                 if (json == null) {
-                    // queue notification: failed to load config
+                    // TODO: queue notification: failed to load config
                     if (currentConfig.equals("default")) {
                         return;
                     }
