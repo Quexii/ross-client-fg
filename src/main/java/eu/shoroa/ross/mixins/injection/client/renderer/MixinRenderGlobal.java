@@ -11,12 +11,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static eu.shoroa.ross.Client.EVENT_BUS;
 
 @Mixin(RenderGlobal.class)
 public class MixinRenderGlobal {
@@ -33,7 +34,7 @@ public class MixinRenderGlobal {
 
         AxisAlignedBB aabb = block.getSelectedBoundingBox(this.theWorld, blockpos).expand(0.0020000000949949026D, 0.0020000000949949026D, 0.0020000000949949026D).offset(-d0, -d1, -d2);
         EventRenderBlockSelection event = new EventRenderBlockSelection(aabb);
-        MinecraftForge.EVENT_BUS.post(event);
+        EVENT_BUS.post(event);
 
         if (event.isCanceled())
             ci.cancel();
@@ -41,6 +42,6 @@ public class MixinRenderGlobal {
 
     @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.BEFORE))
     public void injectRenderEntities(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci) {
-        MinecraftForge.EVENT_BUS.post(new EventPostEntityRender(theWorld.getLoadedEntityList(), partialTicks, renderViewEntity, camera));
+        EVENT_BUS.post(new EventPostEntityRender(theWorld.getLoadedEntityList(), partialTicks, renderViewEntity, camera));
     }
 }

@@ -1,5 +1,7 @@
 package eu.shoroa.ross.module.impl.render;
 
+import eu.shoroa.ross.event.EventRender3D;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.mixins.injection.client.MinecraftAccessor;
 import eu.shoroa.ross.mixins.injection.client.renderer.entity.RenderManagerAccessor;
 import eu.shoroa.ross.module.Category;
@@ -17,8 +19,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
 import net.minecraft.util.*;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -39,8 +39,8 @@ public class ModuleTrajectories extends Module {
         super("Trajectories", "Draws the path based on projectile type and velocity", Category.RENDER, null);
     }
 
-    @SubscribeEvent
-    public void oe$OnRender3D(RenderWorldLastEvent event) {
+    @Subscribe
+    public void oe$OnRender3D(EventRender3D event) {
         if (mc.theWorld == null || mc.thePlayer == null) return;
 
         ItemStack heldItem = mc.thePlayer.getCurrentEquippedItem();

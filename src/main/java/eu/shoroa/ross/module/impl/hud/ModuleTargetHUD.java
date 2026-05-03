@@ -4,6 +4,7 @@ import eu.shoroa.ross.Client;
 import eu.shoroa.ross.animate.Animate;
 import eu.shoroa.ross.animate.Easing;
 import eu.shoroa.ross.event.EventHUD;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.render.Renderer;
@@ -14,6 +15,7 @@ import eu.shoroa.ross.settings.ModeEnum;
 import eu.shoroa.ross.settings.ModeSetting;
 import eu.shoroa.ross.types.Rect;
 import eu.shoroa.ross.util.MathHelper;
+import io.github.humbleui.skija.Canvas;
 import io.github.humbleui.skija.Image;
 import io.github.humbleui.skija.Paint;
 import io.github.humbleui.types.RRect;
@@ -23,17 +25,15 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.Display;
-import io.github.humbleui.skija.Canvas;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import javax.imageio.ImageIO;
 
 import static eu.shoroa.ross.Client.mc;
 
@@ -62,7 +62,7 @@ public class ModuleTargetHUD extends Module {
         clearSteveHeadImage();
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$OnHUD(EventHUD.BottomSkia event) {
         if (mc.thePlayer == null || mc.theWorld == null) return;
 

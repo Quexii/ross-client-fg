@@ -1,13 +1,13 @@
 package eu.shoroa.ross.module.impl.combat;
 
 import eu.shoroa.ross.event.EventTick;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.mixins.injection.client.MinecraftAccessor;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.settings.NumberSetting;
 import eu.shoroa.ross.util.Timer;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Random;
 
@@ -26,7 +26,7 @@ public class ModuleAutoClicked extends Module {
         super("AutoClicker", "Automatically clicks for you", Category.COMBAT, null);
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void onEvent(EventTick event) {
         if (mc.thePlayer == null || mc.theWorld == null || mc.currentScreen != null) return;
 

@@ -6,8 +6,6 @@ import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.settings.BooleanSetting;
 import eu.shoroa.ross.settings.NumberSetting;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -41,12 +39,6 @@ public class ModuleFreeLook extends Module {
     public void onDisable() {
         super.onDisable();
         mc.gameSettings.thirdPersonView = prevPerspective;
-    }
-
-    @SubscribeEvent
-    public void oe$CameraSetup(EntityViewRenderEvent.CameraSetup event) {
-//        event.yaw = yaw + 180F;
-//        event.pitch = pitch;
     }
 
     public float getYaw() {

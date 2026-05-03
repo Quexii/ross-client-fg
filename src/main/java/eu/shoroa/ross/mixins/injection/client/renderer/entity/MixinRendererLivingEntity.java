@@ -1,5 +1,6 @@
 package eu.shoroa.ross.mixins.injection.client.renderer.entity;
 
+import eu.shoroa.ross.event.EventRenderLiving;
 import eu.shoroa.ross.module.ModuleManager;
 import eu.shoroa.ross.module.impl.render.ModuleESP;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
@@ -13,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
+import static eu.shoroa.ross.Client.EVENT_BUS;
 
 @Mixin(RendererLivingEntity.class)
 public abstract class MixinRendererLivingEntity {
@@ -51,5 +54,35 @@ public abstract class MixinRendererLivingEntity {
             float opacity = ModuleManager.antiInvis.getOpacity();
             args.set(3, opacity);
         }
+    }
+
+    @Inject(method = "doRender(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V", at = @At("HEAD"), cancellable = true)
+    private void injectPreRender(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+        EventRenderLiving.Pre event = new EventRenderLiving.Pre(entity, (RendererLivingEntity) (Object) this, x, y, z);
+        EVENT_BUS.post(event);
+        if (event.isCanceled()) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "doRender(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V", at = @At("TAIL"))
+    private void injectPostRender(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+        EventRenderLiving.Post event = new EventRenderLiving.Post(entity, (RendererLivingEntity) (Object) this, x, y, z);
+        EVENT_BUS.post(event);
+    }
+
+    @Inject(method = "renderName(Lnet/minecraft/entity/EntityLivingBase;DDD)V", at = @At("HEAD"), cancellable = true)
+    private void injectPreRenderName(EntityLivingBase entity, double x, double y, double z, CallbackInfo ci) {
+        EventRenderLiving.Specials.Pre event = new EventRenderLiving.Specials.Pre(entity, (RendererLivingEntity) (Object) this, x, y, z);
+        EVENT_BUS.post(event);
+        if (event.isCanceled()) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "renderName(Lnet/minecraft/entity/EntityLivingBase;DDD)V", at = @At("TAIL"))
+    private void injectPostRenderName(EntityLivingBase entity, double x, double y, double z, CallbackInfo ci) {
+        EventRenderLiving.Specials.Post event = new EventRenderLiving.Specials.Post(entity, (RendererLivingEntity) (Object) this, x, y, z);
+        EVENT_BUS.post(event);
     }
 }

@@ -2,11 +2,10 @@ package eu.shoroa.ross.event;
 
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.util.List;
 
-public class EventPostEntityRender extends Event {
+public class EventPostEntityRender {
     private final List<Entity> entities;
     private final float partialTicks;
     private final Entity renderViewEntity;

@@ -1,6 +1,7 @@
 package eu.shoroa.ross.module.impl.render;
 
 import eu.shoroa.ross.event.EventRenderBlockSelection;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.settings.BooleanSetting;
@@ -24,7 +25,7 @@ public class ModuleBlockOverlay extends Module {
         super("Block Overlay", "Custom block selection", Category.RENDER, null);
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$OnRender3D(EventRenderBlockSelection event) {
         event.setCanceled(true);
 

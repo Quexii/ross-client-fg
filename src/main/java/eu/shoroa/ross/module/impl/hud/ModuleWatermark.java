@@ -1,6 +1,7 @@
 package eu.shoroa.ross.module.impl.hud;
 
 import eu.shoroa.ross.event.EventHUD;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.render.Renderer;
@@ -16,7 +17,6 @@ import io.github.humbleui.skija.Color;
 import io.github.humbleui.skija.ImageFilter;
 import io.github.humbleui.skija.Paint;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @SuppressWarnings("ALL")
 public class ModuleWatermark extends Module {
@@ -27,7 +27,7 @@ public class ModuleWatermark extends Module {
         super("Watermark", "Displays a watermark on the screen", Category.HUD, null);
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$BottomVanilla(EventHUD.BottomVanilla event) {
         if (mode.get() == Mode.WEEDSENSE) {
             Renderer2D.begin2d();
@@ -56,7 +56,7 @@ public class ModuleWatermark extends Module {
         }
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$BottomSkia(EventHUD.BottomSkia event) {
         if (mode.get() == Mode.WEEDHACK) {
             ImageSource img = Images.WATERMARK_WEEDHACK;
@@ -73,12 +73,12 @@ public class ModuleWatermark extends Module {
         }
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$TopVanilla(EventHUD.TopVanilla event) {
 
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$TopSkia(EventHUD.TopSkia event) {
 
     }

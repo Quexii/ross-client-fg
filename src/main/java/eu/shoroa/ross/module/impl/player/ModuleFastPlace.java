@@ -1,14 +1,12 @@
 package eu.shoroa.ross.module.impl.player;
 
 import eu.shoroa.ross.event.EventTick;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.mixins.injection.client.MinecraftAccessor;
-import eu.shoroa.ross.module.Bind;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.settings.NumberSetting;
 import eu.shoroa.ross.util.Timer;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import static eu.shoroa.ross.Client.mc;
 
@@ -32,8 +30,8 @@ public class ModuleFastPlace extends Module {
         wasKeyDown = false;
     }
 
-    @SubscribeEvent
-    public void onTick(LivingEvent.LivingUpdateEvent event) {
+    @Subscribe
+    public void onTick(EventTick event) {
         if (mc.thePlayer == null || mc.theWorld == null || mc.currentScreen != null) return;
 
         boolean keyDown = mc.gameSettings.keyBindUseItem.isKeyDown();

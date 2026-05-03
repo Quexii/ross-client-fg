@@ -1,13 +1,13 @@
 package eu.shoroa.ross.integration.hypixel;
 
+import eu.shoroa.ross.event.EventChatReceived;
 import eu.shoroa.ross.event.EventTick;
-import eu.shoroa.ross.integration.hypixel.event.*;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
+import eu.shoroa.ross.event.EventWorld;
+import eu.shoroa.ross.event.Subscribe;
+import eu.shoroa.ross.integration.hypixel.event.EventLeaveBedwars;
+import eu.shoroa.ross.integration.hypixel.event.EventStartBedwars;
 
+import static eu.shoroa.ross.Client.EVENT_BUS;
 import static eu.shoroa.ross.Client.mc;
 
 public class BedwarsSystem {
@@ -20,13 +20,13 @@ public class BedwarsSystem {
     private boolean startBlock;
     private boolean inGame;
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$Tick(EventTick event) {
         if (mc.theWorld == null || mc.thePlayer == null) return;
     }
 
-    @SubscribeEvent
-    public void oe$Chat(ClientChatReceivedEvent event) {
+    @Subscribe
+    public void oe$Chat(EventChatReceived event) {
         if (mc.theWorld == null || mc.thePlayer == null) return;
 
         if (event.type != 0) return;
@@ -35,7 +35,7 @@ public class BedwarsSystem {
 
         if (startBlock) {
             if (message.trim().equalsIgnoreCase("bed wars")) {
-                MinecraftForge.EVENT_BUS.post(new EventStartBedwars());
+                EVENT_BUS.post(new EventStartBedwars());
                 inGame = true;
             }
         }
@@ -45,10 +45,10 @@ public class BedwarsSystem {
         }
     }
 
-    @SubscribeEvent
-    public void oe$WorldChanged(WorldEvent.Load event) {
+    @Subscribe
+    public void oe$WorldChanged(EventWorld.Load event) {
         if (inGame) {
-            MinecraftForge.EVENT_BUS.post(new EventLeaveBedwars());
+            EVENT_BUS.post(new EventLeaveBedwars());
             inGame = false;
         }
     }

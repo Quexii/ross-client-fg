@@ -1,6 +1,7 @@
 package eu.shoroa.ross.module.impl.player;
 
 import eu.shoroa.ross.event.EventTick;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.mixins.injection.client.settings.KeyBindingAccessor;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
@@ -11,7 +12,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Random;
 
@@ -70,7 +70,7 @@ public class ModuleBridgeAssist extends Module {
         }
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$OnUpdate(EventTick event) {
         if (mc.thePlayer == null || mc.theWorld == null) return;
 

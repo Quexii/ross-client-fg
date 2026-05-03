@@ -3,9 +3,11 @@ package eu.shoroa.ross.module.impl.misc;
 import eu.shoroa.ross.Client;
 import eu.shoroa.ross.event.EventHUD;
 import eu.shoroa.ross.event.EventPostEntityRender;
+import eu.shoroa.ross.event.EventRender3D;
+import eu.shoroa.ross.event.Subscribe;
+import eu.shoroa.ross.mixins.injection.client.MinecraftAccessor;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
-import eu.shoroa.ross.mixins.injection.client.MinecraftAccessor;
 import eu.shoroa.ross.render.Renderer;
 import eu.shoroa.ross.render.skia.font.Font;
 import eu.shoroa.ross.render.skia.font.Fonts;
@@ -20,8 +22,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.Display;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class ModuleFireballWarning extends Module {
     }
 
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$PostEntityRender(EventPostEntityRender event) {
         EntityFireball[] entities = mc.theWorld.getLoadedEntityList().stream().filter(entity -> entity instanceof EntityFireball).toArray(EntityFireball[]::new);
         positions.clear();
@@ -60,10 +60,9 @@ public class ModuleFireballWarning extends Module {
         }
     }
 
-    @SubscribeEvent
-    public void oe$Render3D(RenderWorldLastEvent event) {
+    @Subscribe
+    public void oe$Render3D(EventRender3D event) {
         EntityFireball[] entities = mc.theWorld.getLoadedEntityList().stream().filter(entity -> entity instanceof EntityFireball).toArray(EntityFireball[]::new);
-
         final float ll = lineLength.get() * 2;
 
         double renderX = mc.getRenderManager().viewerPosX;
@@ -96,7 +95,7 @@ public class ModuleFireballWarning extends Module {
         Renderer3D.end3D();
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$SkiaBottom(EventHUD.BottomSkia event) {
         if (mc.theWorld == null || mc.thePlayer == null) return;
 

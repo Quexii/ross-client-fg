@@ -4,6 +4,7 @@ import eu.shoroa.ross.Client;
 import eu.shoroa.ross.animate.Animate;
 import eu.shoroa.ross.animate.Easing;
 import eu.shoroa.ross.event.EventHUD;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.render.Renderer;
@@ -32,7 +33,7 @@ public class ModuleItemNotifs extends Module {
         super("Item Notifier", "Notifies you when you pick up an item.", Category.HUD, null);
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$ItemPickedUp(EntityItemPickupEvent event) {
         if (mc.thePlayer == null || mc.theWorld == null) return;
         if (event.entityPlayer.getEntityId() != mc.thePlayer.getEntityId()) return;
@@ -48,7 +49,7 @@ public class ModuleItemNotifs extends Module {
         }
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$Hud(EventHUD.BottomSkia event) {
         if (queue.isEmpty()) return;
 

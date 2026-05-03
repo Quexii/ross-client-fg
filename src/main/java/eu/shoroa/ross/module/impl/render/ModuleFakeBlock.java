@@ -1,6 +1,5 @@
 package eu.shoroa.ross.module.impl.render;
 
-import eu.shoroa.ross.module.Bind;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.settings.BooleanSetting;

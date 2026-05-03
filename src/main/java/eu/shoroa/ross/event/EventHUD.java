@@ -1,12 +1,28 @@
 package eu.shoroa.ross.event;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
-
-public abstract class EventHUD extends Event {
+public abstract class EventHUD {
     public final float partialTicks;
 
     protected EventHUD(float partialTicks) {
         this.partialTicks = partialTicks;
+    }
+
+    public static class PreHud extends EventHUD {
+        public PreHud(float partialTicks) {
+            super(partialTicks);
+        }
+
+        public static class Vanilla extends EventHUD {
+            public Vanilla(float partialTicks) {
+                super(partialTicks);
+            }
+        }
+
+        public static class Skia extends EventHUD {
+            public Skia(float partialTicks) {
+                super(partialTicks);
+            }
+        }
     }
 
     public static class BottomVanilla extends EventHUD {

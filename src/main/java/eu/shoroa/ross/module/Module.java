@@ -1,10 +1,11 @@
 package eu.shoroa.ross.module;
 
 import eu.shoroa.ross.settings.Setting;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static eu.shoroa.ross.Client.EVENT_BUS;
 
 public class Module {
     public final String name;
@@ -36,11 +37,11 @@ public class Module {
     }
 
     public void onEnable() {
-        MinecraftForge.EVENT_BUS.register(this);
+        EVENT_BUS.register(this);
     }
 
     public void onDisable() {
-        MinecraftForge.EVENT_BUS.unregister(this);
+        EVENT_BUS.unregister(this);
     }
 
     public boolean isEnabled() {

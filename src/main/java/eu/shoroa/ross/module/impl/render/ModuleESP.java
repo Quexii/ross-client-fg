@@ -1,6 +1,9 @@
 package eu.shoroa.ross.module.impl.render;
 
 import eu.shoroa.ross.event.EventHUD;
+import eu.shoroa.ross.event.EventRender3D;
+import eu.shoroa.ross.event.EventRenderLiving;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.mixins.injection.client.MinecraftAccessor;
 import eu.shoroa.ross.mixins.injection.client.renderer.entity.RenderManagerAccessor;
 import eu.shoroa.ross.module.Category;
@@ -25,10 +28,6 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -63,8 +62,8 @@ public class ModuleESP extends Module {
         super("ESP", "TODO", Category.RENDER, null);
     }
 
-    @SubscribeEvent
-    public void oe$RenderEntity(RenderLivingEvent.Pre event) {
+    @Subscribe
+    public void oe$RenderEntity(EventRenderLiving.Pre event) {
         if (mode.get() != Mode.MODE_SHADER) return;
         if (!(event.entity instanceof EntityPlayer)) return;
         if (event.renderer == null) return;
@@ -94,7 +93,7 @@ public class ModuleESP extends Module {
         }
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$EventHUD(EventHUD.BottomSkia event) {
         EntityPlayer[] entities = mc.theWorld.getLoadedEntityList().stream().filter(entity -> entity instanceof EntityPlayer).toArray(EntityPlayer[]::new);
 
@@ -158,9 +157,9 @@ public class ModuleESP extends Module {
         }
     }
 
-    @SubscribeEvent
-    public void oe$PreHUD(RenderGameOverlayEvent.Pre event) {
-        if (mode.get() == Mode.MODE_SHADER && event.type == RenderGameOverlayEvent.ElementType.ALL) {
+    @Subscribe
+    public void oe$PreHUD(EventHUD.PreHud.Vanilla event) {
+        if (mode.get() == Mode.MODE_SHADER) {
             if (!shaderInit) {
                 try {
                     outlineShader.init();
@@ -207,8 +206,8 @@ public class ModuleESP extends Module {
         }
     }
 
-    @SubscribeEvent
-    public void oe$Event3D(RenderWorldLastEvent event) {
+    @Subscribe
+    public void oe$Event3D(EventRender3D event) {
         if (mc.theWorld == null || mc.thePlayer == null) return;
 
         if (mode.get() == Mode.MODE_SHADER) {

@@ -1,6 +1,7 @@
 package eu.shoroa.ross.mixins.injection.client;
 
 import eu.shoroa.ross.Client;
+import eu.shoroa.ross.event.EventInput;
 import eu.shoroa.ross.event.EventTick;
 import eu.shoroa.ross.mixins.interfaces.IEntityLivingBase;
 import eu.shoroa.ross.module.ModuleManager;
@@ -14,12 +15,14 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static eu.shoroa.ross.Client.EVENT_BUS;
 
 @Mixin(value = Minecraft.class, priority = 100)
 public class MixinMinecraft {
@@ -51,7 +54,17 @@ public class MixinMinecraft {
 
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;startSection(Ljava/lang/String;)V", ordinal = 0))
     public void injectRunTick(CallbackInfo ci) {
-        MinecraftForge.EVENT_BUS.post(new EventTick());
+        EVENT_BUS.post(new EventTick());
+    }
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Keyboard;getEventKey()I", ordinal = 0))
+    public void injectHandleKeyboard(CallbackInfo ci) {
+        EVENT_BUS.post(new EventInput(Keyboard.getEventKey(), EventInput.Type.KEYBOARD, Keyboard.getEventKeyState() ? EventInput.Action.PRESS : EventInput.Action.RELEASE));
+    }
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;next()Z", shift = At.Shift.AFTER))
+    public void injectHandleMouse(CallbackInfo ci) {
+        EVENT_BUS.post(new EventInput(Mouse.getEventButton(), EventInput.Type.MOUSE, Mouse.getEventButtonState() ? EventInput.Action.PRESS : EventInput.Action.RELEASE));
     }
 
     @Inject(method = "resize", at = @At("RETURN"))

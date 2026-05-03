@@ -1,17 +1,14 @@
 package eu.shoroa.ross.util.proj;
 
 import eu.shoroa.ross.event.EventPostEntityRender;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.mixins.injection.client.MinecraftAccessor;
-import eu.shoroa.ross.types.Point;
 import eu.shoroa.ross.types.Rect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import javax.vecmath.Vector2f;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +21,6 @@ public class EntityProjection {
 
     public EntityProjection() {
         instance = this;
-
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public static EntityProjection getInstance() {
@@ -81,7 +76,7 @@ public class EntityProjection {
         return null;
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void oe$PostEntityRender(EventPostEntityRender event) {
         if (mc.theWorld == null || mc.thePlayer == null) return;
 

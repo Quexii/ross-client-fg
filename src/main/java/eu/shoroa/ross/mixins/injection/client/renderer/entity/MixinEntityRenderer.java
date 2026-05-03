@@ -1,26 +1,29 @@
 package eu.shoroa.ross.mixins.injection.client.renderer.entity;
 
+import eu.shoroa.ross.event.EventRender3D;
 import eu.shoroa.ross.module.ModuleManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.culling.ClippingHelper;
-import net.minecraft.client.renderer.culling.ClippingHelperImpl;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static eu.shoroa.ross.Client.EVENT_BUS;
 import static org.objectweb.asm.Opcodes.GETFIELD;
 
 @Mixin(EntityRenderer.class)
 public class MixinEntityRenderer {
     @Shadow
     private Minecraft mc;
+
+    @Inject(method = "renderWorldPass", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", args = "ldc=hand"))
+    public void injectEvent3D(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
+        EVENT_BUS.post(new EventRender3D(mc.renderGlobal, partialTicks));
+    }
 
     @Redirect(method = "orientCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;rotationYaw:F", opcode = GETFIELD))
     public float getRotationYaw(Entity entity) {
@@ -46,25 +49,4 @@ public class MixinEntityRenderer {
     public boolean updateCameraAndRender(Minecraft minecraft) {
         return ModuleManager.freeLook.applyMouseDelta();
     }
-
-//    @Redirect(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;setAngles(FF)V", ordinal = 0))
-//    public void redirectSetAnglesSmooth(EntityPlayerSP instance, float yaw, float pitch) {
-//        boolean freeLookActive = ModuleManager.freeLook.applyMouseDelta(mc.mouseHelper.deltaX, mc.mouseHelper.deltaY);
-//
-//        if (freeLookActive) return;
-//        mc.thePlayer.setAngles(yaw, pitch);
-//    }
-//
-//    @Redirect(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;setAngles(FF)V", ordinal = 0))
-//    public void redirectSetAngles(EntityPlayerSP instance, float yaw, float pitch) {
-//        boolean freeLookActive = ModuleManager.freeLook.applyMouseDelta(mc.mouseHelper.deltaX, mc.mouseHelper.deltaY);
-//
-//        if (freeLookActive) return;
-//        mc.thePlayer.setAngles(yaw, pitch);
-//    }
-
-//    @Inject(method = "renderWorldPass", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/culling/Frustum;<init>()V"))
-//    public void disableCulling(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
-//        if (ModuleManager.freeLook.isEnabled()) ClippingHelperImpl.getInstance().
-//    }
 }

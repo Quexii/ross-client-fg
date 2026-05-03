@@ -1,11 +1,10 @@
 package eu.shoroa.ross.event;
 
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
-import net.minecraftforge.fml.common.eventhandler.Event;
 
-@Cancelable
-public class EventRenderBlockSelection extends Event {
+public class EventRenderBlockSelection implements Cancelable {
+    private boolean cancelled;
+
     private final AxisAlignedBB boundingBox;
 
     public EventRenderBlockSelection(AxisAlignedBB boundingBox) {
@@ -14,5 +13,15 @@ public class EventRenderBlockSelection extends Event {
 
     public AxisAlignedBB getBoundingBox() {
         return boundingBox;
+    }
+
+    @Override
+    public boolean isCanceled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCanceled(boolean canceled) {
+        this.cancelled = canceled;
     }
 }
