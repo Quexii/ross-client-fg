@@ -65,7 +65,7 @@ public class ItemBaker {
     }
 
     String getKey(ItemStack stack) {
-        return stack.getItem().getRegistryName() + ":" + stack.getMetadata();
+        return stack.getItem().getUnlocalizedName() + ":" + stack.getMetadata();
     }
 
     private ItemBaker() {

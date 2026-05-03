@@ -47,7 +47,7 @@ public class MixinMinecraft {
     @Shadow
     public PlayerControllerMP playerController;
 
-    @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/GuiIngameForge;<init>(Lnet/minecraft/client/Minecraft;)V"))
+    @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;<init>(Lnet/minecraft/client/Minecraft;)V"))
     public void injectInitGuiIngame(CallbackInfo ci) {
         Client.INSTANCE.init();
     }

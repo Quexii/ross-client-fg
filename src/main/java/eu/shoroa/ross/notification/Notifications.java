@@ -2,6 +2,7 @@ package eu.shoroa.ross.notification;
 
 import eu.shoroa.ross.Client;
 import eu.shoroa.ross.event.EventHUD;
+import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.render.Renderer;
 import eu.shoroa.ross.render.filters.Filter;
 import eu.shoroa.ross.render.skia.font.Font;
@@ -10,7 +11,6 @@ import eu.shoroa.ross.render.skia.image.Images;
 import eu.shoroa.ross.util.render.MaterialIcons;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.types.RRect;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.Display;
 
 import java.util.ArrayDeque;
@@ -34,7 +34,7 @@ public class Notifications {
         INSTANCE.queue.add(new Notification(title, message, type, duration));
     }
 
-    @SubscribeEvent
+    @Subscribe
     public void onRender(EventHUD.TopSkia event) {
         if (queue.isEmpty()) return;
 

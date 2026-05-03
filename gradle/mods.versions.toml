@@ -1,5 +1,16 @@
 [versions]
 devauth = "1.2.2"
+fabricLoader = "0.18.3"
+fabricApi = "1.16.0+1.8.9"
+#https://cdn.modrinth.com/data/hCyJxgEF/versions/Ql9GSRaF/netfix-1.0.3.jar
+netfix = "Ql9GSRaF"
+
+#https://cdn.modrinth.com/data/LIGlLgiL/versions/dqbY1yZh/modmenu-0.4.0%2Bmc1.8.9.jar
+modmenu = "dqbY1yZh"
 
 [libraries]
-devauth = { module = "me.djtheredstoner:DevAuth-forge-legacy", version.ref = "devauth" }
+netfix = { module = "maven.modrinth:hCyJxgEF", version.ref = "netfix" }
+modmenu = { module = "maven.modrinth:LIGlLgiL", version.ref = "modmenu" }
+devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
+fabric-api = { module = "net.legacyfabric.ornithed.legacy-fabric-api:legacy-fabric-api", version.ref = "fabricApi" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabricLoader" }

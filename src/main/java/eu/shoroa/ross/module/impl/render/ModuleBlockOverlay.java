@@ -9,7 +9,6 @@ import eu.shoroa.ross.settings.ColorSetting;
 import eu.shoroa.ross.settings.NumberSetting;
 import eu.shoroa.ross.util.render.Renderer3D;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 

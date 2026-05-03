@@ -41,7 +41,6 @@ public class ModuleFireballWarning extends Module {
         super("Fireball Warning", "Warns you about incoming fireballs", Category.MISC, null);
     }
 
-
     @Subscribe
     public void oe$PostEntityRender(EventPostEntityRender event) {
         EntityFireball[] entities = mc.theWorld.getLoadedEntityList().stream().filter(entity -> entity instanceof EntityFireball).toArray(EntityFireball[]::new);
@@ -63,6 +62,9 @@ public class ModuleFireballWarning extends Module {
     @Subscribe
     public void oe$Render3D(EventRender3D event) {
         EntityFireball[] entities = mc.theWorld.getLoadedEntityList().stream().filter(entity -> entity instanceof EntityFireball).toArray(EntityFireball[]::new);
+
+        if (entities.length == 0) return;
+
         final float ll = lineLength.get() * 2;
 
         double renderX = mc.getRenderManager().viewerPosX;

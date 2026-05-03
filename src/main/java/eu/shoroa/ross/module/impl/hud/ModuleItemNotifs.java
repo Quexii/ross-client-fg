@@ -3,6 +3,7 @@ package eu.shoroa.ross.module.impl.hud;
 import eu.shoroa.ross.Client;
 import eu.shoroa.ross.animate.Animate;
 import eu.shoroa.ross.animate.Easing;
+import eu.shoroa.ross.event.EventEntityItemPickup;
 import eu.shoroa.ross.event.EventHUD;
 import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.module.Category;
@@ -17,8 +18,6 @@ import io.github.humbleui.skija.Canvas;
 import io.github.humbleui.skija.Paint;
 import io.github.humbleui.skija.Shader;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayDeque;
 
@@ -34,13 +33,11 @@ public class ModuleItemNotifs extends Module {
     }
 
     @Subscribe
-    public void oe$ItemPickedUp(EntityItemPickupEvent event) {
+    public void oe$ItemPickedUp(EventEntityItemPickup event) {
         if (mc.thePlayer == null || mc.theWorld == null) return;
         if (event.entityPlayer.getEntityId() != mc.thePlayer.getEntityId()) return;
 
-        System.out.println("Item picked up: " + event.item.getAge());
-
-        ItemStack stack = event.item.getEntityItem();
+        ItemStack stack = event.item;
         String itemName = stack.getDisplayName();
         int count = stack.stackSize;
 
@@ -190,7 +187,7 @@ public class ModuleItemNotifs extends Module {
 //import net.minecraft.client.renderer.RenderHelper;
 //import net.minecraft.item.ItemStack;
 //import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-//import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+//import net.minecraftforge.loader.common.eventhandler.SubscribeEvent;
 //
 //import java.util.ArrayDeque;
 //import java.util.ArrayList;

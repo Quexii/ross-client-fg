@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.ForgeHooksClient;
 
 import static eu.shoroa.ross.Client.mc;
 
@@ -82,8 +81,8 @@ public class Renderer2D {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         RenderHelper.enableGUIStandardItemLighting();
 
-        mc.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        mc.renderEngine.getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(mipmaps, mipmaps);
+        mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+        mc.getTextureManager().getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(mipmaps, mipmaps);
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(516, 0.1F);
@@ -105,7 +104,6 @@ public class Renderer2D {
             GlStateManager.disableLighting();
         }
 
-        model = ForgeHooksClient.handleCameraTransforms(model, ItemCameraTransforms.TransformType.GUI);
         ri.renderItem(stack, model);
         GlStateManager.disableAlpha();
         GlStateManager.disableRescaleNormal();
@@ -116,8 +114,8 @@ public class Renderer2D {
         GlStateManager.disableBlend();
 
         GlStateManager.popMatrix();
-        mc.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        mc.renderEngine.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
+        mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+        mc.getTextureManager().getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
     }
 
     public static void drawString(String text, float x, float y, int color, boolean shadow) {

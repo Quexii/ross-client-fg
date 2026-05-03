@@ -2,12 +2,11 @@ package eu.shoroa.ross.gui;
 
 import eu.shoroa.ross.event.EventInput;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+
+import static eu.shoroa.ross.Client.EVENT_BUS;
 
 public abstract class RossScreen extends GuiScreen {
     protected abstract void init();
@@ -18,7 +17,7 @@ public abstract class RossScreen extends GuiScreen {
 
     @Override
     public void initGui() {
-        MinecraftForge.EVENT_BUS.register(this);
+        EVENT_BUS.register(this);
         init();
     }
 
@@ -29,20 +28,22 @@ public abstract class RossScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        MinecraftForge.EVENT_BUS.unregister(this);
+        EVENT_BUS.unregister(this);
     }
 
-    @SubscribeEvent
-    public void oe$GuiMouse(GuiScreenEvent.MouseInputEvent.Pre event) {
+    @Override
+    public void handleMouseInput() {
         if (Mouse.getEventButton() != -1) {
             input(Mouse.getX(), Display.getHeight() - Mouse.getY(), new EventInput(Mouse.getEventButton(), EventInput.Type.MOUSE, Mouse.getEventButtonState() ? EventInput.Action.PRESS : EventInput.Action.RELEASE));
         }
+        super.handleMouseInput();
     }
 
-    @SubscribeEvent
-    public void oe$GuiKeyboard(GuiScreenEvent.KeyboardInputEvent.Pre event) {
+    @Override
+    public void handleKeyboardInput() {
         if (Keyboard.getEventKey() != 0) {
             input(Mouse.getX(), Display.getHeight() - Mouse.getY(), new EventInput(Keyboard.getEventKey(), EventInput.Type.KEYBOARD, Keyboard.getEventKeyState() ? EventInput.Action.PRESS : EventInput.Action.RELEASE));
         }
+        super.handleKeyboardInput();
     }
 }

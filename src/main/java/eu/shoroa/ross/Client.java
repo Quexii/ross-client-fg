@@ -35,6 +35,8 @@ public class Client {
     }
 
     public void init() {
+        System.out.println("Initializing Ross Client...");
+
         skia = new SkiaSource(mc.getFramebuffer());
         skia.init();
         Fonts.load();

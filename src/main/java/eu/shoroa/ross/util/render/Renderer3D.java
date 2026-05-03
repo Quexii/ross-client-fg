@@ -13,11 +13,10 @@ public class Renderer3D {
 
     public static void begin3D(float lineWidth) {
         GlStateManager.pushMatrix();
-        GlStateManager.disableLighting();
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GlStateManager.disableAlpha();
         GlStateManager.depthMask(false);
         GlStateManager.disableDepth();
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
@@ -32,9 +31,8 @@ public class Renderer3D {
         GlStateManager.depthMask(true);
         GlStateManager.enableAlpha();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-        GlStateManager.disableBlend();
+//        GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
-        GlStateManager.enableLighting();
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.popMatrix();
     }

@@ -13,6 +13,7 @@ import eu.shoroa.ross.util.render.Renderer3D;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -146,7 +147,6 @@ public class ModuleTrajectories extends Module {
                 lb = lc.getBlue(), la = lc.getAlpha();
 
         Renderer3D.begin3D(lineWidth.get());
-
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer wr = tessellator.getWorldRenderer();
 
@@ -166,7 +166,7 @@ public class ModuleTrajectories extends Module {
             float r = hitRadius.get();
 
             if (hitResult.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                Renderer3D.drawFilledHitCircle(hx, hy, hz, r, hitResult.sideHit, hr, hg, hb, ha / 3, 32);
+                Renderer3D.drawFilledHitCircle(hx, hy, hz, r, hitResult.sideHit, hr, hg, hb, ha / 6, 32);
                 GL11.glLineWidth(2.0f);
                 Renderer3D.drawHitCircle(hx, hy, hz, r, hitResult.sideHit, hr, hg, hb, ha, 32);
                 GL11.glLineWidth(1.5f);
@@ -174,7 +174,7 @@ public class ModuleTrajectories extends Module {
             } else {
                 GL11.glLineWidth(2.0f);
                 Renderer3D.drawHitCircle(hx, hy, hz, r, EnumFacing.UP, hr, hg, hb, ha, 32);
-                Renderer3D.drawFilledHitCircle(hx, hy, hz, r, EnumFacing.UP, hr, hg, hb, ha / 4, 32);
+                Renderer3D.drawFilledHitCircle(hx, hy, hz, r, EnumFacing.UP, hr, hg, hb, ha / 6, 32);
             }
         }
 

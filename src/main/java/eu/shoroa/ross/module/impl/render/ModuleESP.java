@@ -175,7 +175,6 @@ public class ModuleESP extends Module {
             }
 
             ScaledResolution sr = new ScaledResolution(mc);
-            mc.entityRenderer.setupOverlayRendering();
 
             GlStateManager.disableDepth();
             GlStateManager.disableAlpha();
@@ -193,8 +192,6 @@ public class ModuleESP extends Module {
             GlStateManager.enableDepth();
             GlStateManager.enableAlpha();
             GlStateManager.color(1f, 1f, 1f, 1f);
-
-            GlStateManager.translate(0.0F, 0.0F, 2000.0F);
 
             if (!shaderBufferPrepared) {
                 colorBuffer.bindFramebuffer(false);
