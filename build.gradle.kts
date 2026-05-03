@@ -219,13 +219,10 @@ repositories {
 dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
     mappings(ploceus.mcpMappings("stable", "1.8.9", "22"))
-//    "mappings"("net.legacyfabric:legacy-yarn:1.8.9+build.4:v2")
 
     modImplementation(mods.fabric.loader)
-//    modImplementation(mods.fabric.api)
     modRuntimeOnly(mods.devauth)
     modRuntimeOnly(mods.netfix)
-//    modRuntimeOnly(mods.modmenu)
 
     embed(libs.skija.types)
     embed(libs.skija.shared)

@@ -18,13 +18,14 @@ import net.minecraft.util.MovingObjectPosition;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static eu.shoroa.ross.Client.EVENT_BUS;
 
-@Mixin(value = Minecraft.class, priority = 100)
+@Mixin(value = Minecraft.class, priority = 1100)
 public class MixinMinecraft {
     @Shadow
     public GameSettings gameSettings;
@@ -75,7 +76,7 @@ public class MixinMinecraft {
         Filter.kawase().resize();
     }
 
-    @ModifyConstant(method = "getLimitFramerate", constant = @Constant(intValue = 30))
+    @ModifyConstant(method = "getLimitFramerate", constant = @Constant(intValue = 30), require = 0)
     public int modifyGetLimitFramerate(int original) {
         return 144;
     }

@@ -19,12 +19,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static eu.shoroa.ross.Client.EVENT_BUS;
 
-@Mixin(RenderGlobal.class)
+@Mixin(value = RenderGlobal.class, priority = 1100)
 public class MixinRenderGlobal {
     @Shadow
     private WorldClient theWorld;
 
-    @Inject(method = "drawSelectionBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/AxisAlignedBB;expand(DDD)Lnet/minecraft/util/AxisAlignedBB;", shift = At.Shift.BEFORE), cancellable = true)
+    @Inject(method = "drawSelectionBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/AxisAlignedBB;expand(DDD)Lnet/minecraft/util/AxisAlignedBB;", shift = At.Shift.BEFORE), cancellable = true, require = 0)
     public void injectSelectionEvent(EntityPlayer player, MovingObjectPosition movingObjectPositionIn, int execute, float partialTicks, CallbackInfo ci) {
         BlockPos blockpos = movingObjectPositionIn.getBlockPos();
         Block block = this.theWorld.getBlockState(blockpos).getBlock();
