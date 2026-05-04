@@ -21,6 +21,16 @@ public class NumberSetting extends Setting<Float> {
         super.set(value);
     }
 
+    @Override
+    public boolean setFromString(String value) {
+        try {
+            set(Float.parseFloat(value));
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     public float getMin() { return min; }
     public float getMax() { return max; }
     public float getIncrement() { return increment; }

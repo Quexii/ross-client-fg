@@ -32,6 +32,17 @@ public class ModeSetting<T extends Enum<T> & ModeEnum> extends Setting<T> {
         super.set(newValue);
     }
 
+    @Override
+    public boolean setFromString(String value) {
+        for (T mode : modes) {
+            if (mode.name().equalsIgnoreCase(value) || mode.displayName().equalsIgnoreCase(value)) {
+                set(mode);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void nextMode() {
         currentIndex = (currentIndex + 1) % modes.length;
         super.set(modes[currentIndex]);

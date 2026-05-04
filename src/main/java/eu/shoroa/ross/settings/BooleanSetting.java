@@ -9,4 +9,13 @@ public class BooleanSetting extends Setting<Boolean> {
     public void toggle() {
         set(!get());
     }
+
+    @Override
+    public boolean setFromString(String value) {
+        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+            set(Boolean.parseBoolean(value));
+            return true;
+        }
+        return false;
+    }
 }

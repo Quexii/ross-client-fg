@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class Setting<T> {
-
     private final String name;
     private final String id;
     private T value;
@@ -58,6 +57,8 @@ public abstract class Setting<T> {
     public String getId() {
         return id;
     }
+
+    public abstract boolean setFromString(String value);
 
     public enum Type {
         BOOLEAN,

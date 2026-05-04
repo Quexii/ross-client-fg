@@ -3,6 +3,7 @@ package eu.shoroa.ross.module;
 import eu.shoroa.ross.event.EventInput;
 import eu.shoroa.ross.module.impl.combat.ModuleAutoClicked;
 import eu.shoroa.ross.module.impl.hud.ModuleItemNotifs;
+import eu.shoroa.ross.module.impl.hud.ModuleModernHUD;
 import eu.shoroa.ross.module.impl.hud.ModuleTargetHUD;
 import eu.shoroa.ross.module.impl.hud.ModuleWatermark;
 import eu.shoroa.ross.module.impl.misc.ModuleBedwars;
@@ -10,6 +11,7 @@ import eu.shoroa.ross.module.impl.misc.ModuleFireballWarning;
 import eu.shoroa.ross.module.impl.misc.ModuleFreeLook;
 import eu.shoroa.ross.module.impl.player.*;
 import eu.shoroa.ross.module.impl.render.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,6 +46,7 @@ public class ModuleManager {
                 new ModuleWatermark(),
                 new ModuleTargetHUD(),
                 new ModuleItemNotifs(),
+                new ModuleModernHUD(),
                 // misc
                 freeLook = new ModuleFreeLook(),
                 new ModuleFireballWarning(),
@@ -80,5 +83,16 @@ public class ModuleManager {
 
     public static Module[] getModulesByCategory(Category category) {
         return categoryModules.get(category);
+    }
+
+    @Nullable
+    public static Module getModule(String name) {
+        for (Module module : modules) {
+            if (module.name.equalsIgnoreCase(name)) {
+                return module;
+            }
+        }
+
+        return null;
     }
 }

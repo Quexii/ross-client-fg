@@ -1,6 +1,7 @@
 package eu.shoroa.ross.module;
 
 import eu.shoroa.ross.settings.Setting;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,5 +58,21 @@ public class Module {
     public <T extends Setting<?>> T register(T setting) {
         settings.add(setting);
         return setting;
+    }
+
+    @Nullable
+    public Setting<?> getSettingByName(String name) {
+        for (Setting<?> setting : settings) {
+            if (setting.getName().equals(name)) return setting;
+        }
+        return null;
+    }
+
+    @Nullable
+    public Setting<?> getSettingById(String id) {
+        for (Setting<?> setting : settings) {
+            if (setting.getId().equals(id)) return setting;
+        }
+        return null;
     }
 }
