@@ -12,6 +12,7 @@ public class Images {
     public static final ResourceImage WATERMARK_WEEDHACK = createResourceImage("/assets/rossclient/images/watermark/weedhack.png");
     public static final ResourceImage HALFTONE_CIRCLE = createResourceImage("/assets/rossclient/images/halftone_circle.png");
     public static final ResourceImage HALFTONE_RECT = createResourceImage("/assets/rossclient/images/halftone_rect.png");
+    public static final ResourceImage TOPOLOGY = createResourceImage("/assets/rossclient/images/topology.png");
 
     public static ResourceImage createResourceImage(String path) {
         ResourceImage image = new ResourceImage(path);

@@ -1,8 +1,6 @@
 package eu.shoroa.ross.commands;
 
-import eu.shoroa.ross.commands.impl.CommandHelp;
-import eu.shoroa.ross.commands.impl.CommandModule;
-import eu.shoroa.ross.commands.impl.CommandSay;
+import eu.shoroa.ross.commands.impl.*;
 
 import java.util.Arrays;
 
@@ -13,7 +11,9 @@ public class CommandManager {
         commands = new Command[]{
                 new CommandHelp(),
                 new CommandModule(),
-                new CommandSay()
+                new CommandSay(),
+                new CommandBind(),
+                new CommandUnbind()
         };
     }
 

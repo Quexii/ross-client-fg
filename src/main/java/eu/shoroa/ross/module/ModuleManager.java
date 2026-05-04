@@ -2,10 +2,7 @@ package eu.shoroa.ross.module;
 
 import eu.shoroa.ross.event.EventInput;
 import eu.shoroa.ross.module.impl.combat.ModuleAutoClicked;
-import eu.shoroa.ross.module.impl.hud.ModuleItemNotifs;
-import eu.shoroa.ross.module.impl.hud.ModuleModernHUD;
-import eu.shoroa.ross.module.impl.hud.ModuleTargetHUD;
-import eu.shoroa.ross.module.impl.hud.ModuleWatermark;
+import eu.shoroa.ross.module.impl.hud.*;
 import eu.shoroa.ross.module.impl.misc.ModuleBedwars;
 import eu.shoroa.ross.module.impl.misc.ModuleFireballWarning;
 import eu.shoroa.ross.module.impl.misc.ModuleFreeLook;
@@ -13,12 +10,13 @@ import eu.shoroa.ross.module.impl.player.*;
 import eu.shoroa.ross.module.impl.render.*;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ModuleManager {
     private static final Module[] modules;
+    private static final List<Module> modulesList = new ArrayList<>();
+    ;
     private static final Map<Category, Module[]> categoryModules = new HashMap<>();
 
     public static final ModuleAntiInvis antiInvis;
@@ -43,6 +41,7 @@ public class ModuleManager {
                 animations = new ModuleAnimations(),
                 fakeBlock = new ModuleFakeBlock(),
                 // hud
+                new ModuleArrayList(),
                 new ModuleWatermark(),
                 new ModuleTargetHUD(),
                 new ModuleItemNotifs(),
@@ -52,6 +51,8 @@ public class ModuleManager {
                 new ModuleFireballWarning(),
                 new ModuleBedwars()
         };
+
+        modulesList.addAll(Arrays.asList(modules));
 
         for (Category category : Category.values()) {
             categoryModules.put(category, Arrays.stream(modules).filter(m -> m.category == category).toArray(Module[]::new));
@@ -79,6 +80,10 @@ public class ModuleManager {
 
     public static Module[] getModules() {
         return modules;
+    }
+
+    public static List<Module> getEnabledModules() {
+        return modulesList.stream().filter(Module::isEnabled).collect(Collectors.toList());
     }
 
     public static Module[] getModulesByCategory(Category category) {

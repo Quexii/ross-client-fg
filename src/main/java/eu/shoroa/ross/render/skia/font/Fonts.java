@@ -34,6 +34,12 @@ public class Fonts {
      */
     public static final VariableFont GoogleFlex = Fonts.createVariableFont("/assets/rossclient/fonts/GoogleSansFlex.ttf");
 
+    public static final SimpleFont CaviarDreams = Fonts.createSimpleFont("/assets/rossclient/fonts/CaviarDreams.ttf");
+
+    public static final SimpleFont CaviarDreamsBold = Fonts.createSimpleFont("/assets/rossclient/fonts/CaviarDreams_Bold.ttf");
+
+    public static final SimpleFont MarketDeco = Fonts.createSimpleFont("/assets/rossclient/fonts/MarketDeco.ttf");
+
     public static SimpleFont createSimpleFont(String path) {
         simpleFonts.put(path, new SimpleFont());
         return simpleFonts.get(path);
