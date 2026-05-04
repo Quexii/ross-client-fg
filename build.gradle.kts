@@ -235,18 +235,14 @@ dependencies {
 
 tasks {
     jar {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        from(embed.files.map { zipTree(it) })
+        manifest {
+            attributes("Multi-Release" to "true")
+        }
 
-//        exclude("META-INF/versions/**")
-//        exclude("**/module-info.class")
-//        exclude("**/package-info.class")
-//        exclude("LICENSE.txt")
-        exclude("META-INF/LICENSE.txt")
-        exclude("META-INF/NOTICE.txt")
-        exclude("META-INF/*.SF")
-        exclude("META-INF/*.DSA")
-        exclude("META-INF/*.RSA")
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(embed.files.map {
+            zipTree(it)
+        })
     }
 
     processResources {
@@ -263,8 +259,8 @@ tasks {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
     withSourcesJar()
 }

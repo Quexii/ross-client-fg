@@ -1,6 +1,6 @@
-/*  
- * Copyright LWJGL. All rights reserved.    
- * License terms: https://www.lwjgl.org/license 
+/*
+ * Copyright LWJGL. All rights reserved.
+ * License terms: https://www.lwjgl.org/license
  */
 package eu.shoroa.ross.util;
 
@@ -17,7 +17,7 @@ import org.lwjgl.BufferUtils;
 public class IO {
     private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
         ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
-        buffer.flip();
+        ((ByteBuffer) buffer).flip();
         newBuffer.put(buffer);
         return newBuffer;
     }
