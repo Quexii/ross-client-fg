@@ -106,11 +106,18 @@ public class EleSettingNumber extends EleSetting<Float> {
     @Override
     public boolean input(float mouseX, float mouseY, EventInput event) {
         Rect slider = new Rect(getX() + 10f, getY() + getHeight() - 22f - 8, getWidth() - 20f, 6f + 16);
-        if (slider.contains(mouseX, mouseY) && event.action == EventInput.Action.PRESS && event.type == EventInput.Type.MOUSE && event.value == 0) {
+        if (!isDragging && slider.contains(mouseX, mouseY) &&
+                event.action == EventInput.Action.PRESS &&
+                event.type == EventInput.Type.MOUSE &&
+                event.value == 0) {
             isDragging = true;
             return true;
         }
-        if (isDragging && event.action == EventInput.Action.RELEASE && event.type == EventInput.Type.MOUSE && event.value == 0) {
+
+        if (isDragging &&
+                event.action == EventInput.Action.RELEASE &&
+                event.type == EventInput.Type.MOUSE &&
+                event.value == 0) {
             isDragging = false;
             return true;
         }

@@ -6,7 +6,8 @@
   "refmap": "ross.mixins.refmap.json",
   "mixins": [
     "client.renderer.entity.MixinRendererLivingEntity",
-    "entity.MixinEntityLivingBase"
+    "entity.MixinEntityLivingBase",
+    "entity.item.MixinEntityItem"
   ],
   "client": [
     "MixinGuiMainMenu",

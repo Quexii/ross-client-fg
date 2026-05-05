@@ -51,7 +51,7 @@ public class ScreenClickGUI extends RossScreen {
     @Override
     protected void input(float mouseX, float mouseY, EventInput event) {
         for (EleCategory category : categories) {
-            category.input(mouseX, mouseY, event);
+            if (category.input(mouseX, mouseY, event)) return;
         }
     }
 

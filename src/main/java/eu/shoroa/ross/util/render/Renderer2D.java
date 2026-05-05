@@ -77,10 +77,6 @@ public class Renderer2D {
         GlStateManager.pushMatrix();
 
         GlStateManager.enableRescaleNormal();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        RenderHelper.enableGUIStandardItemLighting();
-
         mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         mc.getTextureManager().getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(mipmaps, mipmaps);
         GlStateManager.enableRescaleNormal();
@@ -103,16 +99,11 @@ public class Renderer2D {
             GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.disableLighting();
         }
-
+        model.getItemCameraTransforms().applyTransform(ItemCameraTransforms.TransformType.GUI);
         ri.renderItem(stack, model);
         GlStateManager.disableAlpha();
         GlStateManager.disableRescaleNormal();
         GlStateManager.disableLighting();
-
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.disableBlend();
-
         GlStateManager.popMatrix();
         mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         mc.getTextureManager().getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();

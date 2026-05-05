@@ -194,7 +194,7 @@ public class EleSettingColor extends EleSetting<Color> {
                     draggingHue = true;
                     return true;
                 }
-            } else if (event.action == EventInput.Action.RELEASE && event.type == EventInput.Type.MOUSE && event.value == 0) {
+            } else if (event.action == EventInput.Action.RELEASE && event.type == EventInput.Type.MOUSE && event.value == 0 && (draggingSB || draggingAlpha || draggingHue)) {
                 draggingSB = false;
                 draggingAlpha = false;
                 draggingHue = false;

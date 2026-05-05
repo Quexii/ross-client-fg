@@ -32,7 +32,7 @@ public class ModuleArrayList extends Module {
     }
 
     @Subscribe
-    public void oe$SkiaTop(EventHUD.TopSkia event) {
+    public void oe$BottomSkia(EventHUD.BottomSkia event) {
         if (mode.get() != Mode.SKIA) return;
 
         Font font = Fonts.GoogleFlex.weight(500);
@@ -73,7 +73,7 @@ public class ModuleArrayList extends Module {
     }
 
     @Subscribe
-    public void oe$VanillaTop(EventHUD.TopVanilla event) {
+    public void oe$BottomVanilla(EventHUD.BottomVanilla event) {
         if (mode.get() != Mode.VANILLA) return;
 
         List<Module> modules = ModuleManager.getEnabledModules();
