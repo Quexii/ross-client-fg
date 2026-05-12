@@ -97,14 +97,18 @@ public class Renderer {
     }
 
     public static void drawText(String text, float x, float y, Font font, float size, Font.Align align, Paint paint) {
+        drawText(text, x, y, font, size, align, paint, false);
+    }
+
+    public static void drawText(String text, float x, float y, Font font, float size, Font.Align align, Paint paint, boolean useSubpixel) {
         io.github.humbleui.skija.Font skFont = fontCache.computeIfAbsent(new FontCache(font.getTypeface(), size), fc -> new io.github.humbleui.skija.Font(fc.typeface, fc.size));
 
         try (TextLine line = TextLine.make(text, skFont)) {
             paint.setAntiAlias(true);
 
             skFont.setMetricsLinear(true);
-            skFont.setSubpixel(true);
-            skFont.setEdging(FontEdging.SUBPIXEL_ANTI_ALIAS);
+            skFont.setSubpixel(useSubpixel);
+            skFont.setEdging(useSubpixel ? FontEdging.SUBPIXEL_ANTI_ALIAS : FontEdging.ANTI_ALIAS);
             skFont.setHinting(FontHinting.NONE);
 
             Point[] array = new Point[line.getGlyphs().length];
@@ -207,6 +211,36 @@ public class Renderer {
             }
             fromGL(texture);
         }
+    }
+
+    public static void save() {
+        currentCanvas.save();
+    }
+
+    public static void saveAlpha(float alpha) {
+        currentCanvas.saveLayerAlpha(null, (int) (alpha * 255));
+    }
+
+    public static void restore() {
+        currentCanvas.restore();
+    }
+
+    public static void translate(float x, float y) {
+        currentCanvas.translate(x, y);
+    }
+
+    public static void rotate(float degrees) {
+        currentCanvas.rotate(degrees);
+    }
+
+    public static void scale(float x, float y) {
+        currentCanvas.scale(x, y);
+    }
+
+    public static void scale(float x, float y, float scale) {
+        currentCanvas.translate(x, y);
+        currentCanvas.scale(scale, scale);
+        currentCanvas.translate(-x, -y);
     }
 
     private static class FontCache {

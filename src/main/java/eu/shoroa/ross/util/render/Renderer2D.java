@@ -1,11 +1,9 @@
 package eu.shoroa.ross.util.render;
 
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -25,6 +23,10 @@ public class Renderer2D {
     }
 
     public static void end2d() {
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.popMatrix();
     }
 
@@ -35,6 +37,7 @@ public class Renderer2D {
         float blue = (float) (color & 255) / 255.0F;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        GlStateManager.pushAttrib();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -47,6 +50,7 @@ public class Renderer2D {
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GlStateManager.popAttrib();
     }
 
     public static void drawBorderedRect(float x, float y, float width, float height, float borderWidth, int color, int borderColor) {
@@ -74,12 +78,14 @@ public class Renderer2D {
         RenderItem ri = mc.getRenderItem();
 
         IBakedModel model = ri.getItemModelMesher().getItemModel(stack);
-        GlStateManager.pushMatrix();
 
-        GlStateManager.enableRescaleNormal();
         mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         mc.getTextureManager().getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(mipmaps, mipmaps);
+
+        GlStateManager.pushAttrib();
+        GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
+        RenderHelper.enableGUIStandardItemLighting();
         GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(516, 0.1F);
         GlStateManager.enableBlend();
@@ -102,9 +108,12 @@ public class Renderer2D {
         model.getItemCameraTransforms().applyTransform(ItemCameraTransforms.TransformType.GUI);
         ri.renderItem(stack, model);
         GlStateManager.disableAlpha();
-        GlStateManager.disableRescaleNormal();
         GlStateManager.disableLighting();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
+        GlStateManager.popAttrib();
+
         mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         mc.getTextureManager().getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
     }

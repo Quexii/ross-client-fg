@@ -35,8 +35,12 @@ public class ModuleArrayList extends Module {
     public void oe$BottomSkia(EventHUD.BottomSkia event) {
         if (mode.get() != Mode.SKIA) return;
 
-        Font font = Fonts.GoogleFlex.weight(500);
-        float textSize = 18f;
+        Font font = Fonts.GoogleFlex
+                .weight(400)
+                .roundness(100)
+                .opticSize(24);
+
+        float textSize = 16f;
         List<Module> modules = ModuleManager.getEnabledModules();
 
         modules.sort(Comparator.comparingDouble(module -> Renderer.getTextBounds(((Module) module).name, font, textSize).width).reversed());
@@ -59,7 +63,7 @@ public class ModuleArrayList extends Module {
             Size size = Renderer.getTextBounds(module.name, font, textSize);
 
             float xPos = !isLeft ? Display.getWidth() - size.width - 16 : 16;
-            float yPos = isTop ? y : Display.getHeight() - y;
+            float yPos = isTop ? y : Display.getHeight() - y - 24f;
 
             try (Paint p = new Paint()) {
                 p.setColor(-1);
@@ -98,7 +102,7 @@ public class ModuleArrayList extends Module {
         GlStateManager.scale(2f, 2f, 1f);
         for (Module module : modules) {
             float xPos = !isLeft ? Display.getWidth() / 2f - mc.fontRendererObj.getStringWidth(module.name) - 8 : 8;
-            float yPos = isTop ? y : Display.getHeight() / 2f - y;
+            float yPos = isTop ? y : Display.getHeight() / 2f - y - 8;
 
             Renderer2D.drawString(module.name, xPos, yPos, -1, true);
             y += 10f;

@@ -26,6 +26,6 @@ public class MixinEntityItem {
         EntityItem self = (EntityItem)(Object)this;
         ItemStack stack = self.getEntityItem();
 
-        EVENT_BUS.post(new EventEntityItemPickup(player, stack));
+//        EVENT_BUS.post(new EventEntityItemPickup(player, stack));
     }
 }

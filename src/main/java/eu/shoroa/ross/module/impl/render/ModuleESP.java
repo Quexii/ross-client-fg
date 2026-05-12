@@ -8,6 +8,7 @@ import eu.shoroa.ross.mixins.injection.client.MinecraftAccessor;
 import eu.shoroa.ross.mixins.injection.client.renderer.entity.RenderManagerAccessor;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
+import eu.shoroa.ross.module.ModuleManager;
 import eu.shoroa.ross.render.Renderer;
 import eu.shoroa.ross.render.gl.Shader;
 import eu.shoroa.ross.render.gl.uniform.Uniform;
@@ -66,7 +67,9 @@ public class ModuleESP extends Module {
     public void oe$RenderEntity(EventRenderLiving.Pre event) {
         if (mode.get() != Mode.MODE_SHADER) return;
         if (!(event.entity instanceof EntityPlayer)) return;
+        if (mc.gameSettings.thirdPersonView == 0 && event.entity == mc.thePlayer && self.get()) return;
         if (event.renderer == null) return;
+        if (ModuleManager.antiBot.isEnabled() && ModuleManager.antiBot.isBot((EntityPlayer) event.entity)) return;
         if (renderingColorPass) return;
 
         renderingColorPass = true;
@@ -101,6 +104,7 @@ public class ModuleESP extends Module {
             for (EntityPlayer entity : entities) {
                 if (entity == mc.thePlayer && !self.get()) continue;
                 if (mc.gameSettings.thirdPersonView == 0 && entity == mc.thePlayer && self.get()) continue;
+                if (ModuleManager.antiBot.isEnabled() && ModuleManager.antiBot.isBot(entity)) continue;
                 int teamColor = TeamHelper.getTeamColor(entity);
                 Rect rect = EntityProjection.getInstance().getScreenPosition(entity);
                 if (rect != null) {
@@ -221,6 +225,7 @@ public class ModuleESP extends Module {
                 for (EntityPlayer entity : entities) {
                     if (entity == mc.thePlayer && !self.get()) continue;
                     if (mc.gameSettings.thirdPersonView == 0 && entity == mc.thePlayer && self.get()) continue;
+                    if (ModuleManager.antiBot.isEnabled() && ModuleManager.antiBot.isBot(entity)) continue;
 
                     int teamColor = TeamHelper.getTeamColor(entity);
                     double interpX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;

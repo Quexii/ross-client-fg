@@ -12,7 +12,7 @@ public class EventInput {
     }
 
     public enum Type {
-        KEYBOARD, MOUSE
+        KEYBOARD, MOUSE, CHARACTER
     }
 
     public enum Action {

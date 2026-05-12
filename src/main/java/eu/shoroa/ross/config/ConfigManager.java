@@ -6,11 +6,17 @@ import eu.shoroa.ross.event.EventInput;
 import eu.shoroa.ross.module.Bind;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.module.ModuleManager;
+import eu.shoroa.ross.notification.Notifications;
 import eu.shoroa.ross.settings.*;
 
 import java.awt.*;
 import java.io.*;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import static eu.shoroa.ross.Client.mc;
 
@@ -22,6 +28,18 @@ public class ConfigManager {
     private String currentConfig = "default";
 
     private final static Gson gson = new Gson();
+
+    private static final long SAVE_DEBOUNCE_MS = 200L;
+    private final Object saveLock = new Object();
+    private final ScheduledExecutorService saveExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread thread = new Thread(r, "ross-config-save");
+            thread.setDaemon(true);
+            return thread;
+        }
+    });
+    private ScheduledFuture<?> pendingSave;
 
     public void init() throws IOException {
         if (!rootDir.exists()) rootDir.mkdir();
@@ -42,6 +60,23 @@ public class ConfigManager {
         saveConfig(currentConfig);
     }
 
+    public void saveQueued() {
+        synchronized (saveLock) {
+            if (pendingSave != null) {
+                pendingSave.cancel(false);
+            }
+            pendingSave = saveExecutor.schedule(this::saveQuietly, SAVE_DEBOUNCE_MS, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    private void saveQuietly() {
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void load() throws IOException {
         loadInit();
 
@@ -50,14 +85,18 @@ public class ConfigManager {
 
     public void loadInit() throws IOException {
         Properties props = new Properties();
-        props.load(new FileReader(initCfg));
+        try (FileReader reader = new FileReader(initCfg)) {
+            props.load(reader);
+        }
         currentConfig = props.getProperty("lastConfig", "default");
     }
 
     public void saveInit() throws IOException {
         Properties props = new Properties();
         props.setProperty("lastConfig", currentConfig);
-        props.store(new FileWriter(initCfg), "Saving initial configuration..");
+        try (FileWriter writer = new FileWriter(initCfg)) {
+            props.store(writer, "Saving initial configuration..");
+        }
     }
 
     public void saveConfig(String name) {
@@ -125,6 +164,7 @@ public class ConfigManager {
                 JsonObject json = gson.fromJson(reader, JsonObject.class);
                 if (json == null) {
                     // TODO: queue notification: failed to load config
+                    Notifications.add("Config Error", "Failed to load config " + name);
                     if (currentConfig.equals("default")) {
                         return;
                     }

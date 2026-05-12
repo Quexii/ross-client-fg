@@ -10,16 +10,16 @@ import org.lwjgl.input.Keyboard;
 import static eu.shoroa.ross.Client.mc;
 
 public class ModuleClickGui extends Module {
+    private final ScreenClickGUI screen = new ScreenClickGUI();
+
     public ModuleClickGui() {
         super("ClickGUI", "", Category.RENDER, new Bind(Keyboard.KEY_RSHIFT, EventInput.Type.KEYBOARD, EventInput.Action.PRESS));
     }
 
     @Override
     public void onEnable() {
-        mc.displayGuiScreen(new ScreenClickGUI());
+        super.onEnable();
+        mc.displayGuiScreen(screen);
         toggle();
     }
-
-    @Override
-    public void onDisable() {}
 }

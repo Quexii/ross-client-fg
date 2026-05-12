@@ -1,6 +1,8 @@
 package eu.shoroa.ross.module;
 
 import eu.shoroa.ross.event.EventInput;
+import eu.shoroa.ross.module.impl.combat.ModuleAimBot;
+import eu.shoroa.ross.module.impl.combat.ModuleAntiBot;
 import eu.shoroa.ross.module.impl.combat.ModuleAutoClicked;
 import eu.shoroa.ross.module.impl.hud.*;
 import eu.shoroa.ross.module.impl.misc.ModuleBedwars;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 public class ModuleManager {
     private static final Module[] modules;
     private static final List<Module> modulesList = new ArrayList<>();
+    private static final List<Module> modulesListSorted = new ArrayList<>();
     ;
     private static final Map<Category, Module[]> categoryModules = new HashMap<>();
 
@@ -23,11 +26,14 @@ public class ModuleManager {
     public static final ModuleFreeLook freeLook;
     public static final ModuleAnimations animations;
     public static final ModuleFakeBlock fakeBlock;
+    public static final ModuleAntiBot antiBot;
 
     static {
         modules = new Module[]{
                 // combat
                 new ModuleAutoClicked(),
+                antiBot = new ModuleAntiBot(),
+                new ModuleAimBot(),
                 // player
                 new ModuleToggleSprint(),
                 new ModuleBridgeAssist(),
@@ -53,6 +59,8 @@ public class ModuleManager {
         };
 
         modulesList.addAll(Arrays.asList(modules));
+        modulesListSorted.addAll(modulesList);
+        modulesListSorted.sort(Comparator.comparing(m -> m.name));
 
         for (Category category : Category.values()) {
             categoryModules.put(category, Arrays.stream(modules).filter(m -> m.category == category).toArray(Module[]::new));
@@ -82,6 +90,10 @@ public class ModuleManager {
         return modules;
     }
 
+    public static List<Module> getSortedModules() {
+        return modulesListSorted;
+    }
+
     public static List<Module> getEnabledModules() {
         return modulesList.stream().filter(Module::isEnabled).collect(Collectors.toList());
     }
@@ -93,7 +105,7 @@ public class ModuleManager {
     @Nullable
     public static Module getModule(String name) {
         for (Module module : modules) {
-            if (module.name.equalsIgnoreCase(name)) {
+            if (module.name.replaceAll(" ","").equalsIgnoreCase(name.replaceAll(" ",""))) {
                 return module;
             }
         }

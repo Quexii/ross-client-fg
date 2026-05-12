@@ -15,6 +15,8 @@ public abstract class RossScreen extends GuiScreen {
 
     protected abstract void input(float mouseX, float mouseY, EventInput event);
 
+    protected abstract void scroll(float value, float partialTicks);
+
     @Override
     public void initGui() {
         EVENT_BUS.register(this);
@@ -31,19 +33,41 @@ public abstract class RossScreen extends GuiScreen {
         EVENT_BUS.unregister(this);
     }
 
+    protected boolean cancelEscape() {
+        return false;
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) {
+        super.keyTyped(typedChar, keyCode);
+        input(Mouse.getX(), Display.getHeight() - Mouse.getY(), new EventInput(typedChar, EventInput.Type.CHARACTER, Keyboard.getEventKeyState() ? EventInput.Action.PRESS : EventInput.Action.RELEASE));
+    }
+
     @Override
     public void handleMouseInput() {
         if (Mouse.getEventButton() != -1) {
             input(Mouse.getX(), Display.getHeight() - Mouse.getY(), new EventInput(Mouse.getEventButton(), EventInput.Type.MOUSE, Mouse.getEventButtonState() ? EventInput.Action.PRESS : EventInput.Action.RELEASE));
         }
+
+        float rawScroll = Mouse.getEventDWheel();
+        float scroll = rawScroll > 0 ? 1 : (rawScroll < 0 ? -1 : 0);
+        if (scroll != 0) {
+            scroll(scroll, 0);
+        }
+
         super.handleMouseInput();
     }
 
     @Override
     public void handleKeyboardInput() {
+        boolean cancelled = false;
+        if (cancelEscape() && Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
+            cancelled = true;
+        }
         if (Keyboard.getEventKey() != 0) {
             input(Mouse.getX(), Display.getHeight() - Mouse.getY(), new EventInput(Keyboard.getEventKey(), EventInput.Type.KEYBOARD, Keyboard.getEventKeyState() ? EventInput.Action.PRESS : EventInput.Action.RELEASE));
         }
+        if (cancelled) return;
         super.handleKeyboardInput();
     }
 }

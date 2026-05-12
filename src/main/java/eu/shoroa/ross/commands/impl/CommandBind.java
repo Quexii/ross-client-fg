@@ -60,17 +60,7 @@ public class CommandBind extends Command {
             }
             module.bind = new Bind(key, EventInput.Type.KEYBOARD, eventAction);
             success("Bound " + module.name + " to " + Keyboard.getKeyName(key));
-            Thread saveThread = new Thread(() -> {
-                try {
-                    Client.INSTANCE.config.save();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-
-            saveThread.setDaemon(true);
-            saveThread.setName("Config Saver");
-            saveThread.start();
+            Client.INSTANCE.config.saveQueued();
         } else if (bind.startsWith("MOUSE_")) {
             try {
                 int button = Integer.parseInt(bind.substring(6));
@@ -80,17 +70,7 @@ public class CommandBind extends Command {
                 }
                 module.bind = new Bind(button, EventInput.Type.MOUSE, eventAction);
                 success("Bound " + module.name + " to MOUSE_" + button);
-                Thread saveThread = new Thread(() -> {
-                    try {
-                        Client.INSTANCE.config.save();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-
-                saveThread.setDaemon(true);
-                saveThread.setName("Config Saver");
-                saveThread.start();
+                Client.INSTANCE.config.saveQueued();
             } catch (NumberFormatException e) {
                 error("Invalid mouse button: " + bind + " (expected format: MOUSE_0, MOUSE_1 ...)");
             }

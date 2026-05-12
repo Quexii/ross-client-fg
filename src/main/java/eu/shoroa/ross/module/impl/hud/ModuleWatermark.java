@@ -16,6 +16,7 @@ import eu.shoroa.ross.util.render.Renderer2D;
 import io.github.humbleui.skija.Color;
 import io.github.humbleui.skija.ImageFilter;
 import io.github.humbleui.skija.Paint;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 
 @SuppressWarnings("ALL")
@@ -34,7 +35,6 @@ public class ModuleWatermark extends Module {
             GlStateManager.scale(2f, 2f, 1.0f);
 
             float totalWidth = 122f;
-
             Renderer2D.drawRect(2f, 2f, totalWidth, 16f, 0xFF000000);
             Renderer2D.drawRect(2.5f, 2.5f, totalWidth-1, 15f, 0xFF383838);
             Renderer2D.drawRect(3f, 3f, totalWidth-2, 14f, 0xFF222222);

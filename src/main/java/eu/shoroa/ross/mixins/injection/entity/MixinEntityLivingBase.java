@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static eu.shoroa.ross.Client.EVENT_BUS;
 
 @Mixin(EntityLivingBase.class)
-public abstract class MixinEntityLivingBase implements IEntityLivingBase {
+public abstract class MixinEntityLivingBase extends MixinEntity implements IEntityLivingBase {
     @Shadow
     protected abstract int getArmSwingAnimationEnd();
 

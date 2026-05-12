@@ -1,5 +1,6 @@
 package eu.shoroa.ross.commands.impl;
 
+import eu.shoroa.ross.Client;
 import eu.shoroa.ross.commands.Command;
 import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.module.ModuleManager;
@@ -47,6 +48,7 @@ public class CommandModule extends Command {
                 } else {
                     module.toggle();
                     ChatUtil.toggled(module.name, module.isEnabled());
+                    Client.INSTANCE.config.saveQueued();
                 }
                 break;
             }
@@ -81,6 +83,7 @@ public class CommandModule extends Command {
                 }
                 if (setting.setFromString(args[3])) {
                     ChatUtil.settingSet(module.name, setting.getName(), setting.get().toString());
+                    Client.INSTANCE.config.saveQueued();
                 } else {
                     error("Invalid value: " + args[3]);
                 }

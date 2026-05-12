@@ -33,16 +33,6 @@ public class CommandUnbind extends Command {
 
         module.bind = null;
         success("Unbound " + module.name + ".");
-        Thread saveThread = new Thread(() -> {
-            try {
-                Client.INSTANCE.config.save();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        saveThread.setDaemon(true);
-        saveThread.setName("Config Saver");
-        saveThread.start();
+        Client.INSTANCE.config.saveQueued();
     }
 }

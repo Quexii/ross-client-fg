@@ -7,6 +7,7 @@ import eu.shoroa.ross.event.EventHUD;
 import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.module.Category;
 import eu.shoroa.ross.module.Module;
+import eu.shoroa.ross.module.ModuleManager;
 import eu.shoroa.ross.render.Renderer;
 import eu.shoroa.ross.render.skia.font.Font;
 import eu.shoroa.ross.render.skia.font.Fonts;
