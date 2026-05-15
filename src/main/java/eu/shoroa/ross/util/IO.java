@@ -56,4 +56,12 @@ public class IO {
         }
         return buffer;
     }
+
+    public static ByteBuffer resourceToBufferUnsafe(String resource, int bufferSize) {
+        try {
+            return resourceToBuffer(resource, bufferSize);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load resource: " + resource, e);
+        }
+    }
 }

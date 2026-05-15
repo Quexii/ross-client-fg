@@ -5,6 +5,7 @@ import eu.shoroa.ross.event.EventHUD;
 import eu.shoroa.ross.event.EventInGameHUD;
 import eu.shoroa.ross.render.Renderer;
 import eu.shoroa.ross.render.filters.Filter;
+import eu.shoroa.ross.render.skia.shader.Shaders;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,6 +43,8 @@ public abstract class MixinGuiIngame {
 
     @Inject(method = "renderGameOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;renderTooltip(Lnet/minecraft/client/gui/ScaledResolution;F)V"))
     public void renderTooltip(float partialTicks, CallbackInfo ci) {
+        Shaders.update();
+
         Filter.kawase().capture(mc.getFramebuffer().framebufferTexture, 4f, true, 4);
 
         EVENT_BUS.post(new EventHUD.BottomVanilla(partialTicks));

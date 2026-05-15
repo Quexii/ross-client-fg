@@ -13,6 +13,7 @@ import eu.shoroa.ross.render.filters.Filter;
 import eu.shoroa.ross.render.skia.font.Font;
 import eu.shoroa.ross.render.skia.font.Fonts;
 import eu.shoroa.ross.render.skia.image.Images;
+import eu.shoroa.ross.render.skia.shader.Shaders;
 import eu.shoroa.ross.util.render.Renderer2D;
 import io.github.humbleui.skija.Canvas;
 import io.github.humbleui.skija.Color;
@@ -169,17 +170,38 @@ public class ModuleItemNotifs extends Module {
             Renderer.drawRect(x + 4f + height, y, width * 2/3, height, p);
             p.setShader(null);
 
+            p.setColor(0x22FFFFFF);
+            /*
+        seed = 1468280749;
+        timeScale = 0.01f;
+        freq = 5;
+        octave = 2;
+        persistence = 0.5f;
+        lacunarity = 2.0f;
+        color = -1;
+        alphaMult = 1f;
+        threshold = 0.01f;
+        lineWidth = 0.01f;
+             */
+
+            Shaders.TOPOGRAPHY.reset();
+            Shaders.TOPOGRAPHY
+                    .freq(8)
+                    .persistence(0.5f)
+                    .lacunarity(2.4f)
+                    .color(0xFF888888)
+                    .alphaMult(0.0f)
+            ;
+            Shaders.TOPOGRAPHY.update();
+            p.setShader(Shaders.TOPOGRAPHY.getShader());
+            Renderer.drawRRect(x, y, width, height, 4f, p);
+            p.setShader(null);
+
             p.setColor(color);
             Renderer.drawRRect(x, y, 16f, height, 4f, p);
 
             p.setColor(Color.makeLerp(color, 0xFF555555, 0.5f));
             Renderer.drawRect(x + 4f, y, height, height, p);
-
-            p.setColor(0x22FFFFFF);
-            canvas.save();
-            canvas.clipRect(Rect.makeXYWH(x + 4f, y, height, height));
-            Renderer.drawImage(Images.TOPOLOGY, x - 140, y - 60, Images.TOPOLOGY.getWidth() / 3f, Images.TOPOLOGY.getHeight() / 3f, p);
-            canvas.restore();
 
             canvas.drawRectShadowNoclip(Rect.makeXYWH(x + 4 + 8, y + 8, height - 16, height - 16), 0f, 0f, 15f, 0f, 0xBB000000);
 

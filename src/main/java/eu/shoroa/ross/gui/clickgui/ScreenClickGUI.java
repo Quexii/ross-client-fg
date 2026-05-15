@@ -5,11 +5,10 @@ import eu.shoroa.ross.animate.Animate;
 import eu.shoroa.ross.animate.Easing;
 import eu.shoroa.ross.event.EventInput;
 import eu.shoroa.ross.gui.RossScreen;
-import eu.shoroa.ross.gui.clickgui.elements.bind.BindPanel;
 import eu.shoroa.ross.gui.clickgui.elements.EleCategory;
+import eu.shoroa.ross.gui.clickgui.elements.bind.BindPanel;
 import eu.shoroa.ross.gui.elements.IconButton;
 import eu.shoroa.ross.module.Category;
-import eu.shoroa.ross.module.ModuleManager;
 import eu.shoroa.ross.render.Renderer;
 import eu.shoroa.ross.render.filters.Filter;
 import eu.shoroa.ross.render.skia.font.Fonts;
@@ -17,8 +16,6 @@ import eu.shoroa.ross.util.render.MaterialIcons;
 import io.github.humbleui.types.Rect;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
-
-import java.util.Arrays;
 
 import static eu.shoroa.ross.Client.EVENT_BUS;
 

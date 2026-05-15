@@ -1,0 +1,165 @@
+// kind=shader
+uniform float2 u_resolution;
+uniform float u_time;
+uniform float u_seed;
+uniform float u_time_scale;
+uniform int u_freq;
+uniform int u_octave;
+uniform float u_persistence;
+uniform float u_lacunarity;
+uniform half3 u_color;
+uniform float u_alpha_mult;
+uniform float u_threshold;
+uniform float u_line_width;
+
+float hash11(float n) {
+    return fract(sin(n) * 43758.5453123);
+}
+
+float hash31(float3 p, float seed) {
+    float n = dot(p, float3(127.1, 311.7, 74.7)) + seed * 0.12345;
+    return hash11(n);
+}
+
+float3 gradientDirection(float h) {
+    int idx = int(floor(h * 16.0));
+    switch (idx) {
+        case 0 : return float3(1.0, 1.0, 0.0);
+        case 1 : return float3(-1.0, 1.0, 0.0);
+        case 2 : return float3(1.0, -1.0, 0.0);
+        case 3 : return float3(-1.0, -1.0, 0.0);
+        case 4 : return float3(1.0, 0.0, 1.0);
+        case 5 : return float3(-1.0, 0.0, 1.0);
+        case 6 : return float3(1.0, 0.0, -1.0);
+        case 7 : return float3(-1.0, 0.0, -1.0);
+        case 8 : return float3(0.0, 1.0, 1.0);
+        case 9 : return float3(0.0, -1.0, 1.0);
+        case 10 : return float3(0.0, 1.0, -1.0);
+        case 11 : return float3(0.0, -1.0, -1.0);
+        case 12 : return float3(1.0, 1.0, 0.0);
+        case 13 : return float3(-1.0, 1.0, 0.0);
+        case 14 : return float3(0.0, -1.0, 1.0);
+        case 15 : return float3(0.0, -1.0, -1.0);
+    }
+    return float3(0.0);
+}
+
+float interpolateNoise(
+float value1,
+float value2,
+float value3,
+float value4,
+float value5,
+float value6,
+float value7,
+float value8,
+float3 t
+) {
+    return mix(
+    mix(mix(value1, value2, t.x), mix(value3, value4, t.x), t.y),
+    mix(mix(value5, value6, t.x), mix(value7, value8, t.x), t.y),
+    t.z
+    );
+}
+
+float3 fade(float3 t) {
+    return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+}
+
+float perlinNoise(float3 position, float seed) {
+    float3 floorPosition = floor(position);
+    float3 fractPosition = position - floorPosition;
+    float3 cellCoordinates = floorPosition;
+
+    float value1 = dot(gradientDirection(hash31(cellCoordinates, seed)), fractPosition);
+    float value2 = dot(gradientDirection(hash31(cellCoordinates + float3(1.0, 0.0, 0.0), seed)), fractPosition - float3(1.0, 0.0, 0.0));
+    float value3 = dot(gradientDirection(hash31(cellCoordinates + float3(0.0, 1.0, 0.0), seed)), fractPosition - float3(0.0, 1.0, 0.0));
+    float value4 = dot(gradientDirection(hash31(cellCoordinates + float3(1.0, 1.0, 0.0), seed)), fractPosition - float3(1.0, 1.0, 0.0));
+    float value5 = dot(gradientDirection(hash31(cellCoordinates + float3(0.0, 0.0, 1.0), seed)), fractPosition - float3(0.0, 0.0, 1.0));
+    float value6 = dot(gradientDirection(hash31(cellCoordinates + float3(1.0, 0.0, 1.0), seed)), fractPosition - float3(1.0, 0.0, 1.0));
+    float value7 = dot(gradientDirection(hash31(cellCoordinates + float3(0.0, 1.0, 1.0), seed)), fractPosition - float3(0.0, 1.0, 1.0));
+    float value8 = dot(gradientDirection(hash31(cellCoordinates + float3(1.0, 1.0, 1.0), seed)), fractPosition - float3(1.0, 1.0, 1.0));
+
+    return interpolateNoise(value1, value2, value3, value4, value5, value6, value7, value8, fade(fractPosition));
+}
+
+float perlinNoise(
+float3 position,
+int frequency,
+int octaveCount,
+float persistence,
+float lacunarity,
+float seed
+) {
+    float value = 0.0;
+    float amplitude = 1.0;
+    float currentFrequency = float(frequency);
+    float currentSeed = seed;
+
+    for (int i = 0;
+    i < 8;
+    ++i) {
+        if (i >= octaveCount) {
+            break;
+        }
+        currentSeed = hash11(currentSeed + float(i) * 17.0) * 65535.0;
+        value += perlinNoise(position * currentFrequency, currentSeed) * amplitude;
+        amplitude *= persistence;
+        currentFrequency *= lacunarity;
+    }
+
+    return value;
+}
+
+float lum(float3 c) {
+    return c.x * 0.3 + c.y * 0.59 + c.z * 0.11;
+}
+
+half4 main(float2 fragCoord) {
+    float2 pos = fragCoord / u_resolution.y;
+    float2 post = (fragCoord + float2(0.0, -1.0)) / u_resolution.y;
+    float2 posb = (fragCoord + float2(0.0, 1.0)) / u_resolution.y;
+    float2 posl = (fragCoord + float2(-1.0, 0.0)) / u_resolution.y;
+    float2 posr = (fragCoord + float2(1.0, 0.0)) / u_resolution.y;
+
+// begin: options
+    float seed = u_seed;
+    float z = u_time * u_time_scale;
+    int freq = u_freq;
+    int octave = u_octave;
+    float persistence = u_persistence;
+    float lacunarity = u_lacunarity;
+// end: options
+
+    float value = perlinNoise(float3(pos, z), freq, octave, persistence, lacunarity, seed);
+    value = (value + 1.0) * 0.5;
+    value = floor(value * 10.0) / 10.0;
+
+    float valuet = perlinNoise(float3(post, z), freq, octave, persistence, lacunarity, seed);
+    valuet = (valuet + 1.0) * 0.5;
+    valuet = floor(valuet * 10.0) / 10.0;
+
+    float valueb = perlinNoise(float3(posb, z), freq, octave, persistence, lacunarity, seed);
+    valueb = (valueb + 1.0) * 0.5;
+    valueb = floor(valueb * 10.0) / 10.0;
+
+    float valuel = perlinNoise(float3(posl, z), freq, octave, persistence, lacunarity, seed);
+    valuel = (valuel + 1.0) * 0.5;
+    valuel = floor(valuel * 10.0) / 10.0;
+
+    float valuer = perlinNoise(float3(posr, z), freq, octave, persistence, lacunarity, seed);
+    valuer = (valuer + 1.0) * 0.5;
+    valuer = floor(valuer * 10.0) / 10.0;
+
+    float lumc = lum(float3(value));
+    float lumt = lum(float3(valuet));
+    float lumb = lum(float3(valueb));
+    float luml = lum(float3(valuel));
+    float lumr = lum(float3(valuer));
+
+    float lap = lumt + lumb + lumr + luml - (4.0 * lumc);
+
+    float mask = smoothstep(u_threshold - u_line_width, u_threshold + u_line_width, lap);
+
+    return half4(half3(u_color * mask), half(value * u_alpha_mult));
+}

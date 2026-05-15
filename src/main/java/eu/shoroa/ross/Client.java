@@ -10,6 +10,7 @@ import eu.shoroa.ross.render.filters.Filter;
 import eu.shoroa.ross.render.skia.SkiaSource;
 import eu.shoroa.ross.render.skia.font.Fonts;
 import eu.shoroa.ross.render.skia.image.Images;
+import eu.shoroa.ross.render.skia.shader.Shaders;
 import eu.shoroa.ross.util.proj.EntityProjection;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
@@ -41,6 +42,7 @@ public class Client {
         skia.init();
         Fonts.load();
         Images.load();
+        Shaders.init();
         Filter.kawase().init();
 
         ModuleManager.init();
