@@ -48,7 +48,7 @@ public class ModuleAimBot extends Module {
             float pitchDiff = Math.abs(neededPitch - mc.thePlayer.rotationPitch);
 
             if (yawDiff > 1e-5) {
-                float maxChange = speed.get().floatValue() / 50 * event.partialTicks * 20f;
+                float maxChange = speed.get().floatValue() * event.partialTicks * 20f;
                 float change = Math.min(maxChange, yawDiff);
                 if (MathHelper.wrapAngleTo180_float(neededYaw - mc.thePlayer.rotationYaw) < 0) {
                     change = -change;
@@ -57,7 +57,7 @@ public class ModuleAimBot extends Module {
             }
 
             if (pitchDiff > 1e-5) {
-                float maxChange = speed.get().floatValue() / 50 * event.partialTicks * 20f;
+                float maxChange = speed.get().floatValue() * event.partialTicks * 20f;
                 float change = Math.min(maxChange, pitchDiff);
                 if (neededPitch - mc.thePlayer.rotationPitch < 0) {
                     change = -change;

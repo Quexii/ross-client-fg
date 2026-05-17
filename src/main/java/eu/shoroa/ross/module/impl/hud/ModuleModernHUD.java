@@ -190,6 +190,11 @@ public class ModuleModernHUD extends Module {
 
                 if (selected) {
                     stroke = -2f;
+                    p.setColor(0xFF000000);
+                    p.setStroke(true);
+                    p.setStrokeWidth(3f);
+                    Renderer.drawRRect(x + stroke, y + stroke, slotSize - stroke * 2, slotSize - stroke * 2, 12f - stroke, p);
+                    stroke = -1;
                     p.setColor(0xFFFFFFFF);
                     p.setStroke(true);
                     p.setStrokeWidth(3f);
@@ -257,10 +262,12 @@ public class ModuleModernHUD extends Module {
             if (item != null) {
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(2f, 2f, 1f);
-                Renderer2D.drawItem(item, itemX / 2, itemY / 2, false);
+                mc.getRenderItem().renderItemAndEffectIntoGUI(item, (int) (itemX / 2), (int) (itemY / 2));
+//                Renderer2D.drawItem(item, itemX / 2, itemY / 2, false);
                 GlStateManager.popMatrix();
             }
         }
+        GlStateManager.enableAlpha();
         Renderer2D.end2d();
     }
 

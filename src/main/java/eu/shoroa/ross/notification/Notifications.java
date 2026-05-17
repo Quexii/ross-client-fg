@@ -59,13 +59,13 @@ public class Notifications {
             float scale = 1 - (float) (notif.exitAnim.getValue() * 0.5f);
             float rotation = (float) (10f - notif.entryAnim.getValue() * 10f - notif.exitAnim.getValue() * 15f);
 
-            canvas.saveLayerAlpha(null, (int) ((notif.entryAnim.getValue() - notif.exitAnim.getValue()) * 255));
+            Renderer.saveAlpha((float) (notif.entryAnim.getValue() - notif.exitAnim.getValue()));
             canvas.translate(x + notifWidth, y);
             canvas.scale(scale, scale);
             canvas.rotate(rotation);
             canvas.translate(-x- notifWidth, -y);
             render(notif, x, y, notifWidth, notifHeight);
-            canvas.restore();
+            Renderer.restore();
 
             yOffset += (notifHeight + 8) * (notif.entryAnim.getValue() - notif.exitAnim.getValue());
         }
@@ -100,9 +100,9 @@ public class Notifications {
 
         float imageSize = 280;
 
-        try (Paint p = new Paint()) {
-            Renderer.drawFilter(Filter.kawase(), mc.getFramebuffer().framebufferTexture, x, y, width, height, 8);
+        Renderer.drawFilter(Filter.kawase(), mc.getFramebuffer().framebufferTexture, x, y, width, height, 8);
 
+        try (Paint p = new Paint()) {
             p.setColor(0x99000000);
             Renderer.drawRRect(x, y, width, height, 8, p);
 

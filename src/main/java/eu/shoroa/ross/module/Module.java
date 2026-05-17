@@ -1,5 +1,7 @@
 package eu.shoroa.ross.module;
 
+import eu.shoroa.ross.notification.Notification;
+import eu.shoroa.ross.notification.Notifications;
 import eu.shoroa.ross.settings.Setting;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,6 +53,10 @@ public class Module {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+
+        if (enabled) Notifications.add(name, "Enabled " + name, Notification.Type.SUCCESS, 1500L);
+        else Notifications.add(name, "Disabled " + name, Notification.Type.ERROR, 1500L);
+
         if (enabled) onEnable();
         else onDisable();
     }
