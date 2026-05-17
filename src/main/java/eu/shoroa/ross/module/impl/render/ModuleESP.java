@@ -23,12 +23,15 @@ import eu.shoroa.ross.util.entity.TeamHelper;
 import eu.shoroa.ross.util.proj.EntityProjection;
 import eu.shoroa.ross.util.render.Renderer3D;
 import io.github.humbleui.skija.Paint;
+import net.minecraft.block.BlockBed;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.chunk.Chunk;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -67,7 +70,7 @@ public class ModuleESP extends Module {
     public void oe$RenderEntity(EventRenderLiving.Pre event) {
         if (mode.get() != Mode.MODE_SHADER) return;
         if (!(event.entity instanceof EntityPlayer)) return;
-        if (mc.gameSettings.thirdPersonView == 0 && event.entity == mc.thePlayer && self.get()) return;
+        if (mc.gameSettings.thirdPersonView != 0 && event.entity == mc.thePlayer && !self.get()) return;
         if (event.renderer == null) return;
         if (ModuleManager.antiBot.isEnabled() && ModuleManager.antiBot.isBot((EntityPlayer) event.entity)) return;
         if (renderingColorPass) return;

@@ -46,7 +46,7 @@ public class BedwarsSystem {
     }
 
     @Subscribe
-    public void oe$WorldChanged(EventWorld.Load event) {
+    public void oe$WorldChanged(EventWorld.LoadChunk event) {
         if (inGame) {
             EVENT_BUS.post(new EventLeaveBedwars());
             inGame = false;

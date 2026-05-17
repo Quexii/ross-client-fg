@@ -89,7 +89,7 @@ public class ModuleAntiBot extends Module {
     }
 
     @Subscribe
-    public void oe$WorldLoad(EventWorld.Load event) {
+    public void oe$WorldLoad(EventWorld.LoadChunk event) {
         botCache.clear();
         realCache.clear();
         firstSeen.clear();

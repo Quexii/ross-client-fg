@@ -74,6 +74,39 @@ public class Renderer2D {
         tessellator.draw();
     }
 
+    private static void setupGuiTransform(float x, float y, boolean isGui3d) {
+        RenderItem ri = mc.getRenderItem();
+
+        GlStateManager.translate(x, y, 100.0F + ri.zLevel);
+        GlStateManager.translate(8.0F, 8.0F, 0.0F);
+        GlStateManager.scale(1.0F, 1.0F, -1.0F);
+        GlStateManager.scale(0.5F, 0.5F, 0.5F);
+        if (isGui3d) {
+            GlStateManager.scale(40.0F, 40.0F, 40.0F);
+            GlStateManager.rotate(210.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.enableLighting();
+        } else {
+            GlStateManager.scale(64.0F, 64.0F, 64.0F);
+            GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.disableLighting();
+        }
+    }
+
+    public static void drawItem(ItemStack stack, float x, float y) {
+        GlStateManager.translate(x, y, 0F);
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        RenderHelper.enableGUIStandardItemLighting();
+        mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.translate(-x, -y, 0F);
+    }
+
     public static void drawItem(ItemStack stack, float x, float y, boolean mipmaps) {
         RenderItem ri = mc.getRenderItem();
 
@@ -84,7 +117,6 @@ public class Renderer2D {
 
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
-        GlStateManager.enableRescaleNormal();
         RenderHelper.enableGUIStandardItemLighting();
         GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(516, 0.1F);
@@ -110,7 +142,6 @@ public class Renderer2D {
         GlStateManager.disableAlpha();
         GlStateManager.disableLighting();
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
         GlStateManager.popAttrib();
 

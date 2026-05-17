@@ -5,6 +5,7 @@ import eu.shoroa.ross.module.impl.combat.ModuleAimBot;
 import eu.shoroa.ross.module.impl.combat.ModuleAntiBot;
 import eu.shoroa.ross.module.impl.combat.ModuleAutoClicked;
 import eu.shoroa.ross.module.impl.hud.*;
+import eu.shoroa.ross.module.impl.misc.ModuleBedDefenseDisplay;
 import eu.shoroa.ross.module.impl.misc.ModuleBedwars;
 import eu.shoroa.ross.module.impl.misc.ModuleFireballWarning;
 import eu.shoroa.ross.module.impl.misc.ModuleFreeLook;
@@ -55,7 +56,8 @@ public class ModuleManager {
                 // misc
                 freeLook = new ModuleFreeLook(),
                 new ModuleFireballWarning(),
-                new ModuleBedwars()
+                new ModuleBedwars(),
+                new ModuleBedDefenseDisplay()
         };
 
         modulesList.addAll(Arrays.asList(modules));

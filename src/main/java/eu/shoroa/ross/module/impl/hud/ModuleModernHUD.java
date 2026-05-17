@@ -21,6 +21,7 @@ import io.github.humbleui.types.Rect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldSettings;
 import org.lwjgl.opengl.Display;
@@ -53,7 +54,7 @@ public class ModuleModernHUD extends Module {
     }
 
     @Subscribe
-    public void oe$Hud(EventHUD.BottomSkia event) {
+    public void oe$BottomSkia(EventHUD.BottomSkia event) {
         if (mc.thePlayer == null || mc.theWorld == null) return;
         Canvas canvas = Client.INSTANCE.skia.getCanvas();
         if (canvas == null) return;
@@ -72,7 +73,7 @@ public class ModuleModernHUD extends Module {
     }
 
     @Subscribe
-    public void oe$HudTop(EventHUD.TopSkia event) {
+    public void oe$TopSkia(EventHUD.TopSkia event) {
         if (mc.thePlayer == null || mc.theWorld == null) return;
         Canvas canvas = Client.INSTANCE.skia.getCanvas();
         if (canvas == null) return;
@@ -83,7 +84,7 @@ public class ModuleModernHUD extends Module {
     }
 
     @Subscribe
-    public void oe$HudVanilla(EventHUD.TopVanilla event) {
+    public void oe$TopVanilla(EventHUD.TopVanilla event) {
         if (mc.thePlayer == null || mc.theWorld == null) return;
         if (changeHotbar.get()) {
             renderHotbarVanilla();
@@ -251,6 +252,9 @@ public class ModuleModernHUD extends Module {
         }
 
         Renderer2D.begin2d();
+//        GlStateManager.pushAttrib();
+//        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+//        RenderHelper.enableGUIStandardItemLighting();
         for (int i = 0; i < 9; i++) {
             ItemStack item = mc.thePlayer.inventory.getStackInSlot(i);
 
@@ -262,12 +266,13 @@ public class ModuleModernHUD extends Module {
             if (item != null) {
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(2f, 2f, 1f);
-                mc.getRenderItem().renderItemAndEffectIntoGUI(item, (int) (itemX / 2), (int) (itemY / 2));
-//                Renderer2D.drawItem(item, itemX / 2, itemY / 2, false);
+//                mc.getRenderItem().renderItemAndEffectIntoGUI(item, (int) (itemX / 2), (int) (itemY / 2));
+                Renderer2D.drawItem(item, itemX / 2, itemY / 2);
                 GlStateManager.popMatrix();
             }
         }
-        GlStateManager.enableAlpha();
+//        RenderHelper.disableStandardItemLighting();
+//        GlStateManager.popAttrib();
         Renderer2D.end2d();
     }
 

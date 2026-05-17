@@ -9,7 +9,8 @@
     "entity.MixinEntity",
     "entity.MixinEntityLivingBase",
     "entity.item.MixinEntityItem",
-    "entity.player.inventory.MixinInventoryPlayer"
+    "entity.player.inventory.MixinInventoryPlayer",
+    "world.chunk.MixinChunk"
   ],
   "client": [
     "MixinGuiMainMenu",
@@ -17,6 +18,7 @@
     "client.MixinMinecraft",
     "client.entity.MixinEntityPlayerSP",
     "client.gui.MixinGuiIngame",
+    "client.multiplayer.ChunkProviderClientAccessor",
     "client.multiplayer.MixinWorldClient",
     "client.network.MixinNetHandlerPlayClient",
     "client.renderer.MixinActiveRenderInfo",

@@ -2,6 +2,7 @@ package eu.shoroa.ross;
 
 import eu.shoroa.ross.config.ConfigManager;
 import eu.shoroa.ross.event.EventBus;
+import eu.shoroa.ross.event.EventInput;
 import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.integration.hypixel.BedwarsSystem;
 import eu.shoroa.ross.module.ModuleManager;
@@ -15,7 +16,6 @@ import eu.shoroa.ross.util.proj.EntityProjection;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import eu.shoroa.ross.event.EventInput;
 
 import java.io.IOException;
 

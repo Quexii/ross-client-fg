@@ -21,6 +21,7 @@ import io.github.humbleui.skija.Paint;
 import io.github.humbleui.skija.Shader;
 import io.github.humbleui.types.Rect;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayDeque;
@@ -87,7 +88,7 @@ public class ModuleItemNotifs extends Module {
     }
 
     @Subscribe
-    public void oe$HudVanilla(EventHUD.TopVanilla event) {
+    public void oe$TopVanilla(EventHUD.TopVanilla event) {
         if (queue.isEmpty()) return;
 
         float notifX = 10f;
@@ -126,8 +127,11 @@ public class ModuleItemNotifs extends Module {
     private void renderVanilla(ItemNotif notif, float x, float y, float width, float height) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x / 2, y / 2, 0);
-        Renderer2D.drawItem(notif.stack, 4f, 2, false);
+        Renderer2D.drawItem(notif.stack, 4f, 2);
+//        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+//        RenderHelper.enableGUIStandardItemLighting();
 //        mc.getRenderItem().renderItemAndEffectIntoGUI(notif.stack, 4, 2);
+//        RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
     }
 

@@ -2,6 +2,8 @@ package eu.shoroa.ross.mixins.injection.client.network;
 
 import eu.shoroa.ross.event.EventChatReceived;
 import eu.shoroa.ross.event.EventEntityItemPickup;
+import eu.shoroa.ross.event.EventWorld;
+import eu.shoroa.ross.util.world.WorldHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -11,6 +13,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S0DPacketCollectItem;
+import net.minecraft.network.play.server.S21PacketChunkData;
+import net.minecraft.world.chunk.Chunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -20,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static eu.shoroa.ross.Client.EVENT_BUS;
+import static eu.shoroa.ross.Client.mc;
 
 @Mixin(NetHandlerPlayClient.class)
 public class MixinNetHandlerPlayClient {
