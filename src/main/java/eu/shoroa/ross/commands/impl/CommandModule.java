@@ -15,7 +15,7 @@ public class CommandModule extends Command {
                 new String[]{
                         ".module toggle <name>",
                         ".module list",
-                        ".module set <name> <setting> <value>",
+                        ".module set <module> <setting> <value>",
                         ".module settings <name>",
                 },
                 new String[]{"module", "mod", "m"}

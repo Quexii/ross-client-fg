@@ -2,6 +2,7 @@ package eu.shoroa.ross.mixins.injection.client;
 
 import eu.shoroa.ross.Client;
 import eu.shoroa.ross.event.EventInput;
+import eu.shoroa.ross.event.EventResize;
 import eu.shoroa.ross.event.EventTick;
 import eu.shoroa.ross.mixins.interfaces.IEntityLivingBase;
 import eu.shoroa.ross.module.ModuleManager;
@@ -70,10 +71,7 @@ public class MixinMinecraft {
 
     @Inject(method = "resize", at = @At("RETURN"))
     public void injectResize(int width, int height, CallbackInfo ci) {
-        if (Client.INSTANCE.skia != null) {
-            Client.INSTANCE.skia.resize();
-        }
-        Filter.kawase().resize();
+        EVENT_BUS.post(new EventResize(width, height));
     }
 
     @ModifyConstant(method = "getLimitFramerate", constant = @Constant(intValue = 30), require = 0)

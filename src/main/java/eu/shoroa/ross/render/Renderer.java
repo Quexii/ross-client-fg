@@ -34,6 +34,13 @@ public class Renderer {
         currentCanvas.drawRRect(RRect.makeXYWH(x, y, width, height, radius), paint);
     }
 
+    public static void clipRect(float x, float y, float width, float height) {
+        currentCanvas.clipRect(Rect.makeXYWH(x, y, width, height));
+    }
+
+    public static void clipRRect(float x, float y, float width, float height, float radius) {
+        currentCanvas.clipRRect(RRect.makeXYWH(x, y, width, height, radius), true);
+    }
 
     public static void drawFilter(Filter filter, int filterTexture, float x, float y, float width, float height) {
         Image image = filter.imageFor(filterTexture);

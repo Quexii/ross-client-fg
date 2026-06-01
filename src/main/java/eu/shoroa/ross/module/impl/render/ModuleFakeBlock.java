@@ -14,12 +14,12 @@ import net.minecraft.scoreboard.Team;
 import static eu.shoroa.ross.Client.mc;
 
 public class ModuleFakeBlock extends Module {
-    private final NumberSetting range = register(new NumberSetting("Range", "fakeblock.range", 6f, 1f, 20f, 0.5f));
-    private final BooleanSetting onlyPlayers = register(new BooleanSetting("Only Players", "fakeblock.only_players", false));
-    private final BooleanSetting onlyEnemyTeam = register(new BooleanSetting("Enemy Team Only", "fakeblock.only_enemy_team", true));
+    private final NumberSetting range = register(new NumberSetting("Range", "range", 6f, 1f, 20f, 0.5f));
+    private final BooleanSetting onlyPlayers = register(new BooleanSetting("Only Players", "only_players", false));
+    private final BooleanSetting onlyEnemyTeam = register(new BooleanSetting("Enemy Team Only", "only_enemy_team", true));
 
     public ModuleFakeBlock() {
-        super("FakeBlock", "Client-side autoblock", Category.RENDER, null);
+        super("FakeBlock", "Client-side autoblock.", Category.RENDER, null);
     }
 
     public boolean shouldBlock() {

@@ -13,17 +13,12 @@ version = modVersion
 val embed: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(embed)
 
+
 loom {
     runs.named("client") {
         isIdeConfigGenerated = true
         property("devauth.enabled", "true")
         property("devauth.account", "main")
-
-        vmArgs(
-            "--add-opens", "java.base/jdk.internal.ref=ALL-UNNAMED",
-            "--add-opens", "java.base/sun.misc=ALL-UNNAMED",
-            "--add-opens", "java.base/java.lang.ref=ALL-UNNAMED"
-        )
     }
 }
 
@@ -39,6 +34,7 @@ repositories {
     maven("https://api.modrinth.com/maven")
     maven("https://maven.legacyfabric.net/")
     maven("https://maven.glass-launcher.net/babric")
+    maven("https://maven.axolotlclient.com/snapshots")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
 }
 
@@ -49,6 +45,9 @@ dependencies {
     modImplementation(mods.fabric.loader)
     modRuntimeOnly(mods.devauth)
     modRuntimeOnly(mods.netfix)
+
+    embed(files("./libs/lwjgl-soar.jar"))
+    embed(files("./libs/lwjgl-soar-natives.jar"))
 
     embed(libs.skija.types)
     embed(libs.skija.shared)

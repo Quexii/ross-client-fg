@@ -9,7 +9,7 @@ import eu.shoroa.ross.notification.Notifications;
 
 public class ModuleBedwars extends Module {
     public ModuleBedwars() {
-        super("Bedwars Core", "Adds various features for Hypixel Bedwars", Category.MISC);
+        super("Bedwars Core", "Adds various features for Hypixel Bedwars.", Category.MISC);
     }
 
     @Subscribe

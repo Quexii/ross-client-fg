@@ -2,7 +2,7 @@
 skija = "0.143.13"
 skija_types = "0.2.0"
 
-fabricLoom = "1.15-SNAPSHOT"
+fabricLoom = "1.16.+"
 
 [libraries]
 skija_shared = { group = "io.github.humbleui", name = "skija-shared", version.ref = "skija" }

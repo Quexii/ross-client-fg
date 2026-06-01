@@ -15,15 +15,15 @@ import static eu.shoroa.ross.Client.mc;
 
 public class ModuleAutoClicked extends Module {
 
-    private final NumberSetting cps = register(new NumberSetting("CPS", "autoclicker.cps", 10, 1, 20, 1));
-    private final NumberSetting randomization = register(new NumberSetting("Randomization", "autoclicker.random", 1.5f, 0, 5, 0.5f));
+    private final NumberSetting cps = register(new NumberSetting("CPS", "cps", 10, 1, 20, 1));
+    private final NumberSetting randomization = register(new NumberSetting("Randomization", "random", 1.5f, 0, 5, 0.5f));
 
     private final Random random = new Random();
     private final Timer leftClickTimer = new Timer();
     private long nextLeftDelay;
 
     public ModuleAutoClicked() {
-        super("AutoClicker", "Automatically clicks for you", Category.COMBAT, null);
+        super("AutoClicker", "Automatically clicks for you.", Category.COMBAT, null);
     }
 
     @Subscribe

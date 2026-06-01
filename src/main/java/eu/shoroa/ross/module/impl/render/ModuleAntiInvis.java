@@ -6,10 +6,10 @@ import eu.shoroa.ross.settings.NumberSetting;
 
 public class ModuleAntiInvis extends Module {
 
-    private final NumberSetting opacity = register(new NumberSetting("Opacity", "antiinvis.opacity", 1f, 0f, 1f, 0.1f));
+    private final NumberSetting opacity = register(new NumberSetting("Opacity", "opacity", 1f, 0f, 1f, 0.1f));
 
     public ModuleAntiInvis() {
-        super("AntiInvis", "Makes invisible players visible again", Category.RENDER, null);
+        super("AntiInvis", "Makes invisible players visible again.", Category.RENDER, null);
     }
 
     public float getOpacity() {

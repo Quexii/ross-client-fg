@@ -53,10 +53,11 @@ public class ModuleManager {
                 new ModuleTargetHUD(),
                 new ModuleItemNotifs(),
                 new ModuleModernHUD(),
+                new ModuleLowHealthOverlay(),
                 // misc
                 freeLook = new ModuleFreeLook(),
                 new ModuleFireballWarning(),
-                new ModuleBedwars(),
+//                new ModuleBedwars(),
                 new ModuleBedDefenseDisplay()
         };
 

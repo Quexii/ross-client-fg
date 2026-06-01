@@ -23,16 +23,16 @@ import java.util.stream.Collectors;
 import static eu.shoroa.ross.Client.mc;
 
 public class ModuleAimBot extends Module {
-    private final NumberSetting fov = register(new NumberSetting("FOV", "aimbot.fov", 90, 0, 360, 1));
-    private final NumberSetting range = register(new NumberSetting("Range", "aimbot.range", 4.2f, 0, 10, 0.1f));
-    private final NumberSetting speed = register(new NumberSetting("Speed", "aimbot.speed", 10f, 1f, 100f, 1f));
-    private final BooleanSetting render = register(new BooleanSetting("Render", "aimbot.render", true));
-    private final BooleanSetting playersOnly = register(new BooleanSetting("Players Only", "aimbot.players", true));
+    private final NumberSetting fov = register(new NumberSetting("FOV", "fov", 90, 0, 360, 1));
+    private final NumberSetting range = register(new NumberSetting("Range", "range", 4.2f, 0, 10, 0.1f));
+    private final NumberSetting speed = register(new NumberSetting("Speed", "speed", 10f, 1f, 100f, 1f));
+    private final BooleanSetting render = register(new BooleanSetting("Render", "render", true));
+    private final BooleanSetting playersOnly = register(new BooleanSetting("Players Only", "players", true));
 
     private EntityLivingBase target;
 
     public ModuleAimBot() {
-        super("AimBot", "Aims at nearby entities", Category.COMBAT);
+        super("AimBot", "Aims at nearby entities.", Category.COMBAT);
     }
 
     @Subscribe

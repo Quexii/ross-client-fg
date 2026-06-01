@@ -31,14 +31,14 @@ import static eu.shoroa.ross.Client.mc;
 
 public class ModuleFireballWarning extends Module {
     private static final float EDGE_MARGIN = 10f;
-    private final NumberSetting lineLength = register(new NumberSetting("Line Length", "fireballwarning.line_length", 50, 1, 100, 1));
-    private final NumberSetting markerSize = register(new NumberSetting("Marker Size", "fireballwarning.marker_size", 18, 10, 40, 1));
-    private final BooleanSetting markerPulse = register(new BooleanSetting("Marker Pulse", "fireballwarning.marker_pulse", true));
+    private final NumberSetting lineLength = register(new NumberSetting("Line Length", "line_length", 50, 1, 100, 1));
+    private final NumberSetting markerSize = register(new NumberSetting("Marker Size", "marker_size", 18, 10, 40, 1));
+    private final BooleanSetting markerPulse = register(new BooleanSetting("Marker Pulse", "marker_pulse", true));
 
     private final Map<EntityFireball, Vec3> positions = new HashMap<>();
 
     public ModuleFireballWarning() {
-        super("Fireball Warning", "Warns you about incoming fireballs", Category.MISC, null);
+        super("Fireball Warning", "Warns you about incoming fireballs.", Category.MISC, null);
     }
 
     @Subscribe

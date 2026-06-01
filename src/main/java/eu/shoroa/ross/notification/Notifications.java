@@ -45,7 +45,7 @@ public class Notifications {
         final float notifHeight = 60;
 
         float yOffset = 0;
-        int max = 5;
+        int max = 12;
 
         Canvas canvas = Client.INSTANCE.skia.getCanvas();
 

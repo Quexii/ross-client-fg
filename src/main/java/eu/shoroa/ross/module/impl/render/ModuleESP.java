@@ -1,9 +1,6 @@
 package eu.shoroa.ross.module.impl.render;
 
-import eu.shoroa.ross.event.EventHUD;
-import eu.shoroa.ross.event.EventRender3D;
-import eu.shoroa.ross.event.EventRenderLiving;
-import eu.shoroa.ross.event.Subscribe;
+import eu.shoroa.ross.event.*;
 import eu.shoroa.ross.mixins.injection.client.MinecraftAccessor;
 import eu.shoroa.ross.mixins.injection.client.renderer.entity.RenderManagerAccessor;
 import eu.shoroa.ross.module.Category;
@@ -27,32 +24,40 @@ import net.minecraft.block.BlockBed;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityEnderChest;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.chunk.Chunk;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import java.io.IOException;
 
 import static eu.shoroa.ross.Client.mc;
 
 public class ModuleESP extends Module {
-    private final ModeSetting<Mode> mode = register(new ModeSetting("Mode", "esp.mode", Mode.MODE_2D));
-    private final BooleanSetting self = register(new BooleanSetting("Self", "esp.do_self", true));
+    private final ModeSetting<Mode> mode = register(new ModeSetting("Mode", "mode", Mode.MODE_2D));
+    private final BooleanSetting self = register(new BooleanSetting("Self", "self", true));
 
     // box settings
-    private final NumberSetting boxOutlineThickness = register(new NumberSetting("Box Outline", "esp.box_outline_thickness", 1f, 0f, 5f, 0.1f));
+    private final NumberSetting boxOutlineThickness = register(new NumberSetting("Box Outline", "box_outline_thickness", 1f, 0f, 5f, 0.1f));
 
     // shader settings
-    private final NumberSetting shaderOutlineThickness = register(new NumberSetting("Shader Outline", "esp.shader_outline_thickness", 1f, 0f, 15f, 0.1f));
-    private final NumberSetting shaderFillAlpha = register(new NumberSetting("Fill Alpha", "esp.shader_fill_alpha", 0.2f, 0f, 1f, 0.1f));
-    private final NumberSetting shaderOutlineAlpha = register(new NumberSetting("Outline Alpha", "esp.shader_outline_alpha", 1f, 0f, 1f, 0.1f));
+    private final NumberSetting shaderOutlineThickness = register(new NumberSetting("Shader Outline", "shader_outline_thickness", 1f, 0f, 15f, 0.1f));
+    private final NumberSetting shaderFillAlpha = register(new NumberSetting("Fill Alpha", "shader_fill_alpha", 0.2f, 0f, 1f, 0.1f));
+    private final NumberSetting shaderOutlineAlpha = register(new NumberSetting("Outline Alpha", "shader_outline_alpha", 1f, 0f, 1f, 0.1f));
 
     private Framebuffer colorBuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
-    private boolean renderingColorPass;
-    private boolean shaderBufferPrepared;
     private static boolean shaderPass;
 
     private final Shader outlineShader = new Shader("shaders/vertex.vert", "shaders/outline.frag");
@@ -63,40 +68,109 @@ public class ModuleESP extends Module {
     }
 
     public ModuleESP() {
-        super("ESP", "TODO", Category.RENDER, null);
+        super("ESP", "Highlights players through walls.", Category.RENDER, null);
     }
 
     @Subscribe
-    public void oe$RenderEntity(EventRenderLiving.Pre event) {
+    public void oe$PostRenderEntities(EventRenderEntities.Post event) {
         if (mode.get() != Mode.MODE_SHADER) return;
-        if (!(event.entity instanceof EntityPlayer)) return;
-        if (mc.gameSettings.thirdPersonView != 0 && event.entity == mc.thePlayer && !self.get()) return;
-        if (event.renderer == null) return;
-        if (ModuleManager.antiBot.isEnabled() && ModuleManager.antiBot.isBot((EntityPlayer) event.entity)) return;
-        if (renderingColorPass) return;
 
-        renderingColorPass = true;
-        shaderPass = true;
-        try {
-            colorBuffer.bindFramebuffer(false);
+        if (colorBuffer.framebufferWidth != mc.displayWidth || colorBuffer.framebufferHeight != mc.displayHeight) {
+            colorBuffer.deleteFramebuffer();
+            colorBuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
 
-            GlStateManager.disableTexture2D();
-            GlStateManager.disableLighting();
+            colorBuffer.setFramebufferFilter(GL11.GL_LINEAR);
 
-            int color = TeamHelper.getTeamColor((EntityPlayer) event.entity);
-            float r = (color >> 16 & 255) / 255.0F;
-            float g = (color >> 8 & 255) / 255.0F;
-            float b = (color & 255) / 255.0F;
-            GlStateManager.color(r, g, b, 1.0F);
-
-            event.renderer.doRender(event.entity, event.x, event.y, event.z, event.entity.rotationYaw, ((MinecraftAccessor) mc).getTimer().renderPartialTicks);
-        } finally {
-            GlStateManager.enableTexture2D();
-            GlStateManager.enableLighting();
-            mc.getFramebuffer().bindFramebuffer(true);
-            shaderPass = false;
-            renderingColorPass = false;
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, colorBuffer.framebufferTexture);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
         }
+        
+        shaderPass = true;
+
+        RenderManager rm = mc.getRenderManager();
+
+        double renderX = event.renderViewEntity.prevPosX + (event.renderViewEntity.posX - event.renderViewEntity.prevPosX) * (double) event.partialTicks;
+        double renderY = event.renderViewEntity.prevPosY + (event.renderViewEntity.posY - event.renderViewEntity.prevPosY) * (double) event.partialTicks;
+        double renderZ = event.renderViewEntity.prevPosZ + (event.renderViewEntity.posZ - event.renderViewEntity.prevPosZ) * (double) event.partialTicks;
+
+        colorBuffer.framebufferClear();
+        colorBuffer.bindFramebuffer(true);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.depthFunc(519);
+        GlStateManager.disableFog();
+        GlStateManager.disableAlpha();
+        GlStateManager.depthMask(false);
+        GlStateManager.disableLighting();
+
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0f, 240.0f);
+
+        boolean prev = rm.isRenderShadow();
+        rm.setRenderShadow(false);
+
+        GlStateManager.enableTexture2D();
+
+        RenderManagerAccessor rma = (RenderManagerAccessor) rm;
+
+        for (Entity entity : event.entities) {
+            boolean flag2 = mc.getRenderViewEntity() instanceof EntityLivingBase && ((EntityLivingBase) mc.getRenderViewEntity()).isPlayerSleeping();
+            boolean flag3 = entity.isInRangeToRender3d(renderX, renderY, renderZ) && (entity.ignoreFrustumCheck || event.camera.isBoundingBoxInFrustum(entity.getEntityBoundingBox()) || entity.riddenByEntity == mc.thePlayer);
+
+            if ((entity != mc.getRenderViewEntity() || mc.gameSettings.thirdPersonView != 0 || flag2) && flag3) {
+                if (!shouldRender(entity)) continue;
+                boolean prevInvis = entity.isInvisible();
+                entity.setInvisible(false);
+
+                GlStateManager.disableTexture2D();
+                GlStateManager.disableLighting();
+
+                int color = TeamHelper.getTeamColor((EntityPlayer) entity);
+                float r = (color >> 16 & 255) / 255.0F;
+                float g = (color >> 8 & 255) / 255.0F;
+                float b = (color & 255) / 255.0F;
+                if (entity.ticksExisted == 0) {
+                    entity.lastTickPosX = entity.posX;
+                    entity.lastTickPosY = entity.posY;
+                    entity.lastTickPosZ = entity.posZ;
+                }
+
+                double ex = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) event.partialTicks;
+                double ey = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) event.partialTicks;
+                double ez = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) event.partialTicks;
+                float yaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * event.partialTicks;
+
+                GlStateManager.color(r, g, b, 1.0F);
+                Render<Entity> render = rm.getEntityRenderObject(entity);
+                boolean renderNametag = entity.getAlwaysRenderNameTagForRender();
+                entity.setAlwaysRenderNameTag(false);
+                render.doRender(entity, ex - rma.getRenderPosX(), ey - rma.getRenderPosY(), ez - rma.getRenderPosZ(), yaw, event.partialTicks);
+                entity.setAlwaysRenderNameTag(renderNametag);
+                GlStateManager.enableTexture2D();
+                GlStateManager.enableLighting();
+
+                entity.setInvisible(prevInvis);
+            }
+        }
+
+        rm.setRenderShadow(prev);
+
+        GlStateManager.popMatrix();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableFog();
+        GlStateManager.depthFunc(515);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableLighting();
+        GlStateManager.enableTexture2D();
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        mc.getFramebuffer().bindFramebuffer(false);
+
+        shaderPass = false;
     }
 
     @Subscribe
@@ -175,11 +249,6 @@ public class ModuleESP extends Module {
                 }
                 shaderInit = true;
             }
-            if (colorBuffer.framebufferWidth != mc.displayWidth || colorBuffer.framebufferHeight != mc.displayHeight) {
-                colorBuffer.deleteFramebuffer();
-                colorBuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
-                shaderBufferPrepared = false;
-            }
 
             ScaledResolution sr = new ScaledResolution(mc);
 
@@ -200,13 +269,10 @@ public class ModuleESP extends Module {
             GlStateManager.enableAlpha();
             GlStateManager.color(1f, 1f, 1f, 1f);
 
-            if (!shaderBufferPrepared) {
-                colorBuffer.bindFramebuffer(false);
-                colorBuffer.setFramebufferColor(0, 0, 0, 0);
-                colorBuffer.framebufferClear();
-                mc.getFramebuffer().bindFramebuffer(true);
-                shaderBufferPrepared = true;
-            }
+            colorBuffer.bindFramebuffer(false);
+            colorBuffer.setFramebufferColor(0, 0, 0, 0);
+            colorBuffer.framebufferClear();
+            mc.getFramebuffer().bindFramebuffer(true);
         }
     }
 
@@ -215,7 +281,6 @@ public class ModuleESP extends Module {
         if (mc.theWorld == null || mc.thePlayer == null) return;
 
         if (mode.get() == Mode.MODE_SHADER) {
-            shaderBufferPrepared = false;
         } else if (mode.get() == Mode.MODE_BOX) {
             EntityPlayer[] entities = mc.theWorld.getLoadedEntityList().stream().filter(entity -> entity instanceof EntityPlayer).toArray(EntityPlayer[]::new);
             float partialTicks = event.partialTicks;
@@ -254,6 +319,15 @@ public class ModuleESP extends Module {
                 Renderer3D.end3D();
             }
         }
+    }
+
+    private boolean shouldRender(Entity entity) {
+        if (mode.get() != Mode.MODE_SHADER) return false;
+        if (!(entity instanceof EntityPlayer)) return false;
+        if (mc.gameSettings.thirdPersonView != 0 && entity == mc.thePlayer && !self.get()) return false;
+        if (ModuleManager.antiBot.isEnabled() && ModuleManager.antiBot.isBot((EntityPlayer) entity)) return false;
+
+        return true;
     }
 
     private static float interpolateAngle(float prev, float current, float partialTicks) {

@@ -2,6 +2,7 @@ package eu.shoroa.ross.mixins.injection.client.renderer;
 
 import eu.shoroa.ross.event.EventPostEntityRender;
 import eu.shoroa.ross.event.EventRenderBlockSelection;
+import eu.shoroa.ross.event.EventRenderEntities;
 import net.minecraft.block.Block;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -42,6 +43,6 @@ public class MixinRenderGlobal {
 
     @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.BEFORE))
     public void injectRenderEntities(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci) {
-        EVENT_BUS.post(new EventPostEntityRender(theWorld.getLoadedEntityList(), partialTicks, renderViewEntity, camera));
+        EVENT_BUS.post(new EventRenderEntities.Post(partialTicks, camera, renderViewEntity, theWorld.getLoadedEntityList()));
     }
 }

@@ -22,14 +22,14 @@ import net.minecraft.client.renderer.GlStateManager;
 @SuppressWarnings("ALL")
 public class ModuleWatermark extends Module {
 
-    private final ModeSetting<Mode> mode = register(new ModeSetting<>("Mode", "watermark.style", Mode.ROSS));
+    private final ModeSetting<Mode> mode = register(new ModeSetting<>("Mode", "style", Mode.ROSS));
 
     public ModuleWatermark() {
-        super("Watermark", "Displays a watermark on the screen", Category.HUD, null);
+        super("Watermark", "Displays a watermark on the screen.", Category.HUD, null);
     }
 
     @Subscribe
-    public void oe$BottomVanilla(EventHUD.BottomVanilla event) {
+    public void oe$TopVanilla(EventHUD.TopVanilla event) {
         if (mode.get() == Mode.WEEDSENSE) {
             Renderer2D.begin2d();
             GlStateManager.scale(2f, 2f, 1.0f);
@@ -57,7 +57,7 @@ public class ModuleWatermark extends Module {
     }
 
     @Subscribe
-    public void oe$BottomSkia(EventHUD.BottomSkia event) {
+    public void oe$TopSkia(EventHUD.TopSkia event) {
         if (mode.get() == Mode.WEEDHACK) {
             ImageSource img = Images.WATERMARK_WEEDHACK;
             Renderer.drawImage(img, 4f, 4f, img.getWidth() / 4f, img.getHeight() / 4f);
@@ -71,16 +71,6 @@ public class ModuleWatermark extends Module {
                 Renderer.drawText("Ross", 4f, 0f, font, 22f, Font.Align.TOP_LEFT, p);
             }
         }
-    }
-
-    @Subscribe
-    public void oe$TopVanilla(EventHUD.TopVanilla event) {
-
-    }
-
-    @Subscribe
-    public void oe$TopSkia(EventHUD.TopSkia event) {
-
     }
 
     private enum Mode implements ModeEnum {

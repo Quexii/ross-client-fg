@@ -13,16 +13,16 @@ import static eu.shoroa.ross.Client.mc;
 
 public class ModuleFreeLook extends Module {
 
-    private final NumberSetting sensitivity = register(new NumberSetting("Sensitivity", "freelook.sensitivity", 1f, 0.1f, 3f, 0.1f));
-    private final BooleanSetting invertX = register(new BooleanSetting("Invert X", "freelook.invert_x", false));
-    private final BooleanSetting invertY = register(new BooleanSetting("Invert Y", "freelook.invert_y", true));
+    private final NumberSetting sensitivity = register(new NumberSetting("Sensitivity", "sensitivity", 1f, 0.1f, 3f, 0.1f));
+    private final BooleanSetting invertX = register(new BooleanSetting("Invert X", "invert_x", false));
+    private final BooleanSetting invertY = register(new BooleanSetting("Invert Y", "invert_y", true));
 
     private int prevPerspective = 0;
     private float yaw = 0f;
     private float pitch = 0f;
 
     public ModuleFreeLook() {
-        super("FreeLook", "Allows you to look around freely", Category.MISC, new Bind(Keyboard.KEY_X, EventInput.Type.KEYBOARD, EventInput.Action.HOLD));
+        super("FreeLook", "Allows you to look around freely.", Category.MISC, new Bind(Keyboard.KEY_X, EventInput.Type.KEYBOARD, EventInput.Action.HOLD));
     }
 
     @Override

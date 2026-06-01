@@ -3,6 +3,7 @@ package eu.shoroa.ross;
 import eu.shoroa.ross.config.ConfigManager;
 import eu.shoroa.ross.event.EventBus;
 import eu.shoroa.ross.event.EventInput;
+import eu.shoroa.ross.event.EventResize;
 import eu.shoroa.ross.event.Subscribe;
 import eu.shoroa.ross.integration.hypixel.BedwarsSystem;
 import eu.shoroa.ross.module.ModuleManager;
@@ -68,5 +69,13 @@ public class Client {
         if (Mouse.getEventButton() != -1) {
             ModuleManager.onInput(event);
         }
+    }
+
+    @Subscribe
+    public void oe$Resize(EventResize event) {
+        if (Client.INSTANCE.skia != null) {
+            Client.INSTANCE.skia.resize();
+        }
+        Filter.kawase().resize();
     }
 }

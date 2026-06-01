@@ -2,6 +2,7 @@
 devauth = "1.2.2"
 fabricLoader = "0.18.3"
 fabricApi = "1.16.0+1.8.9"
+lwjgl3 = "1.4.0-beta.10"
 #https://cdn.modrinth.com/data/hCyJxgEF/versions/Ql9GSRaF/netfix-1.0.3.jar
 netfix = "Ql9GSRaF"
 
@@ -14,3 +15,4 @@ modmenu = { module = "maven.modrinth:LIGlLgiL", version.ref = "modmenu" }
 devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
 fabric-api = { module = "net.legacyfabric.ornithed.legacy-fabric-api:legacy-fabric-api", version.ref = "fabricApi" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabricLoader" }
+lwjgl3 = { module = "io.github.moehreag:legacy-lwjgl3", version.ref = "lwjgl3" }

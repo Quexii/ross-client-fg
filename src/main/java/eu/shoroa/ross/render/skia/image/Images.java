@@ -1,6 +1,7 @@
 package eu.shoroa.ross.render.skia.image;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Images {
@@ -8,11 +9,14 @@ public class Images {
     private static final Map<String, FileImage> fileImages = new HashMap<String, FileImage>();
     private static final Map<String, RemoteImage> remoteImages = new HashMap<String, RemoteImage>();
     private static final Map<String, GLImage> glImages = new HashMap<String, GLImage>();
+    private static final Map<String, ImageSource> imagesById = new HashMap<String, ImageSource>();
 
     public static final ResourceImage WATERMARK_WEEDHACK = createResourceImage("/assets/rossclient/images/watermark/weedhack.png");
     public static final ResourceImage HALFTONE_CIRCLE = createResourceImage("/assets/rossclient/images/halftone_circle.png");
     public static final ResourceImage HALFTONE_RECT = createResourceImage("/assets/rossclient/images/halftone_rect.png");
     public static final ResourceImage TOPOLOGY = createResourceImage("/assets/rossclient/images/topology.png");
+    public static final ResourceImage BACKGROUND_1 = createResourceImage("/assets/rossclient/images/bg1.jpg");
+    public static final ResourceImage BACKGROUND_2 = createResourceImage("/assets/rossclient/images/bg2.jpg");
 
     public static ResourceImage createResourceImage(String path) {
         ResourceImage image = new ResourceImage(path);
@@ -87,4 +91,3 @@ public class Images {
         }
     }
 }
-

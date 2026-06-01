@@ -22,13 +22,13 @@ public class ModuleAntiBot extends Module {
     );
 
     private final Map<UUID, Long> firstSeen = new HashMap<>();
-    private final Set<UUID>       botCache  = new HashSet<>();
-    private final Set<UUID>       realCache = new HashSet<>();
+    private final Set<UUID> botCache = new HashSet<>();
+    private final Set<UUID> realCache = new HashSet<>();
 
     private static final long PING_GRACE_MS = 3000;
 
     public ModuleAntiBot() {
-        super("AntiBot", "Filters NPCs/bots from nametags and targeting", Category.COMBAT);
+        super("AntiBot", "Filters NPCs/bots from nametags and targeting.", Category.COMBAT);
     }
 
     public boolean isBot(EntityPlayer player) {
@@ -36,7 +36,7 @@ public class ModuleAntiBot extends Module {
 
         UUID uuid = player.getUniqueID();
 
-        if (botCache.contains(uuid))  return true;
+        if (botCache.contains(uuid)) return true;
         if (realCache.contains(uuid)) return false;
 
         firstSeen.putIfAbsent(uuid, System.currentTimeMillis());
@@ -51,14 +51,14 @@ public class ModuleAntiBot extends Module {
         if (player == local) return false;
 
         String name = player.getName();
-        UUID   uuid = player.getUniqueID();
+        UUID uuid = player.getUniqueID();
 
         if (!VALID_NAME.matcher(name).matches()) return true;
         if (uuid.version() == 3) return true;
         if (NPC_NAME_PATTERN.matcher(name).find()) return true;
 
         int signals = 0;
-        long seenTime  = firstSeen.getOrDefault(uuid, System.currentTimeMillis());
+        long seenTime = firstSeen.getOrDefault(uuid, System.currentTimeMillis());
         boolean pastGrace = (System.currentTimeMillis() - seenTime) > PING_GRACE_MS;
 
         int ping = getPing(player);

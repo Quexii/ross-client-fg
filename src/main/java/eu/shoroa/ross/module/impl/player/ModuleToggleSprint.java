@@ -10,7 +10,7 @@ import static eu.shoroa.ross.Client.mc;
 
 public class ModuleToggleSprint extends Module {
     public ModuleToggleSprint() {
-        super("ToggleSprint", "", Category.PLAYER, null);
+        super("ToggleSprint", "Automatically sprints for you.", Category.PLAYER, null);
     }
 
     @Subscribe

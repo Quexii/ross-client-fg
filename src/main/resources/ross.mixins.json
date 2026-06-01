@@ -13,7 +13,7 @@
     "world.chunk.MixinChunk"
   ],
   "client": [
-    "MixinGuiMainMenu",
+    "client.gui.MixinGuiMainMenu",
     "client.MinecraftAccessor",
     "client.MixinMinecraft",
     "client.entity.MixinEntityPlayerSP",

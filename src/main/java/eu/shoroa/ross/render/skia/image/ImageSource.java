@@ -1,5 +1,6 @@
 package eu.shoroa.ross.render.skia.image;
 
+import eu.shoroa.ross.types.Size;
 import io.github.humbleui.skija.Image;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +28,10 @@ public abstract class ImageSource implements AutoCloseable {
 
     public final int getHeight() {
         return height;
+    }
+
+    public final Size getSize() {
+        return new Size(width, height);
     }
 
     public synchronized void reload() {

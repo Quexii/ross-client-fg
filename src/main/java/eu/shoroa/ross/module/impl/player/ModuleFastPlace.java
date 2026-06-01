@@ -11,15 +11,15 @@ import eu.shoroa.ross.util.Timer;
 import static eu.shoroa.ross.Client.mc;
 
 public class ModuleFastPlace extends Module {
-    private final NumberSetting cps = register(new NumberSetting("CPS", "fastplace.cps", 10, 1, 20, 1));
-    private final NumberSetting activationDelay = register(new NumberSetting("Activation Delay", "fastplace.activation_delay", 300, 0, 2000, 50));
+    private final NumberSetting cps = register(new NumberSetting("CPS", "cps", 10, 1, 20, 1));
+    private final NumberSetting activationDelay = register(new NumberSetting("Activation Delay", "activation_delay", 300, 0, 2000, 50));
 
     private final Timer timer = new Timer();
     private final Timer holdTimer = new Timer();
     private boolean wasKeyDown = false;
 
     public ModuleFastPlace() {
-        super("FastPlace", "Place blocks faster", Category.PLAYER, null);
+        super("FastPlace", "Place blocks faster.", Category.PLAYER, null);
     }
 
     @Override
