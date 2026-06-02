@@ -23,6 +23,12 @@ public class EventLiving extends EventEntity {
         }
     }
 
+    public static class Attack extends EventLiving {
+        public Attack(EntityLivingBase e) {
+            super(e);
+        }
+    }
+
     public static class Damage extends EventLiving {
         public final float damage;
         public final DamageSource source;

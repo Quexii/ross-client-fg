@@ -20,11 +20,11 @@ loom {
         property("devauth.enabled", "true")
         property("devauth.account", "main")
     }
+    accessWidenerPath.set(file("src/main/resources/${modArtifactId}.accesswidener"))
 }
 
 ploceus {
     setIntermediaryGeneration(2)
-//    accessWidenerPath.set(file("src/main/resources/${modArtifactId}.accesswidener"))
 }
 
 repositories {

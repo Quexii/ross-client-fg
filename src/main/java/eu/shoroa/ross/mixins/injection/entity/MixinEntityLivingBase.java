@@ -22,6 +22,13 @@ public abstract class MixinEntityLivingBase extends MixinEntity implements IEnti
         return this.getArmSwingAnimationEnd();
     }
 
+    @Inject(method = "handleStatusUpdate", at = @At("HEAD"))
+    public void injectStatusUpdate(byte id, CallbackInfo ci) {
+        if (id == 2) { // attack
+            EVENT_BUS.post(new EventLiving.Attack((EntityLivingBase) (Object) this));
+        }
+    }
+
     @Inject(method = "damageEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;isEntityInvulnerable(Lnet/minecraft/util/DamageSource;)Z", shift = At.Shift.AFTER))
     public void injectOnDamage(DamageSource damageSrc, float damageAmount, CallbackInfo ci) {
         EVENT_BUS.post(new EventLiving.Damage((EntityLivingBase) (Object) this, damageAmount, damageSrc));

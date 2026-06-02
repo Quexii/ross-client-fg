@@ -1,9 +1,7 @@
 package eu.shoroa.ross.module;
 
 import eu.shoroa.ross.event.EventInput;
-import eu.shoroa.ross.module.impl.combat.ModuleAimBot;
-import eu.shoroa.ross.module.impl.combat.ModuleAntiBot;
-import eu.shoroa.ross.module.impl.combat.ModuleAutoClicked;
+import eu.shoroa.ross.module.impl.combat.*;
 import eu.shoroa.ross.module.impl.hud.*;
 import eu.shoroa.ross.module.impl.misc.ModuleBedDefenseDisplay;
 import eu.shoroa.ross.module.impl.misc.ModuleBedwars;
@@ -35,6 +33,8 @@ public class ModuleManager {
                 new ModuleAutoClicked(),
                 antiBot = new ModuleAntiBot(),
                 new ModuleAimBot(),
+                new ModuleVelocity(),
+                new ModuleWTap(),
                 // player
                 new ModuleToggleSprint(),
                 new ModuleBridgeAssist(),

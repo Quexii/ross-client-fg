@@ -10,14 +10,15 @@
     "entity.MixinEntityLivingBase",
     "entity.item.MixinEntityItem",
     "entity.player.inventory.MixinInventoryPlayer",
+    "network.MixinNetworkManager",
     "world.chunk.MixinChunk"
   ],
   "client": [
-    "client.gui.MixinGuiMainMenu",
     "client.MinecraftAccessor",
     "client.MixinMinecraft",
     "client.entity.MixinEntityPlayerSP",
     "client.gui.MixinGuiIngame",
+    "client.gui.MixinGuiMainMenu",
     "client.multiplayer.ChunkProviderClientAccessor",
     "client.multiplayer.MixinWorldClient",
     "client.network.MixinNetHandlerPlayClient",
