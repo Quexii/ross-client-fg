@@ -23,6 +23,7 @@ public class ModuleManager {
 
     public static final ModuleAntiInvis antiInvis;
     public static final ModuleFreeLook freeLook;
+    public static final ModuleFreecam freecam;
     public static final ModuleAnimations animations;
     public static final ModuleFakeBlock fakeBlock;
     public static final ModuleAntiBot antiBot;
@@ -39,6 +40,7 @@ public class ModuleManager {
                 new ModuleToggleSprint(),
                 new ModuleBridgeAssist(),
                 new ModuleFastPlace(),
+                freecam = new ModuleFreecam(),
                 // render
                 new ModuleClickGui(),
                 new ModuleTrajectories(),

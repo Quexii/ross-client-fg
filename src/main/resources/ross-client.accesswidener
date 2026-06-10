@@ -2,3 +2,7 @@ classTweaker v2 named
 accessible field net/minecraft/network/play/server/S12PacketEntityVelocity motionX I
 accessible field net/minecraft/network/play/server/S12PacketEntityVelocity motionY I
 accessible field net/minecraft/network/play/server/S12PacketEntityVelocity motionZ I
+accessible field net/minecraft/client/renderer/EntityRenderer cameraZoom D
+accessible field net/minecraft/client/renderer/EntityRenderer cameraYaw D
+accessible field net/minecraft/client/renderer/EntityRenderer cameraPitch D
+accessible method net/minecraft/client/renderer/EntityRenderer orientCamera (F)V

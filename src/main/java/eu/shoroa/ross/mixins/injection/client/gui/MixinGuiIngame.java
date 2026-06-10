@@ -62,6 +62,7 @@ public abstract class MixinGuiIngame {
             EVENT_BUS.post(new EventHUD.TopSkia(partialTicks));
             Client.INSTANCE.skia.endFrame();
         }
+
     }
 
     @Redirect(method = "renderGameOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;renderPlayerStats(Lnet/minecraft/client/gui/ScaledResolution;)V"))

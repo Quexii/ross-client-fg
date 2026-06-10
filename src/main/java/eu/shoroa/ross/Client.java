@@ -57,6 +57,9 @@ public class Client {
         }
     }
 
+    public void shutdown() {
+    }
+
     @Subscribe
     public void oe$EventKey(EventInput event) {
         if (Keyboard.getEventKey() != 0) {

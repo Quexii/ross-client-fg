@@ -10,6 +10,9 @@ import eu.shoroa.ross.module.Module;
 import eu.shoroa.ross.settings.ModeEnum;
 import eu.shoroa.ross.settings.ModeSetting;
 import eu.shoroa.ross.settings.NumberSetting;
+import eu.shoroa.ross.util.ChatUtil;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.network.play.server.S42PacketCombatEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
@@ -23,6 +26,7 @@ public class ModuleVelocity extends Module {
 
     private int velocityTimer = 100;
     private boolean isValidHit = false;
+    private boolean jumped = false;
 
     public ModuleVelocity() {
         super("Velocity", "Reduces your knockback", Category.COMBAT);
@@ -54,15 +58,13 @@ public class ModuleVelocity extends Module {
             if (mc.thePlayer.hurtTime == 8 && mc.gameSettings.keyBindForward.isKeyDown()) {
                 mc.thePlayer.setSprinting(true);
             }
-        }
-        else if (modeSetting.get().equals(Mode.LEGIT_JUMP)) {
+        } else if (modeSetting.get().equals(Mode.LEGIT_JUMP)) {
             if (mc.currentScreen != null || !isValidHit) return;
 
             if (mc.thePlayer.hurtTime == 9 && mc.thePlayer.onGround) {
                 mc.thePlayer.jump();
             }
-        }
-        else if (modeSetting.get().equals(Mode.LEGIT)) {
+        } else if (modeSetting.get().equals(Mode.LEGIT)) {
             if (mc.currentScreen != null) {
                 ((KeyBindingAccessor) mc.gameSettings.keyBindForward).setPressed(wPressed);
                 return;
@@ -76,8 +78,13 @@ public class ModuleVelocity extends Module {
             }
 
             if (mc.thePlayer.hurtTime == 9) {
+                mc.thePlayer.setSprinting(false);
+            }
+
+            if (mc.thePlayer.hurtTime == 8 && !jumped) {
                 if (mc.thePlayer.onGround) {
                     mc.thePlayer.jump();
+                    jumped = true;
                 }
             }
 
@@ -89,6 +96,7 @@ public class ModuleVelocity extends Module {
             if (mc.thePlayer.hurtTime < 5) {
                 ((KeyBindingAccessor) mc.gameSettings.keyBindForward).setPressed(wPressed);
                 mc.thePlayer.setSprinting(false);
+                jumped = false;
             }
         } else if (modeSetting.get().equals(Mode.CUSTOM)) {
             if (!isValidHit) return;
@@ -109,16 +117,18 @@ public class ModuleVelocity extends Module {
     public void oe$PacketIn(EventPacket.In event) {
         if (event.packet instanceof S12PacketEntityVelocity) {
             S12PacketEntityVelocity velocityPacket = (S12PacketEntityVelocity) event.packet;
-
             if (velocityPacket.getEntityID() == mc.thePlayer.getEntityId()) {
-
-                velocityTimer = 0;
-                if (mc.thePlayer.hurtTime > 0) isValidHit = true;
+                if (velocityPacket.getMotionY() > 2140 && velocityPacket.getMotionY() < 3000) {
+                    velocityTimer = 0;
+                    isValidHit = true;
+                    jumped = false;
+                } else {
+                    isValidHit = false;
+                }
 
                 if (modeSetting.get().equals(Mode.CANCEL)) {
                     event.setCanceled(true);
-                }
-                else if (modeSetting.get().equals(Mode.PERCENT)) {
+                } else if (modeSetting.get().equals(Mode.PERCENT)) {
                     double hPct = horizontalPercent.get() / 100.0;
                     double vPct = verticalPercent.get() / 100.0;
 

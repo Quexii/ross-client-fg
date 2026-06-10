@@ -1,12 +1,16 @@
 package eu.shoroa.ross.mixins.injection.client.renderer;
 
+import eu.shoroa.ross.module.ModuleManager;
 import eu.shoroa.ross.util.proj.Projection;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.nio.FloatBuffer;
@@ -24,8 +28,38 @@ public class MixinActiveRenderInfo {
     @Final
     private static IntBuffer VIEWPORT;
 
+    @Shadow
+    private static float rotationX;
+
+    @Shadow
+    private static float rotationZ;
+
+    @Shadow
+    private static float rotationYZ;
+
+    @Shadow
+    private static float rotationXY;
+
+    @Shadow
+    private static float rotationXZ;
+
     @Inject(method = "updateRenderInfo", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glGetInteger(ILjava/nio/IntBuffer;)V"))
     private static void updateRenderInfo(CallbackInfo ci) {
         Projection.update(MODELVIEW, PROJECTION, VIEWPORT);
+    }
+
+    @Inject(method = "updateRenderInfo", at = @At("TAIL"))
+    private static void updateRenderInfoXZ(EntityPlayer entityplayerIn, boolean bl, CallbackInfo ci) {
+        if (!ModuleManager.freecam.isEnabled()) return;
+
+        int i = 0;
+
+        float h = ModuleManager.freecam.getCamPitch();
+        float j = ModuleManager.freecam.getCamYaw();
+        rotationX = MathHelper.cos(j * (float)Math.PI / 180.0F) * (float)(1 - i * 2);
+        rotationZ = MathHelper.sin(j * (float)Math.PI / 180.0F) * (float)(1 - i * 2);
+        rotationYZ = -rotationZ * MathHelper.sin(h * (float)Math.PI / 180.0F) * (float)(1 - i * 2);
+        rotationXY = rotationX * MathHelper.sin(h * (float)Math.PI / 180.0F) * (float)(1 - i * 2);
+        rotationXZ = MathHelper.cos(h * (float)Math.PI / 180.0F);
     }
 }

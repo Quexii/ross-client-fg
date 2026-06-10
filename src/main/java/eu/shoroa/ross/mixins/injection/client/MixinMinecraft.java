@@ -69,6 +69,11 @@ public class MixinMinecraft {
         EVENT_BUS.post(new EventInput(Mouse.getEventButton(), EventInput.Type.MOUSE, Mouse.getEventButtonState() ? EventInput.Action.PRESS : EventInput.Action.RELEASE));
     }
 
+    @Inject(method = "shutdown", at = @At("HEAD"))
+    public void injectShutdown(CallbackInfo ci) {
+        Client.INSTANCE.shutdown();
+    }
+
     @Inject(method = "resize", at = @At("RETURN"))
     public void injectResize(int width, int height, CallbackInfo ci) {
         EVENT_BUS.post(new EventResize(width, height));
