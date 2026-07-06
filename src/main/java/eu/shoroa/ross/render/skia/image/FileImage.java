@@ -26,4 +26,3 @@ public class FileImage extends ImageSource {
         return path.toAbsolutePath().toString();
     }
 }
-

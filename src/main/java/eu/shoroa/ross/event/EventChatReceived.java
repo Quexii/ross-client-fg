@@ -1,5 +1,6 @@
 package eu.shoroa.ross.event;
 
+import eu.shoroa.ross.event.api.Cancelable;
 import net.minecraft.util.IChatComponent;
 
 public class EventChatReceived implements Cancelable {

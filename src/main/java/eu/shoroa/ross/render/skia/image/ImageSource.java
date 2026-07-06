@@ -1,6 +1,6 @@
 package eu.shoroa.ross.render.skia.image;
 
-import eu.shoroa.ross.types.Size;
+import eu.shoroa.ross.type.Size;
 import io.github.humbleui.skija.Image;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,4 +74,3 @@ public abstract class ImageSource implements AutoCloseable {
         }
     }
 }
-

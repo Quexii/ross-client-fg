@@ -1,6 +1,6 @@
 package eu.shoroa.ross.render.skia.image;
 
-import eu.shoroa.ross.util.IO;
+import eu.shoroa.ross.utils.io.Res;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -15,7 +15,7 @@ public class ResourceImage extends ImageSource {
     @Override
     public void init() {
         try {
-            ByteBuffer buffer = IO.resourceToBuffer(path, 8192);
+            ByteBuffer buffer = Res.resourceToBuffer(path, 8192);
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
             setImage(decode(bytes));
@@ -29,4 +29,3 @@ public class ResourceImage extends ImageSource {
         return path;
     }
 }
-

@@ -1,9 +1,12 @@
 package eu.shoroa.ross.render.skia.font;
 
+import eu.shoroa.ross.Client;
 import io.github.humbleui.skija.FontMgr;
 import io.github.humbleui.skija.FontVariation;
 import io.github.humbleui.skija.FontVariationAxis;
 import io.github.humbleui.skija.Typeface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -12,12 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class VariableFont implements Font {
+public class VariableFont implements FontSource {
     private ByteBuffer buffer;
     private Typeface baseFace;
     private Map<Tags, DerivedFont> typefaces = new HashMap<>();
     private io.github.humbleui.skija.Data data;
-    private Font.Data fontData;
+    private FontSource.Data fontData;
+
+    private static final Logger logger = LogManager.getLogger();
 
     public void init(ByteBuffer buffer) {
         this.buffer = buffer;
@@ -27,19 +32,22 @@ public class VariableFont implements Font {
         data = io.github.humbleui.skija.Data.makeFromBytes(bytes);
         baseFace = FontMgr.getDefault().makeFromData(data);
         assert baseFace != null;
-        fontData = new Font.Data(
+        fontData = new FontSource.Data(
                 baseFace.getVariationAxes(),
                 baseFace.getVariations(),
                 baseFace.getFamilyName(),
                 baseFace.getFamilyNames()
         );
 
-        System.out.println("Loaded variable font: " + fontData.familyName);
-        System.out.println("Available axes:");
-        for (FontVariationAxis axis : fontData.axes) {
-            System.out.println(" - " + axis.getTag() + ": " + axis.getMinValue() + " to " + axis.getMaxValue() + " (default: " + axis.getDefaultValue() + ")");
+
+        if (Client.INSTANCE.getConfig().bootstrap().verbose) {
+            logger.info("Loaded variable font: {}", fontData.familyName);
+            logger.info("Available axes:");
+            for (FontVariationAxis axis : fontData.axes) {
+                logger.info(" - {}: {} to {} (default: {})", axis.getTag(), axis.getMinValue(), axis.getMaxValue(), axis.getDefaultValue());
+            }
+            logger.info("\n");
         }
-        System.out.println();
     }
 
     private Typeface createTypeface(Tags tags) {
@@ -177,7 +185,7 @@ public class VariableFont implements Font {
         }
     }
 
-    public final class DerivedFont implements Font {
+    public final class DerivedFont implements FontSource {
         private final Typeface typeface;
         private final Tags tags;
 

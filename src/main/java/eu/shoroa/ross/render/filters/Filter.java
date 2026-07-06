@@ -1,19 +1,13 @@
 package eu.shoroa.ross.render.filters;
 
-import eu.shoroa.ross.render.Renderer;
-import eu.shoroa.ross.render.gl.Shader;
+import eu.shoroa.ross.render.opengl.Shader;
+import eu.shoroa.ross.render.skia.image.GLImage;
 import io.github.humbleui.skija.Image;
-import io.github.humbleui.skija.Path;
-import io.github.humbleui.skija.PathBuilder;
-import io.github.humbleui.types.RRect;
-import io.github.humbleui.types.Rect;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public abstract class Filter {
@@ -54,7 +48,9 @@ public abstract class Filter {
     public void putImage(int target, int texture, int width, int height) {
         Integer oldTex = textureIds.get(target);
         if (oldTex == null || oldTex != texture) {
-            Image oldImg = textures.put(target, Renderer.adoptGLTexture(texture, width, height));
+            GLImage gl = new GLImage(texture, width, height, true);
+            gl.init();
+            Image oldImg = textures.put(target, gl.getImage());
             if (oldImg != null) oldImg.close();
             textureIds.put(target, texture);
         }

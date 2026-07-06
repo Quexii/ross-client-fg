@@ -108,4 +108,3 @@ public class RemoteImage extends ImageSource {
         }
     }
 }
-

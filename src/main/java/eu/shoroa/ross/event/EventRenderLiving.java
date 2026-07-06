@@ -1,5 +1,6 @@
 package eu.shoroa.ross.event;
 
+import eu.shoroa.ross.event.api.Cancelable;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 

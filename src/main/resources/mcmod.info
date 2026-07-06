@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "rossclient",
+    "name": "Ross",
+    "description": "Client-side tweaks and utilities for 1.8.9.",
+    "version": "${version}",
+    "mcversion": "${mcVersionStr}",
+    "url": "https://shoroa.eu/ross",
+    "updateUrl": "",
+    "authorList": [
+      "shoroa"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

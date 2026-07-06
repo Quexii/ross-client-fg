@@ -1,5 +1,6 @@
 package eu.shoroa.ross.event;
 
+import eu.shoroa.ross.event.api.Cancelable;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class EventMotion extends EventLiving {

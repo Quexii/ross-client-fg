@@ -1,0 +1,23 @@
+{
+  "ui.glass": {
+    "category": "player",
+    "sounds": [
+      "rossclient:glass"
+    ],
+    "stream": "false"
+  },
+  "ui.close": {
+    "category": "player",
+    "sounds": [
+      "rossclient:close"
+    ],
+    "stream": "false"
+  },
+  "ui.question": {
+    "category": "player",
+    "sounds": [
+      "rossclient:question"
+    ],
+    "stream": "false"
+  }
+}

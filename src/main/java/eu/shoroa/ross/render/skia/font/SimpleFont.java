@@ -1,14 +1,19 @@
 package eu.shoroa.ross.render.skia.font;
 
+import eu.shoroa.ross.Client;
 import io.github.humbleui.skija.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.ByteBuffer;
 
-public class SimpleFont implements Font {
+public class SimpleFont implements FontSource {
     private ByteBuffer buffer;
     private Typeface typeface;
     private io.github.humbleui.skija.Data data;
     private Data fontData;
+
+    private static final Logger logger = LogManager.getLogger();
 
     public void init(ByteBuffer buffer) {
         this.buffer = buffer;
@@ -18,19 +23,21 @@ public class SimpleFont implements Font {
         data = io.github.humbleui.skija.Data.makeFromBytes(bytes);
         typeface = FontMgr.getDefault().makeFromData(data);
         assert typeface != null;
-        fontData = new Font.Data(
+        fontData = new FontSource.Data(
                 typeface.getVariationAxes(),
                 typeface.getVariations(),
                 typeface.getFamilyName(),
                 typeface.getFamilyNames()
         );
 
-        System.out.println("Loaded simple font: " + fontData.familyName);
-        System.out.println("data:");
-            System.out.println(" - " + fontData.axes);
-            System.out.println(" - " + fontData.variations);
-            System.out.println(" - " + fontData.familyName);
-        System.out.println();
+        if (Client.INSTANCE.getConfig().bootstrap().verbose) {
+            logger.info("Loaded stella font: {}", fontData.familyName);
+            logger.info("data:");
+            logger.info(" - {}", (Object[]) fontData.axes);
+            logger.info(" - {}", (Object[]) fontData.variations);
+            logger.info(" - {}", fontData.familyName);
+            logger.info("\n");
+        }
     }
 
     @Override

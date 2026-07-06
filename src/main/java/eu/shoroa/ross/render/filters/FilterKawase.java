@@ -1,7 +1,7 @@
 package eu.shoroa.ross.render.filters;
 
-import eu.shoroa.ross.render.gl.Shader;
-import eu.shoroa.ross.render.gl.uniform.Uniform;
+import eu.shoroa.ross.render.opengl.Shader;
+import eu.shoroa.ross.render.opengl.uniform.Uniform;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;

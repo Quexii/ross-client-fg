@@ -1,0 +1,175 @@
+package eu.shoroa.ross.feature.module.impl.player;
+
+import eu.shoroa.ross.event.EventInput;
+import eu.shoroa.ross.event.EventTick;
+import eu.shoroa.ross.event.api.Subscribe;
+import eu.shoroa.ross.feature.module.Bind;
+import eu.shoroa.ross.feature.module.Module;
+import eu.shoroa.ross.feature.module.Category;
+import eu.shoroa.ross.feature.setting.*;
+import eu.shoroa.ross.mixins.injection.minecraft.client.setting.MixinKeyBinding;
+import eu.shoroa.ross.mixins.interfaces.IKeyBinding;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import org.jetbrains.annotations.ApiStatus;
+import org.lwjgl.input.Keyboard;
+
+import java.util.Random;
+
+import static eu.shoroa.ross.Client.mc;
+
+public class ModuleBridgeAssist extends Module {
+    private final SettingCategory categoryMain = addCategory("Settings", ".", "settings");
+    private final SettingCategory categoryConditions = addCategory("Conditions", ".", "conditions");
+
+    private final NumberSetting edgeOffset = register(
+            new NumberSetting("Edge Offset", "edge_offset", 0.15f, 0.01f, 0.7f, 0.01f), categoryMain);
+
+    private final NumberSetting unsneakDelay = register(
+            new NumberSetting("Unsneak Delay", "unsneak_delay", 3f, 0f, 20f, 1f), categoryMain);
+
+    private final BooleanSetting randomize = register(
+            new BooleanSetting("Randomize", "randomize", false), categoryMain);
+
+    private final BooleanSetting requireSneak = register(
+            new BooleanSetting("Sneak Key Pressed", "require_sneak", false), categoryConditions);
+
+    private final BooleanSetting requireHoldingBlocks = register(
+            new BooleanSetting("Holding Blocks", "require_holding_block", true), categoryConditions);
+
+    private final BooleanSetting requireLookDown = register(
+            new BooleanSetting("Looking Down", "require_looking_down", true), categoryConditions);
+
+    private final BooleanSetting requireNotMovingForward = register(
+            new BooleanSetting("Not Moving Forward", "require_moving_forward", true), categoryConditions);
+
+    private final Random rng = new Random();
+    private float currentEdgeOffset;
+    private float currentUnsneakDelay;
+    private int unsneakTicks = 0;
+    private boolean wasSneaking = false;
+
+    public ModuleBridgeAssist() {
+        super("Bridge Assist", "Automatically shifts when on edge.", Category.PLAYER, new Bind(Keyboard.KEY_Z, EventInput.Type.KEYBOARD, EventInput.Action.PRESS), "\uf5f4");
+    }
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        refreshRandomizedValues();
+        unsneakTicks = 0;
+        wasSneaking = false;
+    }
+
+    private void refreshRandomizedValues() {
+        if (randomize.get()) {
+            float baseOffset = edgeOffset.get();
+            currentEdgeOffset = baseOffset * (0.8f + rng.nextFloat() * 0.4f);
+
+            float baseDelay = unsneakDelay.get();
+            currentUnsneakDelay = baseDelay * (0.8f + rng.nextFloat() * 0.4f);
+        } else {
+            currentEdgeOffset = edgeOffset.get();
+            currentUnsneakDelay = unsneakDelay.get();
+        }
+    }
+
+    @Subscribe
+    @ApiStatus.Internal
+    public void onUpdate(EventTick event) {
+        if (mc.thePlayer == null || mc.theWorld == null) return;
+
+        if (!mc.thePlayer.onGround) {
+            if (wasSneaking) {
+                ((IKeyBinding) mc.gameSettings.keyBindSneak).setPressed(true);
+            }
+            return;
+        }
+
+        boolean conditionsMet = true;
+        if (requireSneak.get() && !GameSettings.isKeyDown(mc.gameSettings.keyBindSneak)) conditionsMet = false;
+        if (requireHoldingBlocks.get() && !isHoldingBlocks()) conditionsMet = false;
+        if (requireLookDown.get() && mc.thePlayer.rotationPitch < 45f) conditionsMet = false;
+        if (requireNotMovingForward.get() && GameSettings.isKeyDown(mc.gameSettings.keyBindForward))
+            conditionsMet = false;
+
+        boolean onEdge = conditionsMet && isNearEdge(currentEdgeOffset);
+
+        if (onEdge) {
+            if (!wasSneaking) {
+                refreshRandomizedValues();
+            }
+            wasSneaking = true;
+            unsneakTicks = 0;
+            ((IKeyBinding) mc.gameSettings.keyBindSneak).setPressed(true);
+        } else {
+            if (wasSneaking) {
+                unsneakTicks++;
+                if (unsneakTicks >= (int) currentUnsneakDelay) {
+                    wasSneaking = false;
+                    unsneakTicks = 0;
+                    ((IKeyBinding) mc.gameSettings.keyBindSneak).setPressed(GameSettings.isKeyDown(mc.gameSettings.keyBindSneak));
+                } else {
+                    ((IKeyBinding) mc.gameSettings.keyBindSneak).setPressed(true);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        if (mc.gameSettings != null) {
+            ((IKeyBinding) mc.gameSettings.keyBindSneak).setPressed(false);
+        }
+        wasSneaking = false;
+        unsneakTicks = 0;
+    }
+
+    private boolean isNearEdge(float offset) {
+        AxisAlignedBB bb = mc.thePlayer.getEntityBoundingBox();
+        if (bb == null) return false;
+
+        double maxInsetX = ((bb.maxX - bb.minX) / 2.0) - 1.0E-3;
+        double maxInsetZ = ((bb.maxZ - bb.minZ) / 2.0) - 1.0E-3;
+        double insetX = Math.max(0.0, Math.min(offset, maxInsetX));
+        double insetZ = Math.max(0.0, Math.min(offset, maxInsetZ));
+
+        double minX = bb.minX + insetX;
+        double maxX = bb.maxX - insetX;
+        double minZ = bb.minZ + insetZ;
+        double maxZ = bb.maxZ - insetZ;
+        double midX = (minX + maxX) * 0.5;
+        double midZ = (minZ + maxZ) * 0.5;
+        double probeY = bb.minY - 0.5;
+
+        double[][] probes = {
+                {minX, probeY, minZ},
+                {maxX, probeY, minZ},
+                {minX, probeY, maxZ},
+                {maxX, probeY, maxZ},
+                {midX, probeY, minZ},
+                {midX, probeY, maxZ},
+                {minX, probeY, midZ},
+                {maxX, probeY, midZ}
+        };
+
+        for (double[] probe : probes) {
+            BlockPos below = new BlockPos(probe[0], probe[1], probe[2]);
+            Material mat = mc.theWorld.getBlockState(below).getBlock().getMaterial();
+            if (mat == Material.air) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isHoldingBlocks() {
+        ItemStack held = mc.thePlayer.inventory.getCurrentItem();
+        return held != null && held.getItem() instanceof ItemBlock;
+    }
+}
