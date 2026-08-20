@@ -1,5 +1,6 @@
 package eu.shoroa.ross.feature.gui;
 
+import eu.shoroa.ross.config.ConfigManager;
 import eu.shoroa.ross.event.EventInput;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
@@ -33,6 +34,8 @@ public abstract class RossScreen extends GuiScreen {
     @Override
     public void onGuiClosed() {
         EVENT_BUS.unregister(this);
+        // Screens are where modules/binds/HUD placements get edited.
+        ConfigManager.save();
     }
 
     protected boolean cancelEscape() {

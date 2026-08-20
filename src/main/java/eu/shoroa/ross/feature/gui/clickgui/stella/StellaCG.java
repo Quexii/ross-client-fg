@@ -80,7 +80,7 @@ public class StellaCG extends RossScreen {
         if (Client.INSTANCE.getSkia().isStale()) return;
         Client.INSTANCE.getSkia().beginFrame();
         UI.use(Client.INSTANCE.getSkia());
-//        UI.drawFilter(Filter.kawase(), mc.getFramebuffer().framebufferTexture, 0f, 0f, dw, dw);
+        UI.drawFilter(Filter.kawase(), mc.getFramebuffer().framebufferTexture, 0f, 0f, dw, dw);
         UI.saveLayerAlpha(0, 0, dw, dh, openEase.value);
         UI.translate(0f, 40 * (1 - openEase.value));
         panel.render(mouseX, mouseY, partialTicks);
@@ -102,21 +102,24 @@ public class StellaCG extends RossScreen {
 
     @Override
     protected void input(float mouseX, float mouseY, EventInput event) {
-        if (event.type == EventInput.Type.KEYBOARD && event.action == EventInput.Action.PRESS && event.value == Keyboard.KEY_ESCAPE) {
-            if (currentPopup != null) {
+        boolean escape = event.type == EventInput.Type.KEYBOARD && event.action == EventInput.Action.PRESS && event.value == Keyboard.KEY_ESCAPE;
+
+        if (currentPopup != null) {
+            // The popup gets everything first so e.g. a listening bind row can
+            // consume keys (including Escape) before they close anything.
+            if (currentPopup.input(mouseX, mouseY, event)) {
+                return;
+            }
+            if (escape
+                    || (event.type == EventInput.Type.MOUSE && event.action == EventInput.Action.PRESS
+                    && !currentPopup.contains(mouseX, mouseY))) {
                 closingPopup = true;
-            } else {
-                closing = true;
             }
             return;
         }
 
-        if (currentPopup != null) {
-            if (!currentPopup.input(mouseX, mouseY, event)
-                    && event.type == EventInput.Type.MOUSE && event.action == EventInput.Action.PRESS
-                    && !currentPopup.contains(mouseX, mouseY)) {
-                closingPopup = true;
-            }
+        if (escape) {
+            closing = true;
             return;
         }
 

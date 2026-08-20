@@ -4,12 +4,11 @@ import eu.shoroa.ross.event.EventInput;
 import eu.shoroa.ross.feature.module.impl.combat.ModuleAutoClicked;
 import eu.shoroa.ross.feature.module.impl.combat.ModuleVelocity;
 import eu.shoroa.ross.feature.module.impl.combat.ModuleWTap;
-import eu.shoroa.ross.feature.module.impl.hud.ModuleKeystrokes;
-import eu.shoroa.ross.feature.module.impl.player.ModuleAutoSprint;
-import eu.shoroa.ross.feature.module.impl.player.ModuleBridgeAssist;
-import eu.shoroa.ross.feature.module.impl.player.ModuleFastPlace;
-import eu.shoroa.ross.feature.module.impl.player.ModuleFreeCam;
-import eu.shoroa.ross.feature.module.impl.player.ModuleFreeLook;
+import eu.shoroa.ross.feature.module.impl.hud.*;
+import eu.shoroa.ross.feature.module.impl.misc.ModuleBedDefense;
+import eu.shoroa.ross.feature.module.impl.misc.ModuleFireballWarning;
+import eu.shoroa.ross.feature.module.impl.misc.ModuleSilence;
+import eu.shoroa.ross.feature.module.impl.player.*;
 import eu.shoroa.ross.feature.module.impl.render.*;
 import eu.shoroa.ross.feature.module.impl.render.wheelgui.ModuleWheelGUI;
 import org.jetbrains.annotations.Nullable;
@@ -43,14 +42,32 @@ public class ModuleManager {
         modulesList.add(antiInvis = new ModuleAntiInvis());
         modulesList.add(animations = new ModuleAnimations());
         modulesList.add(fakeBlock = new ModuleFakeBlock());
+        modulesList.add(new ModuleTrajectories());
+        modulesList.add(new ModuleBlockOverlay());
         // player
         modulesList.add(new ModuleAutoSprint());
         modulesList.add(new ModuleBridgeAssist());
         modulesList.add(freeLook = new ModuleFreeLook());
         modulesList.add(freecam = new ModuleFreeCam());
         modulesList.add(new ModuleFastPlace());
+        modulesList.add(new ModuleAutoBridge());
         // hud
         modulesList.add(new ModuleKeystrokes());
+        modulesList.add(new ModuleWatermark());
+        modulesList.add(new ModuleFPS());
+        modulesList.add(new ModulePing());
+        modulesList.add(new ModuleClock());
+        modulesList.add(new ModuleCoordinates());
+        modulesList.add(new ModulePotionEffects());
+        modulesList.add(new ModuleArmorHUD());
+        modulesList.add(new ModuleArrayList());
+        modulesList.add(new ModuleLowHealthOverlay());
+        modulesList.add(new ModuleTargetHUD());
+        modulesList.add(new ModuleHUDSplash());
+        // misc
+        modulesList.add(new ModuleFireballWarning());
+        modulesList.add(new ModuleBedDefense());
+        modulesList.add(new ModuleSilence());
 
         sortedModulesList.addAll(modulesList);
         Collections.sort(sortedModulesList, Comparator.comparing(m -> m.name));
@@ -105,7 +122,7 @@ public class ModuleManager {
     @Nullable
     public static Module getModule(String name) {
         for (Module module : modulesList) {
-            if (module.name.replaceAll(" ", "").equalsIgnoreCase(name.replaceAll(" ", ""))) {
+            if (module.name.replaceAll("[\\s-]", "_").equalsIgnoreCase(name.replaceAll("[\\s-]", "_"))) {
                 return module;
             }
         }

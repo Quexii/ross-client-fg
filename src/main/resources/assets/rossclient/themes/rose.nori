@@ -1,0 +1,24 @@
+{
+    accent = 0xFFE53A5C
+    accentDeep = 0xFFC42A48
+    accentSoft = 0xFFF28A9E
+    accentHalftone = 0xFFD93654
+    surface = 0xFF1C181A
+    surfaceDim = 0xFF141012
+    surfaceBright = 0xFF262022
+    surfaceRaised = 0xFF30282A
+    foreground = 0xFFFDF2F4
+    foregroundMuted = 0x88FDF2F4
+    foregroundContrast = 0xFFFFFFFF
+    inactive = 0xFF785A60
+    track = 0xFF3A2E30
+    radio = 0xFF4E3C40
+    radioBorder = 0x667A6270
+    border = 0x447A6270
+    divider = 0xFF2E2426
+    dividerSoft = 0xFF241C1E
+    shadow = 0x66000000
+    shadowSoft = 0x33000000
+    outline = 0x55000000
+    dimmer = 0xAA000000
+}

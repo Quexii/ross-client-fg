@@ -56,6 +56,10 @@ public abstract class Filter {
         }
     }
 
+    public Integer getTargetFor(int target) {
+        return textureIds.get(target);
+    }
+
     public Image imageFor(int texture) {
         return textures.get(texture);
     }

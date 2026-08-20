@@ -4,6 +4,7 @@ import eu.shoroa.ross.event.EventRenderLiving;
 //import eu.shoroa.ross.module.ModuleManager;
 //import eu.shoroa.ross.module.impl.render.ModuleESP;
 import eu.shoroa.ross.feature.module.ModuleManager;
+import eu.shoroa.ross.feature.module.impl.render.ModuleESP;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,19 +21,19 @@ import static eu.shoroa.ross.Client.EVENT_BUS;
 
 @Mixin(RendererLivingEntity.class)
 public abstract class MixinRendererLivingEntity {
-//    @Inject(method = "canRenderName(Lnet/minecraft/entity/EntityLivingBase;)Z", at = @At("HEAD"), cancellable = true)
-//    private void disableNameInESP(EntityLivingBase entity, CallbackInfoReturnable<Boolean> cir) {
-//        if (ModuleESP.isShaderPass() && entity instanceof EntityPlayer) {
-//            cir.setReturnValue(false);
-//        }
-//    }
+    @Inject(method = "canRenderName(Lnet/minecraft/entity/EntityLivingBase;)Z", at = @At("HEAD"), cancellable = true)
+    private void disableNameInESP(EntityLivingBase entity, CallbackInfoReturnable<Boolean> cir) {
+        if (ModuleESP.isShaderPass() && entity instanceof EntityPlayer) {
+            cir.setReturnValue(false);
+        }
+    }
 
-//    @Inject(method = "renderLayers", at = @At("HEAD"), cancellable = true)
-//    private void disableLayersInESP(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn, CallbackInfo ci) {
-//        if (ModuleESP.isShaderPass() && entity instanceof EntityPlayer) {
-//            ci.cancel();
-//        }
-//    }
+    @Inject(method = "renderLayers", at = @At("HEAD"), cancellable = true)
+    private void disableLayersInESP(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn, CallbackInfo ci) {
+        if (ModuleESP.isShaderPass() && entity instanceof EntityPlayer) {
+            ci.cancel();
+        }
+    }
 
     @Redirect(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;isInvisibleToPlayer(Lnet/minecraft/entity/player/EntityPlayer;)Z"))
     public boolean redirectIsInvisibleToPlayer(EntityLivingBase instance, EntityPlayer player) {

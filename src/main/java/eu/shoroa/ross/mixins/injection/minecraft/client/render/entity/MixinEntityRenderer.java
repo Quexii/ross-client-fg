@@ -1,9 +1,11 @@
 package eu.shoroa.ross.mixins.injection.minecraft.client.render.entity;
 
 import eu.shoroa.ross.event.EventRender3D;
+import eu.shoroa.ross.event.api.EventPreOverlay;
 import eu.shoroa.ross.feature.module.ModuleManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,7 +22,18 @@ public class MixinEntityRenderer {
     @Shadow
     private Minecraft mc;
 
-    @Inject(method = "renderWorldPass", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", args = "ldc=hand"))
+    @Inject(
+            method = "updateCameraAndRender",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;renderGameOverlay(F)V", shift = At.Shift.BEFORE),
+            cancellable = false
+    )
+    private void preRenderIngame(float partialTicks, long nanoTime, CallbackInfo ci) {
+        GlStateManager.disableAlpha();
+        EVENT_BUS.post(new EventPreOverlay(partialTicks));
+        GlStateManager.enableAlpha();
+    }
+
+    @Inject(method = "renderWorldPass", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", args = "ldc=hand"))
     public void injectEvent3D(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
         EVENT_BUS.post(new EventRender3D(mc.renderGlobal, partialTicks));
     }
@@ -45,7 +58,7 @@ public class MixinEntityRenderer {
         return ModuleManager.freeLook.isEnabled() ? ModuleManager.freeLook.getPitch() : entity.prevRotationPitch;
     }
 
-//    @ModifyArgs(method = "renderWorldPass", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/culling/ICamera;setPosition(DDD)V"))
+    //    @ModifyArgs(method = "renderWorldPass", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/culling/ICamera;setPosition(DDD)V"))
 //    public void modifyCameraSetPosition(Args args) {
 //        if (ModuleManager.freecam.isEnabled()) {
 //            float partialTicks = ((MinecraftAccessor) mc).getTimer().renderPartialTicks;

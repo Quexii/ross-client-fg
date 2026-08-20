@@ -82,6 +82,10 @@ public final class Shader {
         return builder.toString();
     }
 
+    public int id() {
+        return pid;
+    }
+
     public void attach() {
         GL20.glUseProgram(pid);
     }

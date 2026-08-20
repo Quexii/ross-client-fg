@@ -1,10 +1,13 @@
 package eu.shoroa.ross;
 
+import eu.shoroa.nori.Nori;
 import eu.shoroa.ross.config.Config;
+import eu.shoroa.ross.config.ConfigManager;
 import eu.shoroa.ross.event.EventInput;
 import eu.shoroa.ross.event.api.EventBus;
 import eu.shoroa.ross.event.LifeCycle;
 import eu.shoroa.ross.event.api.Subscribe;
+import eu.shoroa.ross.feature.gui.clickgui.stella.StellaTheme;
 import eu.shoroa.ross.feature.module.ModuleManager;
 import eu.shoroa.ross.render.filters.Filter;
 import eu.shoroa.ross.render.skia.Skia;
@@ -15,11 +18,13 @@ import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
+import org.spongepowered.asm.launch.MixinTweaker;
 
 public class Client {
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static final EventBus EVENT_BUS = new EventBus();
     public static final Client INSTANCE = new Client();
+    public static final Nori nori = new Nori();
     private static final Logger logger = LogManager.getLogger();
 
     private Skia skia;
@@ -40,8 +45,12 @@ public class Client {
         Fonts.load();
         Images.load();
         Filter.kawase().init();
+        StellaTheme.init();
 
         ModuleManager.init();
+//        ConfigManager.load();
+
+        ConfigManager.load();
     }
 
     @Subscribe
@@ -54,6 +63,7 @@ public class Client {
     @Subscribe
     @ApiStatus.Internal
     public void onStop(LifeCycle.Stop e) {
+        ConfigManager.save();
         skia.destroy();
     }
 

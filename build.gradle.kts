@@ -46,6 +46,7 @@ repositories {
 dependencies {
     embed(libs.mixins)
     annotationProcessor(variantOf(libs.mixins.annotations) { classifier("processor") })
+    embed(libs.nori)
 
     // for whatever reason runtimeOnly doesnt work so a workaround
     devAuthMod(mods.devauth)

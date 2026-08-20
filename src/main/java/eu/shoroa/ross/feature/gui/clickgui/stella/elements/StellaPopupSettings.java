@@ -63,7 +63,9 @@ public class StellaPopupSettings extends StellaPopup {
             case MODE:
                 return new StellaModeSetting(0f, 0f, width, StellaSetting.ROW_HEIGHT, (ModeSetting) setting);
             case COLOR:
-                return new StellaColorSetting(0f, 0f, width, StellaSetting.ROW_HEIGHT, (ColorSetting) setting);
+                return new StellaColorSetting(0f, 0f, width, StellaSetting.ROW_HEIGHT * 3, (ColorSetting) setting);
+            case BIND:
+                return new StellaBindSetting(0f, 0f, width, StellaSetting.ROW_HEIGHT, (BindSetting) setting);
             default:
                 return null;
         }
@@ -91,7 +93,7 @@ public class StellaPopupSettings extends StellaPopup {
             if (!hasVisibleSettings(entry.getValue())) continue;
             h += HEADER_H + HEADER_GAP_TOP + HEADER_GAP_BOTTOM;
             for (StellaSetting<?> element : entry.getValue()) {
-                if (element.getSetting().isVisible()) h += StellaSetting.ROW_HEIGHT;
+                if (element.getSetting().isVisible()) h += element.getHeight();
             }
         }
         return h;
@@ -135,7 +137,7 @@ public class StellaPopupSettings extends StellaPopup {
                     element.setX(viewX());
                     element.setY(y);
                     element.render(mouseX, mouseY, partialTicks);
-                    y += StellaSetting.ROW_HEIGHT;
+                    y += element.getHeight();
                 }
             }
 
@@ -153,7 +155,7 @@ public class StellaPopupSettings extends StellaPopup {
             }
 
             if (categories.isEmpty() || elements.isEmpty()) {
-                p.setColor(StellaTheme.get().textMuted);
+                p.setColor(StellaTheme.get().foregroundMuted);
                 UI.drawText("No settings", getX() + getWidth() / 2f, viewY() + viewH() / 2f, Fonts.GoogleFlex.weight(500), 22f, Align.CENTER, p);
             }
         }
@@ -182,7 +184,7 @@ public class StellaPopupSettings extends StellaPopup {
             UI.drawPath(pb.build(), p);
         }
 
-        p.setColor(StellaTheme.get().onAccent);
+        p.setColor(StellaTheme.get().foregroundContrast);
         UI.drawText(category.name, x + 24f, y + HEADER_H / 2f, Fonts.GoogleFlex.weight(600), 19f, Align.CENTER_LEFT, p);
     }
 
@@ -206,7 +208,9 @@ public class StellaPopupSettings extends StellaPopup {
             }
         }
 
-        return contains(mouseX, mouseY);
+        // Only mouse events are swallowed by hovering the popup; keyboard events
+        // must fall through so StellaCG can handle Escape and the like.
+        return event.type == EventInput.Type.MOUSE && contains(mouseX, mouseY);
     }
 
     @Override

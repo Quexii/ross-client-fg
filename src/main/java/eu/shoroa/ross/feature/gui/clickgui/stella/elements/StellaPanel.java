@@ -86,7 +86,7 @@ public class StellaPanel extends GuiElement {
             UI.drawRect(getX(), getY() + categoryY + selectedCategoryEase.value * sideButtonH, sidebarW, sideButtonH, p);
 
             float arrowSize = 35f;
-            p.setColor(StellaTheme.get().sidebarArrow);
+            p.setColor(StellaTheme.get().surfaceDim);
 
             try (PathBuilder pb = new PathBuilder()) {
                 pb.moveTo(getX() + sidebarW, getY() + categoryY + selectedCategoryEase.value * sideButtonH + (sideButtonH - arrowSize) / 2);
@@ -98,7 +98,7 @@ public class StellaPanel extends GuiElement {
             p.setColor(StellaTheme.get().divider);
             UI.drawRect(getX() + sidebarW, getY() + categoryY, getWidth() - sidebarW, 2, p);
 
-            p.setColor(Color.withA(StellaTheme.get().text, (int) (255 * modulesEase.value)));
+            p.setColor(Color.withA(StellaTheme.get().foreground, (int) (255 * modulesEase.value)));
             UI.drawText(selectedCategory.name, getX() + sidebarW + 80, getY() + 40f + 10f * (1 - modulesEase.value), Fonts.GoogleFlex.weight(500), 30f, Align.CENTER_LEFT, p);
             UI.drawText(MaterialIcons.LOCATION_ON, getX() + sidebarW + 40, getY() + 40f + 10f * (1 - modulesEase.value), Fonts.MaterialIcons.weight(600).grade(200).opticSize(20).fill(true), 30f, Align.CENTER_LEFT, p);
         }

@@ -47,8 +47,14 @@ public class MixinRenderGlobal {
         if (event.isCanceled()) ci.cancel();
     }
 
-    @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.BEFORE))
-    public void injectRenderEntities(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci) {
+    //    @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.BEFORE))
+    @Inject(method = "renderEntities", at = @At("HEAD"))
+    public void injectPreRenderEntities(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci) {
+        EVENT_BUS.post(new EventRenderEntities.Pre(partialTicks, camera, renderViewEntity, theWorld.getLoadedEntityList()));
+    }
+
+    @Inject(method = "renderEntities", at = @At("RETURN"))
+    public void injectPostRenderEntities(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci) {
         EVENT_BUS.post(new EventRenderEntities.Post(partialTicks, camera, renderViewEntity, theWorld.getLoadedEntityList()));
     }
 

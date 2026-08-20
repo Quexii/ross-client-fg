@@ -18,7 +18,7 @@ public class ResourceImage extends ImageSource {
             ByteBuffer buffer = Res.resourceToBuffer(path, 8192);
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
-            setImage(decode(bytes));
+            decodeEncoded(bytes);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load classpath image: " + path, e);
         }

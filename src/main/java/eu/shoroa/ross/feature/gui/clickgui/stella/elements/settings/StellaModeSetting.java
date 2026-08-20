@@ -66,7 +66,7 @@ public class StellaModeSetting<T extends Enum<T> & ModeEnum> extends StellaSetti
                 p.setColor(theme().accent);
                 UI.drawCircle(ox + half, cy, half, p);
 //                UI.drawRRect(ox, cy - half, RADIO_SIZE, RADIO_SIZE, 9f, p);
-                p.setColor(theme().onAccent);
+                p.setColor(theme().foregroundContrast);
                 UI.drawText(MaterialIcons.CHECK, ox + half, cy, Fonts.MaterialIcons.weight(700).grade(200).fill(true), 22f, Align.CENTER, p);
             } else {
                 p.setColor(theme().radio);
@@ -78,7 +78,7 @@ public class StellaModeSetting<T extends Enum<T> & ModeEnum> extends StellaSetti
                 p.setStroke(false);
             }
 
-            p.setColor(theme().text);
+            p.setColor(theme().foreground);
             UI.drawText(mode.displayName(), ox + RADIO_SIZE + ICON_TEXT_GAP, cy, Fonts.GoogleFlex.weight(550), 18f, Align.CENTER_LEFT, p);
 
             ox += optionWidth(mode) + OPTION_GAP;
@@ -93,11 +93,11 @@ public class StellaModeSetting<T extends Enum<T> & ModeEnum> extends StellaSetti
         UI.drawRRect(bx, by, CYCLER_W, CYCLER_H, 6f, p);
         p.setStroke(true);
         p.setStrokeWidth(1.5f);
-        p.setColor(theme().text);
+        p.setColor(theme().foreground);
         UI.drawRRect(bx, by, CYCLER_W, CYCLER_H, 6f, p);
         p.setStroke(false);
 
-        p.setColor(theme().text);
+        p.setColor(theme().foreground);
         UI.drawText(setting().getCurrentDisplayName(), bx + CYCLER_W / 2f, by + CYCLER_H / 2f, Fonts.GoogleFlex.weight(600), 18f, Align.CENTER, p);
         UI.drawText(MaterialIcons.ARROW_LEFT, bx + 6f, by + CYCLER_H / 2f, Fonts.MaterialIcons.weight(700).fill(true), 24f, Align.CENTER_LEFT, p);
         UI.drawText(MaterialIcons.ARROW_RIGHT, bx + CYCLER_W - 6f, by + CYCLER_H / 2f, Fonts.MaterialIcons.weight(700).fill(true), 24f, Align.CENTER_RIGHT, p);

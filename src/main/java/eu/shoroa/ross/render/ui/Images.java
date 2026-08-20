@@ -1,9 +1,9 @@
 package eu.shoroa.ross.render.ui;
 
 import eu.shoroa.ross.render.skia.image.*;
+import eu.shoroa.ross.render.skia.image.remote.RemoteImage;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class Images {
@@ -34,12 +34,6 @@ public class Images {
 
     public static RemoteImage createRemoteImage(String url) {
         RemoteImage image = new RemoteImage(url);
-        remoteImages.put(url, image);
-        return image;
-    }
-
-    public static RemoteImage createRemoteImage(String url, int connectTimeoutMs, int readTimeoutMs) {
-        RemoteImage image = new RemoteImage(url, connectTimeoutMs, readTimeoutMs);
         remoteImages.put(url, image);
         return image;
     }

@@ -2,6 +2,7 @@
 
 uniform sampler2D uTex;
 uniform float uThickness;
+uniform float uSoftness;
 uniform vec2 uTexelSize;
 uniform float uFillAlpha;
 uniform float uOutlineAlpha;
@@ -18,9 +19,9 @@ void main() {
         return;
     }
 
-    float maxNeighborA = 0.0;
+    vec3 accumColor = vec3(0.0);
+    float accumWeight = 0.0;
     float minDist = uThickness + 1.0;
-    vec3 neighborRGB = vec3(0.0);
 
     for (float x = -uThickness; x <= uThickness; x++) {
         for (float y = -uThickness; y <= uThickness; y++) {
@@ -29,22 +30,24 @@ void main() {
 
             vec2 offset = vec2(x, y) * uTexelSize;
             vec4 neighborSample = texture2D(uTex, uv + offset);
+            if (neighborSample.a <= 0.0) continue;
 
-            if (neighborSample.a > 0.0) {
-                if (d < minDist) {
-                    minDist = d;
-                    neighborRGB = neighborSample.rgb;
-                    maxNeighborA = neighborSample.a;
-                }
-            }
+            minDist = min(minDist, d);
+
+            float contribW = neighborSample.a / (1.0 + d * d);
+            accumColor += neighborSample.rgb * contribW;
+            accumWeight += contribW;
         }
     }
 
-    if (maxNeighborA > 0.0) {
-        float distFactor = clamp(minDist / uThickness, 0.0, 1.0);
-        float edge = pow(1.0 - distFactor, 3.0);
+    if (accumWeight > 0.0) {
+        float soft = max(uSoftness, 0.0001);
+        float edgeDist = uThickness - minDist;
+        float w = clamp(edgeDist / soft, 0.0, 1.0);
+        w = w * w * (3.0 - 2.0 * w);
 
-        gl_FragColor = vec4(neighborRGB, uOutlineAlpha * edge);
+        vec3 outColor = accumColor / accumWeight;
+        gl_FragColor = vec4(outColor, uOutlineAlpha * w);
     } else {
         discard;
     }

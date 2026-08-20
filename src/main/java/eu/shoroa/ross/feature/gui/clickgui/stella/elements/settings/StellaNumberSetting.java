@@ -15,7 +15,7 @@ import io.github.humbleui.skija.Paint;
 public class StellaNumberSetting extends StellaSetting<Float> {
     private static final float TRACK_W = 240f;
     private static final float TRACK_H = 8f;
-    private static final float KNOB_R = 13f;
+    private static final float KNOB_R = 10f;
 
     private DampFloat sliderEase = new DampFloat();
 
@@ -52,12 +52,12 @@ public class StellaNumberSetting extends StellaSetting<Float> {
         float tx = trackX();
         float ty = trackY();
         float knobX = tx + sliderEase.value * TRACK_W;
-        float cy = ty + TRACK_H / 2f;
+        float cy = ty + TRACK_H / 2f - 1;
 
         try (Paint p = new Paint()) {
             drawLabel(p);
 
-            p.setColor(theme().text);
+            p.setColor(theme().foreground);
             UI.drawText(format(setting.get()), tx - 20f, getY() + getHeight() / 2f, Fonts.GoogleFlex.weight(600), 20f, Align.CENTER_RIGHT, p);
 
             p.setColor(theme().track);
@@ -70,7 +70,7 @@ public class StellaNumberSetting extends StellaSetting<Float> {
             UI.drawCircle(knobX, cy + 2f, KNOB_R, p);
             p.setMaskFilter(null);
 
-            p.setColor(theme().surfaceBright);
+            p.setColor(theme().surface);
             UI.drawCircle(knobX, cy, KNOB_R, p);
             p.setStroke(true);
             p.setStrokeWidth(1.5f);

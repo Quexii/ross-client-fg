@@ -1,9 +1,47 @@
 package eu.shoroa.ross.feature.gui.clickgui.stella;
 
-public final class StellaTheme {
-    public static final StellaTheme LIGHT = light();
+import com.google.gson.*;
+import eu.shoroa.nori.parse.Node;
+import eu.shoroa.ross.Client;
+import eu.shoroa.ross.utils.io.Res;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-    private static StellaTheme active = LIGHT;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.ByteBuffer;
+
+public final class StellaTheme {
+    private static final Logger LOGGER = LogManager.getLogger(StellaTheme.class);
+
+    public static StellaTheme LIGHT;
+    public static StellaTheme DARK;
+    public static StellaTheme FOREST;
+    public static StellaTheme SLATE;
+    public static StellaTheme EMBER;
+    public static StellaTheme ROSE;
+    public static StellaTheme AURORA;
+    public static StellaTheme ABYSS;
+
+    public static void init() {
+        try {
+            LIGHT = fromRes("/assets/rossclient/themes/light.nori");
+            DARK = fromRes("/assets/rossclient/themes/dark.nori");
+            FOREST = fromRes("/assets/rossclient/themes/forest.nori");
+            SLATE = fromRes("/assets/rossclient/themes/slate.nori");
+            EMBER = fromRes("/assets/rossclient/themes/ember.nori");
+            ROSE = fromRes("/assets/rossclient/themes/rose.nori");
+            AURORA = fromRes("/assets/rossclient/themes/aurora.nori");
+            ABYSS = fromRes("/assets/rossclient/themes/abyss.nori");
+
+            active = LIGHT;
+        } catch (IOException e) {
+            LOGGER.error("Failed to load theme", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static StellaTheme active;
 
     public static StellaTheme get() {
         return active;
@@ -13,90 +51,69 @@ public final class StellaTheme {
         active = theme;
     }
 
-    /** Primary teal — headers, sliders fill, toggles, scrollbar thumb. */
+    // Accent
     public int accent;
-    /** Darker teal — selected sidebar entry. */
     public int accentDeep;
-    /** Lighter teal — category header notch. */
     public int accentSoft;
-    /** Teal tint for the halftone dot pattern drawn over accent areas. */
     public int accentHalftone;
 
-    /** Main background (cream). */
+    // Surfaces
     public int surface;
-    /** Slightly dimmed background — module grid area. */
     public int surfaceDim;
-    /** Brightest surface — knobs, cycler boxes. */
     public int surfaceBright;
-    /** Arrow wedge pointing out of the sidebar. */
-    public int sidebarArrow;
+    public int surfaceRaised;
 
-    /** Primary text/icons on light surfaces (navy). */
-    public int text;
-    /** Muted text — placeholders like "No settings". */
-    public int textMuted;
-    /** Text/icons on accent-colored surfaces. */
-    public int onAccent;
+    // Foregrounds
+    public int foreground;
+    public int foregroundMuted;
+    public int foregroundContrast;
 
-    /** Disabled/off state of accent-colored controls (toggle off, module off). */
+    // Effects
     public int inactive;
-    /** Empty slider track. */
     public int track;
-    /** Unselected radio fill. */
     public int radio;
-    /** Unselected radio outline. */
     public int radioBorder;
-    /** Hairline border around cards, knobs and swatches. */
     public int border;
 
-    /** Divider line on the panel. */
     public int divider;
-    /** Divider line between setting rows. */
     public int dividerSoft;
 
-    /** Soft navy drop shadow. */
     public int shadow;
-    /** Fainter shadow — knob rings, scrollbar track. */
     public int shadowSoft;
-    /** Dark outline stroke on accent-filled pills/buttons. */
     public int outline;
-    /** Fullscreen dim behind popups. */
     public int dimmer;
 
     private StellaTheme() {
     }
 
-    private static StellaTheme light() {
-        StellaTheme t = new StellaTheme();
-
-        t.accent = 0xFF0DBDC3;
-        t.accentDeep = 0xFF00A7AB;
-        t.accentSoft = 0xFF6EDEE1;
-        t.accentHalftone = 0xFF09B7BB;
-
-        t.surface = 0xFFF9F9F7;
-        t.surfaceDim = 0xFFEFF3F3;
-        t.surfaceBright = 0xFFFDFDFC;
-        t.sidebarArrow = 0xFFEBF5F7;
-
-        t.text = 0xFF264278;
-        t.textMuted = 0x88264278;
-        t.onAccent = 0xFFF9F9F7;
-
-        t.inactive = 0xFF93A9BF;
-        t.track = 0xFFC7CDD4;
-        t.radio = 0xFFD5DBE1;
-        t.radioBorder = 0x66889AB0;
-        t.border = 0x447D8FB3;
-
-        t.divider = 0xFFECECEB;
-        t.dividerSoft = 0xFFE7EAE7;
-
-        t.shadow = 0x33264278;
-        t.shadowSoft = 0x22264278;
-        t.outline = 0x33000000;
-        t.dimmer = 0x66000000;
-
-        return t;
+    public static StellaTheme fromRes(String path) throws IOException {
+        ByteBuffer buf = Res.resourceToBuffer(path, 1024);
+        byte[] bytes = new byte[buf.remaining()];
+        buf.get(bytes);
+        Node<?> root = Client.nori.parse(new String(bytes));
+        StellaTheme theme = new StellaTheme();
+        theme.accent = root.get("accent").getInt();
+        theme.accentDeep = root.get("accentDeep").getInt();
+        theme.accentSoft = root.get("accentSoft").getInt();
+        theme.accentHalftone = root.get("accentHalftone").getInt();
+        theme.surface = root.get("surface").getInt();
+        theme.surfaceDim = root.get("surfaceDim").getInt();
+        theme.surfaceBright = root.get("surfaceBright").getInt();
+        theme.surfaceRaised = root.get("surfaceRaised").getInt();
+        theme.foreground = root.get("foreground").getInt();
+        theme.foregroundMuted = root.get("foregroundMuted").getInt();
+        theme.foregroundContrast = root.get("foregroundContrast").getInt();
+        theme.inactive = root.get("inactive").getInt();
+        theme.track = root.get("track").getInt();
+        theme.radio = root.get("radio").getInt();
+        theme.radioBorder = root.get("radioBorder").getInt();
+        theme.border = root.get("border").getInt();
+        theme.divider = root.get("divider").getInt();
+        theme.dividerSoft = root.get("dividerSoft").getInt();
+        theme.shadow = root.get("shadow").getInt();
+        theme.shadowSoft = root.get("shadowSoft").getInt();
+        theme.outline = root.get("outline").getInt();
+        theme.dimmer = root.get("dimmer").getInt();
+        return theme;
     }
 }

@@ -1,5 +1,6 @@
 package eu.shoroa.ross.feature.module;
 
+import eu.shoroa.ross.feature.setting.BindSetting;
 import eu.shoroa.ross.feature.setting.Setting;
 import eu.shoroa.ross.feature.setting.SettingCategory;
 import org.jetbrains.annotations.Nullable;
@@ -15,11 +16,14 @@ public class Module {
     public final Category category;
     public final String icon;
 
+    /** Kept in sync with {@link #bindSetting}; change binds through the setting. */
     public Bind bind;
+    public final BindSetting bindSetting;
 
     private boolean enabled = false;
 
     private final List<SettingCategory> settings = new ArrayList<>();
+    private final SettingCategory bindCategory = new SettingCategory("Bind", "Keybind for this module", "bind");
 
     public Module(String name, String description, Category category, Bind bind, String icon) {
         this.name = name;
@@ -27,6 +31,10 @@ public class Module {
         this.category = category;
         this.bind = bind;
         this.icon = icon;
+
+        bindSetting = new BindSetting("Bind", "bind", bind);
+        bindSetting.onChange(value -> this.bind = value);
+        bindCategory.addSetting(bindSetting);
     }
 
     public Module(String name, String description, Category category, String icon) {
@@ -72,12 +80,15 @@ public class Module {
         return category;
     }
 
+    /** All setting categories, with the synthetic "Bind" category appended last. */
     public List<SettingCategory> getSettings() {
-        return settings;
+        List<SettingCategory> all = new ArrayList<>(settings);
+        all.add(bindCategory);
+        return all;
     }
 
     public Setting<?> getSettingById(String id) {
-        for (SettingCategory category : settings) {
+        for (SettingCategory category : getSettings()) {
             Setting<?> setting = category.getSettingById(id);
             if (setting != null) {
                 return setting;

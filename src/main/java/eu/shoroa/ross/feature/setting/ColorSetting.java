@@ -1,7 +1,6 @@
 package eu.shoroa.ross.feature.setting;
 
-
-import java.awt.*;
+import java.awt.Color;
 
 public class ColorSetting extends Setting<Color> {
 
@@ -15,52 +14,83 @@ public class ColorSetting extends Setting<Color> {
 
     @Override
     public boolean setFromString(String value) {
-        // formats: #aarrggbb, argb(int,int,int,int), argb(float,float,float,float), rgba(int,int,int,int), rgba(float,float,float,float), rgb(int, int, int) = argbs with alpha = 255, rgb(float, float, float) = argbs with alpha = 1.0
         try {
-            if (value.startsWith("#")) {
-                set(new Color((int) Long.parseLong(value.substring(1), 16), true));
-                return true;
-            } else if (value.startsWith("argb(") && value.endsWith(")")) {
-                String[] parts = value.substring(5, value.length() - 1).split(",");
-                if (parts.length == 4) {
-                    set(new Color(Integer.parseInt(parts[0].trim()), Integer.parseInt(parts[1].trim()), Integer.parseInt(parts[2].trim()), Integer.parseInt(parts[3].trim())));
+            String v = value.trim();
+
+            if (v.startsWith("#")) {
+                String hex = v.substring(1);
+                long parsed = Long.parseLong(hex, 16);
+                if (hex.length() == 6) {
+                    set(new Color((int) (parsed | 0xFF000000), true));
+                    return true;
+                } else if (hex.length() == 8) {
+                    set(new Color((int) parsed, true));
                     return true;
                 }
-            } else if (value.startsWith("argb(") && value.endsWith(")")) {
-                String[] parts = value.substring(5, value.length() - 1).split(",");
-                if (parts.length == 4) {
-                    set(new Color(Float.parseFloat(parts[0].trim()), Float.parseFloat(parts[1].trim()), Float.parseFloat(parts[2].trim()), Float.parseFloat(parts[3].trim())));
-                    return true;
-                }
-            } else if (value.startsWith("rgba(") && value.endsWith(")")) {
-                String[] parts = value.substring(5, value.length() - 1).split(",");
-                if (parts.length == 4) {
-                    set(new Color(Integer.parseInt(parts[0].trim()), Integer.parseInt(parts[1].trim()), Integer.parseInt(parts[2].trim()), Integer.parseInt(parts[3].trim())));
-                    return true;
-                }
-            } else if (value.startsWith("rgba(") && value.endsWith(")")) {
-                String[] parts = value.substring(5, value.length() - 1).split(",");
-                if (parts.length == 4) {
-                    set(new Color(Float.parseFloat(parts[0].trim()), Float.parseFloat(parts[1].trim()), Float.parseFloat(parts[2].trim()), Float.parseFloat(parts[3].trim())));
-                    return true;
-                }
-            } else if (value.startsWith("rgb(") && value.endsWith(")")) {
-                String[] parts = value.substring(4, value.length() - 1).split(",");
-                if (parts.length == 3) {
-                    set(new Color(Integer.parseInt(parts[0].trim()), Integer.parseInt(parts[1].trim()), Integer.parseInt(parts[2].trim())));
-                    return true;
-                }
-            } else if (value.startsWith("rgb(") && value.endsWith(")")) {
-                String[] parts = value.substring(4, value.length() - 1).split(",");
-                if (parts.length == 3) {
-                    set(new Color(Float.parseFloat(parts[0].trim()), Float.parseFloat(parts[1].trim()), Float.parseFloat(parts[2].trim())));
-                    return true;
-                }
+                return false;
             }
+
+            if (v.startsWith("argb(") && v.endsWith(")")) {
+                return parseComponents(v.substring(5, v.length() - 1), true, true);
+            }
+            if (v.startsWith("rgba(") && v.endsWith(")")) {
+                return parseComponents(v.substring(5, v.length() - 1), false, true);
+            }
+            if (v.startsWith("rgb(") && v.endsWith(")")) {
+                return parseComponents(v.substring(4, v.length() - 1), false, false);
+            }
+
         } catch (NumberFormatException e) {
             return false;
         }
-
         return false;
+    }
+
+    private boolean parseComponents(String inner, boolean alphaFirst, boolean hasAlpha) {
+        String[] parts = inner.split(",");
+        int expected = hasAlpha ? 4 : 3;
+        if (parts.length != expected) return false;
+
+        boolean isFloat = false;
+        for (String part : parts) {
+            if (part.contains(".")) {
+                isFloat = true;
+                break;
+            }
+        }
+
+        if (isFloat) {
+            float[] f = new float[expected];
+            for (int i = 0; i < expected; i++) {
+                f[i] = Float.parseFloat(parts[i].trim());
+                if (f[i] < 0 || f[i] > 1) return false;
+            }
+            if (alphaFirst && hasAlpha) {
+                set(new Color(f[1], f[2], f[3], f[0]));
+            } else if (hasAlpha) {
+                set(new Color(f[0], f[1], f[2], f[3]));
+            } else {
+                set(new Color(f[0], f[1], f[2]));
+            }
+        } else {
+            int[] c = new int[expected];
+            for (int i = 0; i < expected; i++) {
+                c[i] = Integer.parseInt(parts[i].trim());
+                if (c[i] < 0 || c[i] > 255) return false;
+            }
+            if (alphaFirst && hasAlpha) {
+                set(new Color(c[1], c[2], c[3], c[0]));
+            } else if (hasAlpha) {
+                set(new Color(c[0], c[1], c[2], c[3]));
+            } else {
+                set(new Color(c[0], c[1], c[2]));
+            }
+        }
+        return true;
+    }
+
+    public String toHexString() {
+        Color c = get();
+        return String.format("#%02X%02X%02X%02X", c.getAlpha(), c.getRed(), c.getGreen(), c.getBlue());
     }
 }

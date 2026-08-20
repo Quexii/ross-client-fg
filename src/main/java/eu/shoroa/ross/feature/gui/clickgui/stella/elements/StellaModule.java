@@ -73,7 +73,7 @@ public class StellaModule extends GuiElement {
             UI.drawRRect(x, y, w, h, radius, p);
             p.setStroke(false);
 
-            p.setColor(StellaTheme.get().text);
+            p.setColor(StellaTheme.get().foreground);
             UI.drawText(module.icon, x + w / 2f, y + (h - buttonHeight) / 2f, Fonts.MaterialIcons.weight(350).fill(true), 52f, Align.CENTER, p);
 
             UI.save();
@@ -91,7 +91,7 @@ public class StellaModule extends GuiElement {
             UI.drawRRect(x + buttonGap, y + h - buttonHeight - buttonGap, w - buttonGap * 2, buttonHeight, radius - buttonGap, p);
             p.setStroke(false);
 
-            p.setColor(StellaTheme.get().onAccent);
+            p.setColor(StellaTheme.get().foregroundContrast);
             UI.drawText(module.name, x + w / 2f, y + h - buttonHeight / 2 - buttonGap, Fonts.GoogleFlex.weight(500), 18f, Align.CENTER, p);
 
             if (hasSettings) {

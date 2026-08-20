@@ -27,7 +27,7 @@ public abstract class StellaSetting<T> extends GuiElement {
     }
 
     protected void drawLabel(Paint p) {
-        p.setColor(theme().text);
+        p.setColor(theme().foreground);
         UI.drawText(setting.getName(), getX() + 4f, getY() + getHeight() / 2f, Fonts.GoogleFlex.weight(550), 20f, Align.CENTER_LEFT, p);
     }
 }

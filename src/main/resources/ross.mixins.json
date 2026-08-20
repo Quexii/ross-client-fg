@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.7.11",
   "compatibilityLevel": "JAVA_8",
+  "target": "@env(DEFAULT)",
   "package": "eu.shoroa.ross.mixins.injection",
   "refmap": "ross.mixins.refmap.json",
   "mixins": [
@@ -12,14 +13,17 @@
   ],
   "client": [
     "minecraft.client.MixinMinecraft",
+    "minecraft.client.audio.MixinSoundHandler",
+    "minecraft.client.audio.MixinSoundManager",
     "minecraft.client.entity.MixinEntityPlayerSP",
     "minecraft.client.network.MixinNetHandlerPlayClient",
     "minecraft.client.render.MixinActiveRenderInfo",
     "minecraft.client.render.MixinItemRenderer",
     "minecraft.client.render.MixinRenderGlobal",
     "minecraft.client.render.entity.MixinEntityRenderer",
-    "minecraft.client.render.entity.MixinRenderPlayer",
     "minecraft.client.render.entity.MixinRendererLivingEntity",
+    "minecraft.client.render.entity.MixinRenderManager",
+    "minecraft.client.render.entity.MixinRenderPlayer",
     "minecraft.client.render.entity.RenderManagerAccessor",
     "minecraft.client.setting.MixinKeyBinding"
   ],

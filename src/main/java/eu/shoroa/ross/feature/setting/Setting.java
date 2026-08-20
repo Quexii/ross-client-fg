@@ -33,8 +33,9 @@ public abstract class Setting<T> {
         }
     }
 
-    public void onChange(Consumer<T> listener) {
+    public Setting<T> onChange(Consumer<T> listener) {
         listeners.add(listener);
+        return this;
     }
 
     public boolean isVisible() {
@@ -64,6 +65,7 @@ public abstract class Setting<T> {
         BOOLEAN,
         NUMBER,
         COLOR,
-        MODE
+        MODE,
+        BIND
     }
 }

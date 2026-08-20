@@ -4,6 +4,7 @@ import eu.shoroa.ross.Client;
 import eu.shoroa.ross.render.filters.Filter;
 import eu.shoroa.ross.render.skia.Skia;
 import eu.shoroa.ross.render.skia.font.FontSource;
+import eu.shoroa.ross.render.skia.image.ImageSource;
 import eu.shoroa.ross.type.Size;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.types.Point;
@@ -41,6 +42,24 @@ public class UI {
         currentCanvas.clipRRect(RRect.makeXYWH(x, y, width, height, radius), true);
         currentCanvas.drawImageRect(image, Rect.makeWH(Display.getWidth(), Display.getHeight()));
         currentCanvas.restore();
+    }
+
+    public static void drawImage(ImageSource imageSource, float x, float y, float width, float height, float radius, float alpha) {
+        Image image = imageSource.getImage();
+        if (image == null) return;
+
+        save();
+        clipRRect(x, y, width, height, radius);
+
+        Rect src = Rect.makeXYWH(0, 0, image.getWidth(), image.getHeight());
+        Rect dst = Rect.makeXYWH(x, y, width, height);
+
+        try (Paint p = new Paint()) {
+            p.setAlphaf(Math.max(0f, Math.min(1f, alpha)));
+            //(@NotNull Image image, @NotNull Rect src, @NotNull Rect dst, @NotNull SamplingMode samplingMode, @Nullable Paint paint, boolean strict)
+            currentCanvas.drawImageRect(image, src, dst, SamplingMode.LINEAR, p, true);
+        }
+        restore();
     }
 
     public static void drawRect(float x, float y, float w, float h, Paint p) {

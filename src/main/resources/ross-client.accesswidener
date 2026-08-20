@@ -6,3 +6,5 @@ accessible field net/minecraft/client/renderer/EntityRenderer cameraZoom D
 accessible field net/minecraft/client/renderer/EntityRenderer cameraYaw D
 accessible field net/minecraft/client/renderer/EntityRenderer cameraPitch D
 accessible method net/minecraft/client/renderer/EntityRenderer orientCamera (F)V
+accessible field net/minecraft/client/audio/SoundHandler sndManager Lnet/minecraft/client/audio/SoundManager;
+accessible field net/minecraft/client/audio/SoundManager sndSystem Lnet/minecraft/client/audio/SoundManager$SoundSystemStarterThread;

@@ -41,9 +41,9 @@ public class StellaBooleanSetting extends StellaSetting<Boolean> {
             UI.drawRRect(px, py, PILL_W, PILL_H, PILL_H / 2f, p);
             p.setStroke(false);
 
-            p.setColor(Color.withA(theme().onAccent, (int) (255 * t)));
+            p.setColor(Color.withA(theme().foregroundContrast, (int) (255 * t)));
             UI.drawText("On", px + 24f, py + PILL_H / 2f, Fonts.GoogleFlex.weight(600), 17f, Align.CENTER_LEFT, p);
-            p.setColor(Color.withA(theme().onAccent, (int) (255 * (1 - t))));
+            p.setColor(Color.withA(theme().foregroundContrast, (int) (255 * (1 - t))));
             UI.drawText("Off", px + PILL_W - 24f, py + PILL_H / 2f, Fonts.GoogleFlex.weight(600), 17f, Align.CENTER_RIGHT, p);
 
             float knobR = PILL_H / 2f - 4f;

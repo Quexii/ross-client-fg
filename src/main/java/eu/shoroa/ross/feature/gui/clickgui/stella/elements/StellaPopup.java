@@ -55,19 +55,19 @@ public abstract class StellaPopup extends GuiElement {
             p.setColorFilter(null);
             UI.restore();
 
-            p.setColor(StellaTheme.get().text);
-            UI.drawText(title, getX() + 54f, getY() + 42f, Fonts.GoogleFlex.weight(550), 24f, Align.CENTER_LEFT, p);
-            UI.drawText(MaterialIcons.LOCATION_ON, getX() + 20f, getY() + 42f, Fonts.MaterialIcons.weight(800).opticSize(24).grade(200).fill(true), 24f, Align.CENTER_LEFT, p);
+//            p.setColor(StellaTheme.get().foregroundContrast);
+//            UI.drawText(title, getX() + 54f, getY() + 42f, Fonts.GoogleFlex.weight(550), 24f, Align.CENTER_LEFT, p);
+//            UI.drawText(MaterialIcons.LOCATION_ON, getX() + 20f, getY() + 42f, Fonts.MaterialIcons.weight(800).opticSize(24).grade(200).fill(true), 24f, Align.CENTER_LEFT, p);
 
-            p.setColor(StellaTheme.get().onAccent);
+            p.setColor(StellaTheme.get().foregroundContrast);
             UI.drawText(title, getX() + 54f, getY() + 40f, Fonts.GoogleFlex.weight(550), 24f, Align.CENTER_LEFT, p);
             UI.drawText(MaterialIcons.LOCATION_ON, getX() + 20f, getY() + 40f, Fonts.MaterialIcons.weight(800).opticSize(24).grade(200).fill(true), 24f, Align.CENTER_LEFT, p);
 
             float cx = closeX();
             float cy = closeY();
-            p.setColor(StellaTheme.get().text);
+            p.setColor(StellaTheme.get().foreground);
             UI.drawRRect(cx, cy, CLOSE_SIZE, CLOSE_SIZE, 4f, p);
-            p.setColor(StellaTheme.get().onAccent);
+            p.setColor(StellaTheme.get().surfaceRaised);
             UI.drawText(MaterialIcons.CLOSE, cx + CLOSE_SIZE / 2f, cy + CLOSE_SIZE / 2f, Fonts.MaterialIcons.weight(700).grade(200), 26f, Align.CENTER, p);
         }
 

@@ -39,7 +39,7 @@ public class StellaCategory extends GuiElement {
         float cy = getY() + getHeight() / 2f;
 
         try (Paint p = new Paint()) {
-            p.setColor(StellaTheme.get().onAccent);
+            p.setColor(StellaTheme.get().foregroundContrast);
             UI.drawText(category.icon, cx, cy, Fonts.MaterialIcons.weight(300).grade(200).fill(true), 50f, Align.CENTER, p);
         }
     }

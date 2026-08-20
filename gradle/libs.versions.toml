@@ -3,6 +3,7 @@ mixins = "0.7.11-SNAPSHOT"
 mixins_annotations = "0.8.5-SNAPSHOT"
 skija = "0.143.17"
 skija_types = "0.2.0"
+nori = "c1ecac6781"
 
 [libraries]
 mixins = { group = "org.spongepowered", name = "mixin", version.ref = "mixins" }
@@ -14,3 +15,4 @@ skija_linux_x64 = { group = "io.github.humbleui", name = "skija-linux-x64", vers
 skija_linux_arm64 = { group = "io.github.humbleui", name = "skija-linux-arm64", version.ref = "skija" }
 skija_macos_x64 = { group = "io.github.humbleui", name = "skija-macos-x64", version.ref = "skija" }
 skija_macos_arm64 = { group = "io.github.humbleui", name = "skija-macos-arm64", version.ref = "skija" }
+nori = { group = "com.github.Quexii", name = "nori-java", version.ref = "nori" }

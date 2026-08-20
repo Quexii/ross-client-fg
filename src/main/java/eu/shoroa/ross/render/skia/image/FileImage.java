@@ -15,7 +15,7 @@ public class FileImage extends ImageSource {
     @Override
     public void init() {
         try {
-            setImage(decode(Files.readAllBytes(path)));
+            decodeEncoded(Files.readAllBytes(path));
         } catch (IOException e) {
             throw new RuntimeException("Failed to load file image: " + path, e);
         }

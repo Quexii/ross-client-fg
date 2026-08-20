@@ -7,8 +7,8 @@ import org.lwjgl.opengl.GL11;
 
 public class GLImage extends ImageSource {
     private int texture;
-    private int width;
-    private int height;
+    private int textureWidth;
+    private int textureHeight;
     private boolean mipmaps;
 
     private GLTextureInfo textureInfo;
@@ -20,9 +20,28 @@ public class GLImage extends ImageSource {
 
     public GLImage(int texture, int width, int height, boolean mipmaps) {
         this.texture = texture;
-        this.width = width;
-        this.height = height;
         this.mipmaps = mipmaps;
+
+        rebuildBackendTexture(width, height);
+    }
+
+    public void setTexture(int texture) {
+        this.texture = texture;
+
+        rebuildBackendTexture(textureWidth, textureHeight);
+    }
+
+    public void setSize(int width, int height) {
+        if (width == textureWidth && height == textureHeight) {
+            return;
+        }
+
+        rebuildBackendTexture(width, height);
+    }
+
+    private void rebuildBackendTexture(int width, int height) {
+        this.textureWidth = width;
+        this.textureHeight = height;
 
         int binding = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
@@ -30,15 +49,6 @@ public class GLImage extends ImageSource {
         this.textureInfo = new GLTextureInfo(GL11.GL_TEXTURE_2D, texture, format);
         this.backendTexture = BackendTexture.makeGL(width, height, mipmaps, textureInfo);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, binding);
-    }
-
-    public void setTexture(int texture) {
-        this.texture = texture;
-    }
-
-    public void setSize(int width, int height) {
-        this.width = width;
-        this.height = height;
     }
 
     @Override
